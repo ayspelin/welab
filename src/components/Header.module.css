@@ -1,0 +1,111 @@
+.header {
+    background-color: var(--background);
+    border-bottom: 1px solid var(--gray-200);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: var(--shadow-sm);
+}
+
+.headerInner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 80px;
+}
+
+.logoText {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: -0.02em;
+}
+
+.logoHighlight {
+    color: var(--secondary);
+}
+
+.navList {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.navLink {
+    font-weight: 500;
+    color: var(--gray-600);
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+}
+
+.navLink:hover {
+    color: var(--primary);
+}
+
+@media (max-width: 768px) {
+    .nav {
+        display: none;
+        /* simple mobile hide for now */
+    }
+}
+
+/* Dropdown Styles */
+.dropdownContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.dropdownMenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 220px;
+    background-color: white;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    list-style: none;
+    padding: 0.5rem 0;
+    margin: 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.2s ease;
+    z-index: 100;
+}
+
+.dropdownContainer:hover .dropdownMenu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdownItem {
+    display: block;
+    padding: 0.75rem 1.5rem;
+    color: var(--gray-700);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.dropdownItem:hover {
+    background-color: var(--gray-50);
+    color: var(--primary);
+}
+
+.dropdownItemAll {
+    display: block;
+    padding: 0.75rem 1.5rem;
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-top: 1px solid var(--gray-100);
+    margin-top: 0.5rem;
+}
+
+.dropdownItemAll:hover {
+    background-color: var(--gray-50);
+}

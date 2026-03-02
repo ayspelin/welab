@@ -1,0 +1,423 @@
+/* Admin Layout Styles */
+.adminLayout {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    min-height: 100vh;
+    background-color: var(--gray-50);
+}
+
+.sidebar {
+    width: 250px;
+    background-color: var(--gray-900);
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebarHeader {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--gray-800);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.brand {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: white;
+}
+
+.brandHighlight {
+    color: var(--secondary);
+}
+
+.nav {
+    padding: 1.5rem 0;
+    flex: 1;
+}
+
+.navList {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.navLink {
+    padding: 0.75rem 1.5rem;
+    color: var(--gray-400);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.2s ease;
+    font-weight: 500;
+    border-left: 3px solid transparent;
+}
+
+.navLink:hover {
+    background-color: var(--gray-800);
+    color: white;
+}
+
+.navLink[aria-current="page"] {
+    background-color: var(--gray-800);
+    color: white;
+    border-left-color: var(--secondary);
+}
+
+.sidebarFooter {
+    padding: 1.5rem;
+    border-top: 1px solid var(--gray-800);
+}
+
+.logoutBtn {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: transparent;
+    color: var(--gray-400);
+    border: 1px solid var(--gray-600);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.logoutBtn:hover {
+    background-color: #B91C1C;
+    color: white;
+    border-color: #B91C1C;
+}
+
+.mainWrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 250px);
+}
+
+.topbar {
+    height: 60px;
+    background-color: white;
+    border-bottom: 1px solid var(--gray-200);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 2rem;
+}
+
+.topbarLinks {
+    display: flex;
+    gap: 1rem;
+}
+
+.topbarLink {
+    color: var(--primary);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.contentArea {
+    flex: 1;
+    overflow-y: auto;
+    background-color: var(--gray-50);
+}
+
+/* Page Styles */
+.adminMain {
+    padding: 2rem;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.title {
+    color: var(--gray-900);
+    font-size: 1.5rem;
+}
+
+.roleBadge {
+    background-color: var(--primary-light);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 100px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.statBox {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+}
+
+.statLabel {
+    display: block;
+    color: var(--gray-500);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.statValue {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--gray-900);
+}
+
+.sectionTitle {
+    font-size: 1.125rem;
+    color: var(--gray-900);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.quickActions {
+    margin-bottom: 3rem;
+}
+
+.actionsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.actionBtn {
+    background-color: white;
+    border: 1px dashed var(--gray-400);
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    color: var(--primary);
+    font-weight: 600;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.actionBtn:hover {
+    border-color: var(--primary);
+    background-color: var(--gray-50);
+}
+
+.icon {
+    font-size: 1.5rem;
+}
+
+.recentActivity {
+    background-color: white;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+    padding: 1.5rem;
+}
+
+.tableContainer {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.table th {
+    color: var(--gray-500);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.thumb {
+    width: 40px;
+    height: 40px;
+    background-color: var(--gray-200);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    color: var(--gray-500);
+}
+
+.statusBadge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 100px;
+    font-weight: 600;
+}
+
+.active {
+    background-color: #DCFCE7;
+    color: #15803D;
+}
+
+.editBtn {
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.editBtn:hover {
+    text-decoration: underline;
+}
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background-color: white;
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 500px;
+    box-shadow: var(--shadow-lg);
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--gray-200);
+    padding-bottom: 1rem;
+}
+
+.modalHeader h2 {
+    font-size: 1.25rem;
+    color: var(--gray-900);
+}
+
+.closeBtn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--gray-500);
+}
+
+.formGroup {
+    margin-bottom: 1.5rem;
+}
+
+.formGroup label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--gray-700);
+    font-weight: 500;
+}
+
+.formGroup input,
+.formGroup select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+}
+
+.tabsContainer {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.tabBtn {
+    background: none;
+    border: none;
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    color: var(--gray-500);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.tabBtn:hover {
+    color: var(--primary);
+}
+
+.tabBtn.activeTab {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+}
+
+.fileUploadArea {
+    border: 2px dashed var(--gray-300);
+    border-radius: var(--radius-md);
+    padding: 3rem 1.5rem;
+    text-align: center;
+    background-color: var(--gray-50);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.fileUploadArea:hover {
+    border-color: var(--primary);
+    background-color: #f0fdf4;
+    /* Light green tint on hover */
+}
+
+.uploadIcon {
+    font-size: 2.5rem;
+    color: var(--gray-400);
+}
+
+.fileUploadArea:hover .uploadIcon {
+    color: var(--primary);
+}
+
+.uploadText {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--gray-700);
+}
+
+.uploadSubtext {
+    font-size: 0.875rem;
+    color: var(--gray-500);
+}
+
+.fileInput {
+    display: none;
+}

@@ -1,0 +1,121 @@
+.pageHeader {
+    background-color: var(--gray-50);
+    padding-block: 4rem;
+    border-bottom: 1px solid var(--gray-200);
+    text-align: center;
+}
+
+.headerTitle {
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.headerDesc {
+    color: var(--gray-600);
+    font-size: 1.125rem;
+    max-width: 600px;
+    margin-inline: auto;
+}
+
+.brandsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3rem;
+}
+
+.brandCard {
+    display: flex;
+    background-color: var(--background);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.brandCard:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.brandLogo {
+    width: 200px;
+    background-color: var(--gray-50);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid var(--gray-200);
+    padding: 2rem;
+    color: var(--gray-500);
+    font-weight: 500;
+    text-align: center;
+}
+
+.brandInfo {
+    padding: 2rem;
+    flex: 1;
+}
+
+.brandName {
+    font-size: 1.25rem;
+    color: var(--gray-900);
+    margin-bottom: 0.75rem;
+}
+
+.brandDesc {
+    color: var(--gray-600);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.brandTags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tag {
+    background-color: var(--primary-light);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.partnershipCta {
+    text-align: center;
+    max-width: 700px;
+    margin-inline: auto;
+}
+
+.partnershipCta h2 {
+    margin-bottom: 1.5rem;
+}
+
+.partnershipCta p {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    opacity: 0.9;
+    margin-bottom: 2.5rem;
+}
+
+@media (max-width: 1024px) {
+    .brandsGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .brandCard {
+        flex-direction: column;
+    }
+
+    .brandLogo {
+        width: 100%;
+        height: 150px;
+        border-right: none;
+        border-bottom: 1px solid var(--gray-200);
+    }
+}

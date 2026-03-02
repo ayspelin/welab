@@ -1,0 +1,194 @@
+.dashboardWrapper {
+    background-color: var(--gray-50);
+    min-height: calc(100vh - 80px);
+}
+
+.dashboardHeader {
+    background-color: white;
+    border-bottom: 1px solid var(--gray-200);
+    padding-block: 2rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.headerInner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title {
+    color: var(--primary);
+    font-size: 1.75rem;
+    margin-bottom: 0.25rem;
+}
+
+.welcome {
+    color: var(--gray-600);
+    font-size: 1rem;
+}
+
+.headerActions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.logoutBtn {
+    background-color: var(--gray-200);
+    color: var(--gray-800);
+}
+
+.logoutBtn:hover {
+    background-color: var(--gray-300);
+}
+
+.mainContent {
+    padding-block: 3rem;
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.statCard {
+    background-color: white;
+    padding: 1.5rem 2rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--gray-200);
+    box-shadow: var(--shadow-sm);
+}
+
+.statTitle {
+    font-size: 0.95rem;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+}
+
+.statValue {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--gray-900);
+}
+
+.badge {
+    font-size: 1rem;
+    padding: 0.25rem 0.75rem;
+    background-color: var(--primary-light);
+    color: white;
+    border-radius: 100px;
+    display: inline-block;
+    transform: translateY(-5px);
+}
+
+.docsSection {
+    background-color: white;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--gray-200);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.sectionHeader {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.sectionHeader h2 {
+    font-size: 1.25rem;
+    color: var(--gray-900);
+    margin-bottom: 0.25rem;
+}
+
+.sectionHeader p {
+    color: var(--gray-500);
+    font-size: 0.95rem;
+}
+
+.tableContainer {
+    overflow-x: auto;
+}
+
+.docsTable {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.docsTable th,
+.docsTable td {
+    padding: 1rem 2rem;
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.docsTable th {
+    background-color: var(--gray-50);
+    font-weight: 600;
+    color: var(--gray-600);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.docsTable tr:last-child td {
+    border-bottom: none;
+}
+
+.docsTable tr:hover td {
+    background-color: var(--gray-50);
+}
+
+.docTitle {
+    font-weight: 500;
+    color: var(--gray-900);
+}
+
+.typeBadge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+}
+
+.pdf {
+    background-color: #FEE2E2;
+    color: #B91C1C;
+}
+
+.excel {
+    background-color: #DCFCE7;
+    color: #15803D;
+}
+
+.word {
+    background-color: #DBEAFE;
+    color: #1D4ED8;
+}
+
+.docDate {
+    color: var(--gray-500);
+    font-size: 0.95rem;
+}
+
+.downloadLink {
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.downloadLink:hover {
+    text-decoration: underline;
+    color: var(--secondary);
+}
+
+@media (max-width: 640px) {
+    .headerInner {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: flex-start;
+    }
+}

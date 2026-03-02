@@ -1,0 +1,231 @@
+.breadcrumb {
+    background-color: var(--primary);
+    padding: 2rem 0;
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.breadcrumb h1 {
+    color: white;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.breadcrumb a {
+    color: white;
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.productDetail {
+    padding: 4rem 0;
+    background-color: var(--gray-50);
+}
+
+.productGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    background-color: white;
+    padding: 3rem 2rem;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+@media (min-width: 1024px) {
+    .productGrid {
+        grid-template-columns: 1fr 2fr 1.5fr;
+    }
+}
+
+/* Left Column */
+.leftCol {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.mainImage {
+    aspect-ratio: 1;
+    position: relative;
+    background-color: transparent;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.imagePlaceholder {
+    color: var(--gray-400);
+    text-align: center;
+}
+
+.productSubTag {
+    font-weight: 600;
+    color: var(--gray-700);
+    font-size: 1rem;
+}
+
+/* Middle Column */
+.middleCol {
+    display: flex;
+    flex-direction: column;
+}
+
+.headerRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.productTitle {
+    font-size: 2rem;
+    color: var(--gray-900);
+    line-height: 1.2;
+    margin: 0;
+}
+
+.actionIcons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.iconBtn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    background: transparent;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.25rem;
+    transition: all 0.2s ease;
+}
+
+.iconBtn:hover {
+    background-color: var(--primary);
+    color: white;
+}
+
+.description {
+    color: var(--gray-700);
+    line-height: 1.6;
+    margin-bottom: 3rem;
+    font-size: 1rem;
+}
+
+.manufacturerBox {
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.manufacturerLogo {
+    color: var(--primary);
+    font-weight: bold;
+    font-size: 2rem;
+    text-align: center;
+    line-height: 1;
+}
+
+.manufacturerSub {
+    font-size: 0.75rem;
+    color: var(--gray-500);
+    font-weight: normal;
+    display: block;
+    margin-top: 0.25rem;
+}
+
+.manufacturerInfo {
+    flex: 1;
+}
+
+.mfgTitle {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--gray-500);
+    margin-bottom: 0.5rem;
+    border-bottom: 2px solid var(--primary);
+    display: inline-block;
+    padding-bottom: 0.25rem;
+}
+
+.mfgLink {
+    color: var(--primary);
+    font-weight: 500;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.mfgLink:hover {
+    text-decoration: underline;
+}
+
+/* Right Column (Quote Form) */
+.rightCol {
+    background-color: var(--gray-50);
+    padding: 2rem;
+    border-left: 4px solid var(--primary);
+    border-radius: var(--radius-sm);
+}
+
+.formTitle {
+    font-size: 1.25rem;
+    color: var(--gray-900);
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--primary);
+    display: inline-block;
+    padding-bottom: 0.5rem;
+}
+
+.formGroup {
+    margin-bottom: 1rem;
+}
+
+.formGroup label {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--gray-700);
+    margin-bottom: 0.5rem;
+}
+
+.formGroup input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+}
+
+.submitBtn {
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-top: 1rem;
+}
+
+.submitBtn:hover {
+    background-color: var(--primary-light);
+}

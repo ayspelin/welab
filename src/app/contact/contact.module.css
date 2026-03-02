@@ -1,0 +1,200 @@
+.pageHeader {
+    background-color: var(--primary);
+    color: white;
+    padding-block: 5rem;
+    text-align: center;
+}
+
+.headerTitle {
+    margin-bottom: 1rem;
+    font-size: clamp(2.5rem, 4vw, 3rem);
+}
+
+.headerDesc {
+    color: var(--gray-300);
+    font-size: 1.125rem;
+}
+
+.contactGrid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 4rem;
+}
+
+.contactInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.infoCard {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+}
+
+.icon {
+    font-size: 1.75rem;
+    background-color: var(--gray-100);
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+}
+
+.infoDetails h3 {
+    font-size: 1.125rem;
+    color: var(--gray-900);
+    margin-bottom: 0.5rem;
+}
+
+.infoDetails p {
+    color: var(--gray-600);
+    line-height: 1.6;
+}
+
+.workingHours {
+    background-color: var(--gray-50);
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--secondary);
+    margin-top: 1rem;
+}
+
+.workingHours h3 {
+    color: var(--primary);
+    margin-bottom: 1rem;
+    font-size: 1.125rem;
+}
+
+.workingHours p {
+    color: var(--gray-700);
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+/* Contact Form */
+.contactFormWrapper {
+    background-color: var(--background);
+    padding: 3rem;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--gray-200);
+}
+
+.formTitle {
+    margin-bottom: 2rem;
+    color: var(--gray-900);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.formRow {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.formRow .formGroup {
+    flex: 1;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.formGroup label {
+    font-weight: 500;
+    color: var(--gray-700);
+    font-size: 0.95rem;
+}
+
+.formGroup input,
+.formGroup select,
+.formGroup textarea {
+    padding: 0.875rem 1rem;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-sm);
+    background-color: var(--background);
+    color: var(--foreground);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroup textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(15, 58, 105, 0.1);
+}
+
+.formCheckbox {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    margin-top: 0.5rem;
+}
+
+.formCheckbox input {
+    margin-top: 0.25rem;
+}
+
+.formCheckbox label {
+    color: var(--gray-600);
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.link {
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+.submitBtn {
+    margin-top: 1rem;
+    width: 100%;
+    padding-block: 1rem;
+    font-size: 1rem;
+}
+
+/* Map */
+.mapSection {
+    width: 100%;
+    height: 400px;
+}
+
+.mapPlaceholder {
+    width: 100%;
+    height: 100%;
+    background-color: var(--gray-200);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-500);
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+@media (max-width: 1024px) {
+    .contactGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .contactFormWrapper {
+        padding: 2rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .formRow {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+}

@@ -1,0 +1,100 @@
+/* Category Grid Page */
+.pageHeader {
+    background-color: var(--primary);
+    color: white;
+    padding: 3rem 0;
+}
+
+.pageTitle {
+    color: white;
+    margin-bottom: 0.5rem;
+    font-size: 2rem;
+}
+
+.breadcrumb {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.breadcrumb a {
+    color: white;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.categoryGridSection {
+    padding-block: 4rem;
+}
+
+.categoryGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.categoryCard {
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+}
+
+.categoryCard:hover {
+    transform: translateY(-4px);
+}
+
+.categoryImageWrapper {
+    aspect-ratio: 1/1;
+    width: 100%;
+    background-color: var(--gray-100);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.imagePlaceholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--gray-400);
+    font-size: 1rem;
+    padding: 1rem;
+}
+
+.categoryInfo {
+    background-color: var(--gray-50);
+    padding: 1.5rem 1rem;
+    text-align: center;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    border: 1px solid var(--gray-100);
+    border-top: none;
+}
+
+.categoryName {
+    font-size: 1.125rem;
+    color: var(--gray-900);
+    font-weight: 500;
+    margin: 0;
+    transition: color 0.2s ease;
+}
+
+.categoryCard:hover .categoryInfo {
+    background-color: #38bdf8;
+    /* Light blue on hover like screenshot */
+}
+
+.categoryCard:hover .categoryName {
+    color: white;
+}
