@@ -25,17 +25,19 @@ export async function POST(req: NextRequest) {
         }
 
         const data = await req.json();
-        const { name, logoUrl, description } = data;
+        const { name, logoUrl, description_tr, description_en, url } = data;
 
-        if (!name || !logoUrl) {
-            return NextResponse.json({ error: "Name and logo URL are required" }, { status: 400 });
+        if (!name) {
+            return NextResponse.json({ error: "Name is required" }, { status: 400 });
         }
 
         const newBrand = await prisma.brand.create({
             data: {
                 name,
-                logoUrl,
-                description,
+                logoUrl: logoUrl || '/images/placeholder.jpg',
+                description_tr,
+                description_en,
+                url,
             }
         });
 

@@ -31,7 +31,8 @@ export async function POST(req: NextRequest) {
             updatedSettings = await prisma.setting.update({
                 where: { id: existing.id },
                 data: {
-                    aboutText: data.aboutText,
+                    aboutText_tr: data.aboutText_tr,
+                    aboutText_en: data.aboutText_en,
                     phone: data.phone,
                     email: data.email,
                     address: data.address,
@@ -40,7 +41,8 @@ export async function POST(req: NextRequest) {
         } else {
             updatedSettings = await prisma.setting.create({
                 data: {
-                    aboutText: data.aboutText,
+                    aboutText_tr: data.aboutText_tr,
+                    aboutText_en: data.aboutText_en,
                     phone: data.phone,
                     email: data.email,
                     address: data.address,

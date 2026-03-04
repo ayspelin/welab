@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
                     select: { products: true, children: true }
                 }
             },
-            orderBy: { name: 'asc' }
+            orderBy: { name_tr: 'asc' }
         });
         return NextResponse.json(categories);
     } catch (error) {
@@ -31,16 +31,18 @@ export async function POST(req: NextRequest) {
         }
 
         const data = await req.json();
-        const { name, description, imageUrl, parentId } = data;
+        const { name_tr, name_en, description_tr, description_en, imageUrl, parentId } = data;
 
-        if (!name) {
-            return NextResponse.json({ error: "Name is required" }, { status: 400 });
+        if (!name_tr) {
+            return NextResponse.json({ error: "Turkish Name is required" }, { status: 400 });
         }
 
         const newCategory = await prisma.category.create({
             data: {
-                name,
-                description,
+                name_tr,
+                name_en,
+                description_tr,
+                description_en,
                 imageUrl,
                 parentId: parentId || null
             }

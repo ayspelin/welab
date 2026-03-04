@@ -13,17 +13,19 @@ export async function PUT(req: NextRequest, context: any) {
         }
 
         const data = await req.json();
-        const { name, description, imageUrl, parentId } = data;
+        const { name_tr, name_en, description_tr, description_en, imageUrl, parentId } = data;
 
-        if (!name) {
-            return NextResponse.json({ error: "Name is required" }, { status: 400 });
+        if (!name_tr) {
+            return NextResponse.json({ error: "Turkish Name is required" }, { status: 400 });
         }
 
         const updatedCategory = await prisma.category.update({
             where: { id },
             data: {
-                name,
-                description,
+                name_tr,
+                name_en,
+                description_tr,
+                description_en,
                 imageUrl,
                 parentId: parentId || null
             }

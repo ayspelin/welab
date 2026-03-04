@@ -18,6 +18,8 @@ model User {
   email        String   @unique
   passwordHash String
   role         Role     @default(DEALER)
+  isApproved   Boolean  @default(false)
+  emailVerified Boolean @default(false)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
@@ -29,20 +31,24 @@ enum Role {
 }
 
 model Brand {
-  id          String   @id @default(uuid())
-  name        String
-  logoUrl     String
-  description String?
-  products    Product[]
+  id             String   @id @default(uuid())
+  name           String
+  logoUrl        String
+  description_tr String?
+  description_en String?
+  url            String?
+  products       Product[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
 model Category {
-  id          String     @id @default(uuid())
-  name        String
-  description String?
-  imageUrl    String?
+  id             String     @id @default(uuid())
+  name_en        String
+  name_tr        String?
+  description_en String?
+  description_tr String?
+  imageUrl       String?
   
   // Self-relation for sub-categories
   parentId    String?
@@ -57,8 +63,10 @@ model Category {
 
 model Product {
   id             String         @id @default(uuid())
-  name           String
-  description    String        @db.Text
+  name_en        String
+  name_tr        String?
+  description_en String         @db.Text
+  description_tr String?        @db.Text
   technicalSpecs Json?
   
   brandId        String
@@ -104,9 +112,10 @@ model Document {
 }
 
 model Setting {
-  id        String   @id @default(uuid())
-  aboutText String   @db.Text
-  phone     String?
+  id           String   @id @default(uuid())
+  aboutText_en String   @db.Text
+  aboutText_tr String?  @db.Text
+  phone        String?
   email     String?
   address   String?
   

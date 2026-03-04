@@ -1,0 +1,72 @@
+{
+    "Navigation": {
+        "home": "Home",
+        "about": "About Us",
+        "brands": "Global Brands",
+        "products": "Products",
+        "downloads": "Downloads",
+        "contact": "Contact",
+        "login": "Dealer Login",
+        "admin": "Admin",
+        "portal": "Portal",
+        "logout": "Logout"
+    },
+    "Footer": {
+        "rights": "All rights reserved.",
+        "links": "Quick Links",
+        "contact": "Contact Us",
+        "brandDesc": "Your Solution Partner for Industrial Laboratory Systems & Analytical Instruments.",
+        "about": "About Us",
+        "quality": "Quality Certificates",
+        "careers": "Careers",
+        "productsTitle": "Products & Solutions",
+        "analytical": "Analytical Instruments",
+        "qualityControl": "Quality Control",
+        "waterPurification": "Water Purification",
+        "brands": "Global Brands",
+        "privacy": "Privacy Policy",
+        "terms": "Terms of Service"
+    },
+    "Home": {
+        "heroBadge": "Industrial Laboratory Solutions",
+        "heroTitle": "Analyze the Future with \n<highlight>The Power of Science</highlight>",
+        "heroDesc": "We provide world-class laboratory equipment and professional technical support for your research, quality control, and industrial production processes.",
+        "explore": "Explore Products",
+        "quote": "Request a Quote",
+        "solutionsTitle": "Our Solutions",
+        "solutionsDesc": "End-to-end solutions for all your laboratory needs.",
+        "trustTitle": "Why Choose WELAB?",
+        "trustDesc": "With over 15 years of industry experience, we not only sell devices but also provide comprehensive post-sales installation, calibration, and training services through our expert engineering staff.",
+        "ctaTitle": "Looking for the Right System for Your Lab?",
+        "ctaDesc": "Our experts are ready to assist you. Contact us for detailed info and a quote.",
+        "ctaContact": "Contact Us",
+        "ctaPartnerships": "View Agencies",
+        "brandsSubtitle": "WE ARE DISTRIBUTORS OF GLOBAL BRANDS!",
+        "brandsTitle": "Our Agencies",
+        "noBrands": "There are currently no agencies to list."
+    },
+    "Common": {
+        "aboutUs": "About Us",
+        "ourBrands": "Global Brands",
+        "contact": "Contact",
+        "downloads": "Downloads",
+        "readMore": "Read More",
+        "message_sent": "Your message has been successfully sent."
+    },
+    "Products": {
+        "title": "Products",
+        "home": "Home",
+        "emptyCategory": "No categories have been added yet.",
+        "manufacturer": "Manufacturer",
+        "viewManufacturer": "Click here to see all products from this manufacturer",
+        "requestQuote": "Request Quote",
+        "companyName": "Company Name",
+        "contactName": "Contact Name *",
+        "phone": "Phone *",
+        "email": "Email",
+        "city": "City",
+        "refUrl": "Reference URL",
+        "notes": "Notes",
+        "submit": "SUBMIT"
+    }
+}

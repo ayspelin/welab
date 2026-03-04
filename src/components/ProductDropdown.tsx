@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 import styles from "./Header.module.css";
 
 export default function ProductDropdown() {
+    const t = useTranslations("Navigation");
     const [categories, setCategories] = useState<any[]>([]);
 
     useEffect(() => {
@@ -27,7 +29,7 @@ export default function ProductDropdown() {
     return (
         <li className={styles.dropdownContainer}>
             <Link href="/products" className={styles.navLink}>
-                Products <span style={{ fontSize: '0.75rem' }}>▼</span>
+                {t('products', { fallback: 'PRODUCTS' })} <span style={{ fontSize: '0.75rem', marginLeft: '0.25rem' }}>▼</span>
             </Link>
             {categories.length > 0 && (
                 <ul className={styles.dropdownMenu}>

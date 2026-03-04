@@ -14,9 +14,10 @@ export async function PUT(
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
-        const id = context.params.id;
+        const params = await context.params;
+        const id = params.id;
         const data = await req.json();
-        const { name, logoUrl, description } = data;
+        const { name, logoUrl, description_tr, description_en, url } = data;
 
         if (!name) {
             return NextResponse.json({ error: "Name is required" }, { status: 400 });
@@ -27,14 +28,16 @@ export async function PUT(
             data: {
                 name,
                 logoUrl,
-                description,
+                description_tr,
+                description_en,
+                url,
             }
         });
 
         return NextResponse.json(updatedBrand, { status: 200 });
     } catch (error) {
-        console.error("Error updating brand:", error);
-        return NextResponse.json({ error: "Failed to update brand" }, { status: 500 });
+        console.error("Error updating brand EXACTLY:", error);
+        return NextResponse.json({ error: "Failed to update brand", details: String(error) }, { status: 500 });
     }
 }
 
@@ -49,7 +52,8 @@ export async function DELETE(
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
-        const id = context.params.id;
+        const params = await context.params;
+        const id = params.id;
 
         // Check if brand is attached to products
         const productsCount = await prisma.product.count({

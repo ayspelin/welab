@@ -1,0 +1,72 @@
+{
+    "Navigation": {
+        "home": "Ana Sayfa",
+        "about": "Hakkımızda",
+        "brands": "Temsilciliklerimiz",
+        "products": "Ürünler",
+        "downloads": "Katalog ve Dokümanlar",
+        "contact": "İletişim",
+        "login": "Bayi Girişi",
+        "admin": "Yönetici Paneli",
+        "portal": "Bayi Portalı",
+        "logout": "Çıkış"
+    },
+    "Footer": {
+        "rights": "Tüm hakları saklıdır.",
+        "links": "Hızlı Bağlantılar",
+        "contact": "Bize Ulaşın",
+        "brandDesc": "Endüstriyel Laboratuvar Sistemleri & Analitik Cihazlar için Çözüm Ortağınız.",
+        "about": "Hakkımızda",
+        "quality": "Kalite Belgeleri",
+        "careers": "Kariyer",
+        "productsTitle": "Ürünler ve Çözümler",
+        "analytical": "Analitik Cihazlar",
+        "qualityControl": "Kalite Kontrol",
+        "waterPurification": "Su Saflaştırma",
+        "brands": "Temsilciliklerimiz",
+        "privacy": "Gizlilik Politikası",
+        "terms": "Kullanım Koşulları"
+    },
+    "Home": {
+        "heroBadge": "Endüstriyel Laboratuvar Çözümleri",
+        "heroTitle": "Geleceği Analiz Edin \n<highlight>Bilimin Gücüyle</highlight>",
+        "heroDesc": "Araştırma, kalite kontrol ve endüstriyel üretim süreçleriniz için dünya standartlarında laboratuvar cihazları ve profesyonel teknik destek sağlıyoruz.",
+        "explore": "Ürünleri Keşfet",
+        "quote": "Teklif İste",
+        "solutionsTitle": "Çözümlerimiz",
+        "solutionsDesc": "Tüm laboratuvar ihtiyaçlarınız için uçtan uca çözümler.",
+        "trustTitle": "Neden WELAB'ı Seçmelisiniz?",
+        "trustDesc": "15 yılı aşkın endüstri tecrübemizle sadece cihaz satmıyor, aynı zamanda uzman mühendis kadromuzla satış sonrası kurulum, kalibrasyon ve eğitim hizmetlerini kapsamlı bir şekilde sunuyoruz.",
+        "ctaTitle": "Laboratuvarınız İçin Doğru Sistemi mi Arıyorsunuz?",
+        "ctaDesc": "Uzmanlarımız size yardımcı olmaya hazır. Detaylı bilgi ve teklif için ulaşın.",
+        "ctaContact": "İletişime Geç",
+        "ctaPartnerships": "Temsilcilikleri Gör",
+        "brandsSubtitle": "DÜNYA MARKALARININ DİSTRİBÜTÖRLÜĞÜNÜ YAPIYORUZ!",
+        "brandsTitle": "Temsilciliklerimiz",
+        "noBrands": "Şu an listelenecek temsilcilik bulunmamaktadır."
+    },
+    "Common": {
+        "aboutUs": "Hakkımızda",
+        "ourBrands": "Temsilciliklerimiz",
+        "contact": "İletişim",
+        "downloads": "Katalog ve Dokümanlar",
+        "readMore": "Devamını Oku",
+        "message_sent": "Mesajınız başarıyla iletilmiştir."
+    },
+    "Products": {
+        "title": "Ürünler",
+        "home": "Ana Sayfa",
+        "emptyCategory": "Henüz hiçbir kategori eklenmemiş.",
+        "manufacturer": "Üretici Firma",
+        "viewManufacturer": "Üreticiye ait tüm ürünleri görmek için tıklayın",
+        "requestQuote": "Fiyat Teklifi İsteyin",
+        "companyName": "Kurum/Firma Adı",
+        "contactName": "Yetkili Adı Soyadı *",
+        "phone": "Telefon Numarası *",
+        "email": "E-posta Adresi",
+        "city": "Bulunduğu Şehir",
+        "refUrl": "Referans URL",
+        "notes": "Açıklamalar",
+        "submit": "GÖNDER"
+    }
+}

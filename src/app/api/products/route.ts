@@ -38,8 +38,10 @@ export async function POST(req: NextRequest) {
 
         const data = await req.json();
         const {
-            name,
-            description,
+            name_tr,
+            name_en,
+            description_tr,
+            description_en,
             technicalSpecs,
             brandId,
             categoryId,
@@ -47,15 +49,17 @@ export async function POST(req: NextRequest) {
             images
         } = data;
 
-        if (!name || !description || !brandId || !categoryId) {
+        if (!name_tr || !description_tr || !brandId || !categoryId) {
             return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
         }
 
         // Creating product and nested images
         const newProduct = await prisma.product.create({
             data: {
-                name,
-                description,
+                name_tr,
+                name_en,
+                description_tr,
+                description_en,
                 technicalSpecs: technicalSpecs || {},
                 brandId,
                 categoryId,

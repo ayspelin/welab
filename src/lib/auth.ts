@@ -24,6 +24,15 @@ export const authOptions: NextAuthOptions = {
                     throw new Error("Kullanıcı bulunamadı.");
                 }
 
+                if (user.role === "DEALER") {
+                    if (!user.emailVerified) {
+                        throw new Error("E-posta adresiniz doğrulanmamış. Lütfen e-postanızı kontrol edin.");
+                    }
+                    if (!user.isApproved) {
+                        throw new Error("Hesabınız henüz onaylanmadı. Lütfen yönetici onayını bekleyin.");
+                    }
+                }
+
                 const isPasswordValid = await bcrypt.compare(credentials.password, user.passwordHash);
 
                 if (!isPasswordValid) {

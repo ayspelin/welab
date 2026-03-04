@@ -9,10 +9,15 @@ async function main() {
     if (!existing) {
         await prisma.setting.create({
             data: {
-                aboutText: `
+                aboutText_tr: `
 <h2>WeLab Hakkında</h2>
 <p>WeLab, laboratuvar ve endüstriyel spektral analiz cihazları konusunda uzmanlaşmış bir teknoloji firmasıdır.</p>
 <p>20 yılı aşkın tecrübemiz ve alanında lider global iş ortaklarımızla, Türkiye'deki araştırma merkezlerine, üniversitelere ve endüstriyel tesislere en ileri teknolojiyi sunuyoruz.</p>
+                `,
+                aboutText_en: `
+<h2>About WeLab</h2>
+<p>WeLab is a technology company specializing in laboratory and industrial spectral analysis devices.</p>
+<p>With over 20 years of experience and globally leading partners, we provide state-of-the-art technology to research centers, universities, and industrial facilities in Turkey.</p>
                 `,
                 phone: "+90 216 123 45 67",
                 email: "info@welab.com.tr",

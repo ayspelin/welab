@@ -14,14 +14,16 @@ export async function PUT(req: NextRequest, context: any) {
         const id = resolvedParams.id;
 
         const data = await req.json();
-        const { name, description, technicalSpecs, brandId, categoryId, isFeatured, images } = data;
+        const { name_tr, name_en, description_tr, description_en, technicalSpecs, brandId, categoryId, isFeatured, images } = data;
 
         // Perform update
         const updatedProduct = await prisma.product.update({
             where: { id },
             data: {
-                ...(name && { name }),
-                ...(description && { description }),
+                ...(name_tr && { name_tr }),
+                ...(name_en !== undefined && { name_en }),
+                ...(description_tr && { description_tr }),
+                ...(description_en !== undefined && { description_en }),
                 ...(technicalSpecs !== undefined && { technicalSpecs }),
                 ...(brandId && { brandId }),
                 ...(categoryId && { categoryId }),
