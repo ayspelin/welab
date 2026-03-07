@@ -112,12 +112,19 @@ model Document {
 }
 
 model Setting {
-  id           String   @id @default(uuid())
-  aboutText_en String   @db.Text
-  aboutText_tr String?  @db.Text
-  phone        String?
-  email     String?
-  address   String?
+  id             String   @id @default(uuid())
+  aboutText_en   String   @db.Text
+  aboutText_tr   String?  @db.Text
+  phone          String?
+  email          String?
+  address        String?
   
-  updatedAt DateTime @updatedAt
+  heroTitle_tr   String?  @db.Text
+  heroTitle_en   String?  @db.Text
+  heroDesc_tr    String?  @db.Text
+  heroDesc_en    String?  @db.Text
+  heroImageUrl   String?
+  heroBgImageUrl String?
+  
+  updatedAt      DateTime @updatedAt
 }

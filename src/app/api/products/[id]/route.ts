@@ -14,7 +14,7 @@ export async function PUT(req: NextRequest, context: any) {
         const id = resolvedParams.id;
 
         const data = await req.json();
-        const { name_tr, name_en, description_tr, description_en, technicalSpecs, brandId, categoryId, isFeatured, images } = data;
+        const { name_tr, name_en, description_tr, description_en, technicalSpecs, brandId, categoryId, isFeatured, images, documents } = data;
 
         // Perform update
         const updatedProduct = await prisma.product.update({
@@ -32,21 +32,44 @@ export async function PUT(req: NextRequest, context: any) {
         });
 
         // Optionally handle image replacement if new images are provided
-        if (images && images.length > 0) {
+        if (images !== undefined) {
             // First delete old images
             await prisma.productImage.deleteMany({
                 where: { productId: id }
             });
 
             // Create new ones
-            await prisma.productImage.createMany({
-                data: images.map((img: any, index: number) => ({
-                    productId: id,
-                    url: img.url,
-                    isPrimary: index === 0,
-                    order: index
-                }))
+            if (images.length > 0) {
+                await prisma.productImage.createMany({
+                    data: images.map((img: any, index: number) => ({
+                        productId: id,
+                        url: img.url,
+                        isPrimary: index === 0,
+                        order: index
+                    }))
+                });
+            }
+        }
+
+        // Optionally handle document replacement
+        if (documents !== undefined) {
+            // First delete old documents
+            await prisma.document.deleteMany({
+                where: { productId: id }
             });
+
+            // Create new ones
+            if (documents.length > 0) {
+                await prisma.document.createMany({
+                    data: documents.map((doc: any) => ({
+                        productId: id,
+                        title: doc.title || "Document",
+                        type: doc.type || "PDF",
+                        url: doc.url,
+                        isPublic: doc.isPublic !== undefined ? doc.isPublic : true
+                    }))
+                });
+            }
         }
 
         return NextResponse.json(updatedProduct, { status: 200 });

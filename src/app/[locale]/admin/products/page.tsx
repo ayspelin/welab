@@ -256,6 +256,7 @@ export default function ProductsPage() {
                             <input
                                 type="text"
                                 value={name_tr}
+                                onChange={(e) => setNameTr(e.target.value)}
                                 style={{ width: "100%", padding: "0.5rem", borderRadius: "0.25rem", border: "1px solid var(--gray-300)", marginBottom: "0.5rem" }}
                             />
                             <label style={{ display: "block", marginBottom: "0.5rem", marginTop: "0.5rem" }}>Ürün Adı (İngilizce)</label>

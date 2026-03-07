@@ -116,6 +116,24 @@
     font-weight: 600;
 }
 
+.viewLiveBtn {
+    background-color: var(--primary);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.viewLiveBtn:hover {
+    background-color: var(--primary-dark);
+}
+
 .contentArea {
     flex: 1;
     overflow-y: auto;

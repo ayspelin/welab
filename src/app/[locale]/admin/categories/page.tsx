@@ -171,6 +171,8 @@ export default function CategoriesAdminPage() {
                             <input
                                 type="text"
                                 value={name_tr}
+                                onChange={(e) => setNameTr(e.target.value)}
+                                required
                                 placeholder="Örn: Analitik Cihazlar"
                             />
                         </div>

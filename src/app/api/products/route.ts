@@ -46,7 +46,8 @@ export async function POST(req: NextRequest) {
             brandId,
             categoryId,
             isFeatured,
-            images
+            images,
+            documents
         } = data;
 
         if (!name_tr || !description_tr || !brandId || !categoryId) {
@@ -70,10 +71,19 @@ export async function POST(req: NextRequest) {
                         isPrimary: index === 0,
                         order: index
                     })) : []
+                },
+                documents: {
+                    create: documents && Array.isArray(documents) ? documents.map((doc: any) => ({
+                        title: doc.title || "Document",
+                        type: doc.type || "PDF",
+                        url: doc.url,
+                        isPublic: doc.isPublic !== undefined ? doc.isPublic : true
+                    })) : []
                 }
             },
             include: {
                 images: true,
+                documents: true,
                 brand: true,
                 category: true
             }

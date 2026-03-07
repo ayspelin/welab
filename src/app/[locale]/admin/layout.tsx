@@ -44,11 +44,10 @@ export default function AdminLayout({
 
                 <div className={styles.mainWrapper}>
                     <header className={styles.topbar}>
-                        <div className={styles.searchBar}>
-                            <input type="text" placeholder="Ara..." />
-                        </div>
-                        <div className={styles.profileMenu}>
-                            <div className={styles.avatar}>{user?.email?.charAt(0).toUpperCase() || "A"}</div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                            <Link href="/" target="_blank" className={styles.viewLiveBtn}>
+                                🌍 Ana Sayfaya Git
+                            </Link>
                         </div>
                     </header>
 

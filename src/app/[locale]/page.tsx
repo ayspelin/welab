@@ -2,30 +2,102 @@ import styles from "./page.module.css";
 import { Link } from "@/i18n/routing";
 import Image from "next/image";
 import BrandsSection from "@/components/BrandsSection";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
+import { PrismaClient } from "@prisma/client";
 
-export default function Home() {
-  const t = useTranslations("Home");
+const prisma = new PrismaClient();
+
+export default async function Home(props: { params: Promise<{ locale: string }> }) {
+  const { locale } = await props.params;
+  const t = await getTranslations("Home");
+
+  // Fetch up to 3 categories from the database
+  const dbCategories = await prisma.category.findMany({
+    take: 3,
+    orderBy: { createdAt: 'desc' }
+  });
+
+  // Fetch Site Settings for Hero Texts
+  const settings = await prisma.setting.findFirst();
+
+  // Determine dynamic copy, fallback to hardcoded localization
+  const currentHeroTitle = locale === 'tr'
+    ? (settings?.heroTitle_tr || t.raw('heroTitle'))
+    : (settings?.heroTitle_en || t.raw('heroTitle'));
+
+  const currentHeroDesc = locale === 'tr'
+    ? (settings?.heroDesc_tr || t('heroDesc'))
+    : (settings?.heroDesc_en || t('heroDesc'));
+
+  const currentHeroImageUrl = settings?.heroImageUrl || "/images/quality_control.png";
+  const currentHeroBgImageUrl = settings?.heroBgImageUrl || "/images/hero_bg.png";
+
+  // Default fallback categories with high-quality AI images
+  const defaultCategories = [
+    {
+      id: "c1",
+      name_en: "Analytical Instruments",
+      description_en: "High precision chromatography, spectroscopy, and basic analytical systems.",
+      imageUrl: "/images/analytical_instruments.png"
+    },
+    {
+      id: "c2",
+      name_en: "Quality Control",
+      description_en: "Durability tests, material analysis, and physical measurement devices.",
+      imageUrl: "/images/quality_control.png"
+    },
+    {
+      id: "c3",
+      name_en: "Water Purification",
+      description_en: "Type 1, Type 2, and Type 3 ultra-pure water systems for sensitive research.",
+      imageUrl: "/images/water.png" // using existing water.png if available, we can also generate one
+    }
+  ];
+
+  // If DB is empty, use defaults. Otherwise, use DB data (and fallback images if DB image is missing)
+  const displayCategories = dbCategories.length > 0 ? dbCategories : defaultCategories;
 
   return (
     <>
       {/* Hero Section */}
       <section className={styles.hero}>
+        <div className={styles.heroBackground}>
+          <Image
+            src={currentHeroBgImageUrl}
+            alt="Laboratory Background"
+            fill
+            style={{ objectFit: 'cover', zIndex: -1, opacity: 0.15 }}
+            priority
+          />
+        </div>
         <div className={`container ${styles.heroContainer}`}>
           <div className={styles.heroContent}>
             <span className={styles.heroBadge}>{t('heroBadge')}</span>
-            <h1 className={styles.heroTitle} dangerouslySetInnerHTML={{ __html: t.raw('heroTitle') }} />
-            <p className={styles.heroDesc}>
-              {t('heroDesc')}
-            </p>
+            <div
+              className={styles.heroTitle}
+              role="heading"
+              aria-level={1}
+              dangerouslySetInnerHTML={{ __html: currentHeroTitle }}
+            />
+            <div
+              className={styles.heroDesc}
+              dangerouslySetInnerHTML={{ __html: currentHeroDesc }}
+            />
             <div className={styles.heroActions}>
               <Link href="/products" className="btn btn-primary">{t('explore')}</Link>
               <Link href="/contact" className="btn btn-secondary">{t('quote')}</Link>
             </div>
           </div>
           <div className={styles.heroImageWrapper}>
-            <div className={styles.imagePlaceholder}>
-              <span className={styles.placeholderText}>Hero Image (Machines)</span>
+            <div className={styles.heroImageContainer}>
+              <Image
+                src={currentHeroImageUrl}
+                alt="Advanced Laboratory Equipment"
+                width={600}
+                height={450}
+                style={{ objectFit: 'cover', borderRadius: '16px', boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}
+                priority
+              />
             </div>
           </div>
         </div>
@@ -43,24 +115,21 @@ export default function Home() {
           </div>
 
           <div className={styles.categoryGrid}>
-            <div className={styles.categoryCard}>
-              <div className={styles.catImage}>IMG</div>
-              <h3 className={styles.catTitle}>Analytical Instruments</h3>
-              <p className={styles.catDesc}>High precision chromatography, spectroscopy, and basic analytical systems.</p>
-              <Link href="/products?category=c1" className={styles.catLink}>View Details &rarr;</Link>
-            </div>
-            <div className={styles.categoryCard}>
-              <div className={styles.catImage}>IMG</div>
-              <h3 className={styles.catTitle}>Quality Control</h3>
-              <p className={styles.catDesc}>Durability tests, material analysis, and physical measurement devices.</p>
-              <Link href="/products?category=c2" className={styles.catLink}>View Details &rarr;</Link>
-            </div>
-            <div className={styles.categoryCard}>
-              <div className={styles.catImage}>IMG</div>
-              <h3 className={styles.catTitle}>Water Purification</h3>
-              <p className={styles.catDesc}>Type 1, Type 2, and Type 3 ultra-pure water systems for sensitive research.</p>
-              <Link href="/products?category=c3" className={styles.catLink}>View Details &rarr;</Link>
-            </div>
+            {displayCategories.map((cat: any, index: number) => (
+              <div key={cat.id} className={styles.categoryCard}>
+                <div className={styles.catImageContainer}>
+                  <Image
+                    src={cat.imageUrl || defaultCategories[index % 3].imageUrl}
+                    alt={cat.name_en}
+                    fill
+                    style={{ objectFit: 'cover' }}
+                  />
+                </div>
+                <h3 className={styles.catTitle}>{cat.name_en}</h3>
+                <p className={styles.catDesc}>{cat.description_en}</p>
+                <Link href={`/products?category=${cat.id}`} className={styles.catLink}>View Details &rarr;</Link>
+              </div>
+            ))}
           </div>
         </div>
       </section>

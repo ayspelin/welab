@@ -36,6 +36,12 @@ export async function POST(req: NextRequest) {
                     phone: data.phone,
                     email: data.email,
                     address: data.address,
+                    heroTitle_tr: data.heroTitle_tr,
+                    heroTitle_en: data.heroTitle_en,
+                    heroDesc_tr: data.heroDesc_tr,
+                    heroDesc_en: data.heroDesc_en,
+                    heroImageUrl: data.heroImageUrl,
+                    heroBgImageUrl: data.heroBgImageUrl,
                 }
             });
         } else {
@@ -46,6 +52,12 @@ export async function POST(req: NextRequest) {
                     phone: data.phone,
                     email: data.email,
                     address: data.address,
+                    heroTitle_tr: data.heroTitle_tr,
+                    heroTitle_en: data.heroTitle_en,
+                    heroDesc_tr: data.heroDesc_tr,
+                    heroDesc_en: data.heroDesc_en,
+                    heroImageUrl: data.heroImageUrl,
+                    heroBgImageUrl: data.heroBgImageUrl,
                 }
             });
         }
