@@ -26,43 +26,35 @@ export async function POST(req: NextRequest) {
         // Find existing to update, or create
         const existing = await prisma.setting.findFirst();
 
+        const updateData = {
+            aboutText_tr: data.aboutText_tr,
+            aboutText_en: data.aboutText_en,
+            phone: data.phone,
+            email: data.email,
+            address: data.address,
+            heroTitle_tr: data.heroTitle_tr,
+            heroTitle_en: data.heroTitle_en,
+            heroDesc_tr: data.heroDesc_tr,
+            heroDesc_en: data.heroDesc_en,
+            heroImageUrl: data.heroImageUrl,
+            heroBgImageUrl: data.heroBgImageUrl,
+            refNotice_tr: data.refNotice_tr ?? null,
+            refNotice_en: data.refNotice_en ?? null,
+            trustFeatures_tr: data.trustFeatures_tr ?? null,
+            trustFeatures_en: data.trustFeatures_en ?? null,
+            trustStats_tr: data.trustStats_tr ?? null,
+            trustStats_en: data.trustStats_en ?? null,
+        } as any; // Cast as any due to Prisma client not yet synced
+
         let updatedSettings;
         if (existing) {
             updatedSettings = await prisma.setting.update({
                 where: { id: existing.id },
-                data: {
-                    aboutText_tr: data.aboutText_tr,
-                    aboutText_en: data.aboutText_en,
-                    phone: data.phone,
-                    email: data.email,
-                    address: data.address,
-                    heroTitle_tr: data.heroTitle_tr,
-                    heroTitle_en: data.heroTitle_en,
-                    heroDesc_tr: data.heroDesc_tr,
-                    heroDesc_en: data.heroDesc_en,
-                    heroImageUrl: data.heroImageUrl,
-                    heroBgImageUrl: data.heroBgImageUrl,
-                    refNotice_tr: data.refNotice_tr ?? null,
-                    refNotice_en: data.refNotice_en ?? null,
-                }
+                data: updateData
             });
         } else {
             updatedSettings = await prisma.setting.create({
-                data: {
-                    aboutText_tr: data.aboutText_tr,
-                    aboutText_en: data.aboutText_en,
-                    phone: data.phone,
-                    email: data.email,
-                    address: data.address,
-                    heroTitle_tr: data.heroTitle_tr,
-                    heroTitle_en: data.heroTitle_en,
-                    heroDesc_tr: data.heroDesc_tr,
-                    heroDesc_en: data.heroDesc_en,
-                    heroImageUrl: data.heroImageUrl,
-                    heroBgImageUrl: data.heroBgImageUrl,
-                    refNotice_tr: data.refNotice_tr ?? null,
-                    refNotice_en: data.refNotice_en ?? null,
-                }
+                data: updateData
             });
         }
 

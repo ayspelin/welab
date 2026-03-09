@@ -14,7 +14,7 @@ export default function AdminLayout({
 
     return (
         <ProtectedRoute allowedRoles={["SUPER_ADMIN", "ADMIN"]}>
-            <div className={styles.adminLayout}>
+            <div className={styles.adminLayout} data-admin="true">
                 <aside className={styles.sidebar}>
                     <div className={styles.sidebarHeader}>
                         <Link href="/admin">

@@ -22,10 +22,27 @@ export default function Footer() {
 
     return (
         <footer className={styles.footer}>
+            {/* Bento top row */}
+            <div className={styles.footerBento}>
+                <div className={styles.footerBentoLeft}>
+                    <h2 className={styles.footerBentoTitle}>{t('talkToExpert')}</h2>
+                    <Link href="/contact" className="btn btn-primary">{t('contactExperts')}</Link>
+                </div>
+                <div className={styles.footerBentoRight}>
+                    <p className={styles.footerBentoSubtitle}>
+                        {t('findSolution')}<br />
+                        <span>{t('laboratory')}</span><br />
+                        {t('subSolution')}
+                    </p>
+                    <Link href="/products" className="btn btn-primary">{t('browseProducts')}</Link>
+                </div>
+            </div>
+
+            {/* Main link columns */}
             <div className={`container ${styles.footerGrid}`}>
                 <div className={styles.brand}>
-                    <Link href="/" style={{ display: 'inline-block', marginBottom: '1rem', marginLeft: '-0.75rem' }}>
-                        <img src="/images/logo.svg" alt="WELAB Logo" style={{ width: '250px', height: '98px', objectFit: 'contain' }} />
+                    <Link href="/" style={{ display: 'inline-block', marginBottom: '1rem', marginLeft: '-0.5rem' }}>
+                        <img src="/images/logo.svg" alt="WELAB Logo" style={{ width: '200px', height: '78px', objectFit: 'contain' }} />
                     </Link>
                     <p className={styles.brandDesc}>
                         {t('brandDesc')}
@@ -60,6 +77,7 @@ export default function Footer() {
                     </ul>
                 </div>
             </div>
+
             <div className={styles.bottomBar}>
                 <div className={`container ${styles.bottomInner}`}>
                     <p>&copy; {new Date().getFullYear()} WELAB. {t('rights')}</p>

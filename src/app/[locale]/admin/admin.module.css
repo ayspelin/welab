@@ -1,3 +1,52 @@
+/* ============================================
+   ADMIN LIGHT THEME — override dark globals
+   ============================================ */
+:global([data-admin="true"]) {
+    --background: #ffffff;
+    --background-2: #f8fafc;
+    --background-card: #ffffff;
+    --background-card-hover: #f1f5f9;
+    --foreground: #0f172a;
+    --text-muted: #64748b;
+    --text-subtle: #475569;
+    --border: #e2e8f0;
+    --border-hover: #cbd5e1;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-400: #94a3b8;
+    --gray-500: #64748b;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-800: #1e293b;
+    --gray-900: #0f172a;
+    --primary: #1378f4;
+    --primary-light: #4492f5;
+    --primary-dark: #0e5cbf;
+    --secondary: #8cc63f;
+    --accent: #8cc63f;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 16px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* Admin Light Theme — reset button styles in admin */
+:global([data-admin="true"]) :global(.btn) {
+    text-transform: none;
+    letter-spacing: normal;
+    font-size: 0.875rem;
+    border-radius: 4px;
+}
+
+:global([data-admin="true"]) :global(.btn)::after {
+    content: none;
+}
+
 /* Admin Layout Styles */
 .adminLayout {
     display: flex;
@@ -5,6 +54,7 @@
     width: 100%;
     min-height: 100vh;
     background-color: var(--gray-50);
+    color: var(--gray-900);
 }
 
 .sidebar {
@@ -13,6 +63,17 @@
     color: white;
     display: flex;
     flex-direction: column;
+}
+
+@media (max-width: 768px) {
+    .adminLayout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+    }
 }
 
 .sidebarHeader {
@@ -95,6 +156,12 @@
     width: calc(100% - 250px);
 }
 
+@media (max-width: 768px) {
+    .mainWrapper {
+        width: 100%;
+    }
+}
+
 .topbar {
     height: 60px;
     background-color: white;
@@ -173,6 +240,18 @@
     margin-bottom: 3rem;
 }
 
+@media (max-width: 1024px) {
+    .statsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .statsGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
 .statBox {
     background-color: white;
     padding: 1.5rem;
@@ -212,6 +291,12 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .actionsGrid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .actionBtn {

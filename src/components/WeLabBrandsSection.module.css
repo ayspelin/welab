@@ -1,6 +1,6 @@
 .section {
     padding-block: 5rem 6rem;
-    background: linear-gradient(135deg, #f8faff 0%, #f0f4ff 100%);
+    background-color: var(--background);
     position: relative;
     overflow: hidden;
 }
@@ -9,7 +9,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse at 70% 50%, rgba(26, 111, 196, 0.06) 0%, transparent 60%);
+    background: radial-gradient(ellipse at 70% 50%, rgba(45, 158, 255, 0.05) 0%, transparent 60%);
     pointer-events: none;
 }
 
@@ -20,26 +20,27 @@
 
 .subtitle {
     display: block;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.15em;
-    color: var(--primary, #1a6fc4);
-    font-weight: 600;
+    color: var(--primary);
+    font-weight: 700;
     margin-bottom: 0.75rem;
 }
 
 .title {
-    font-size: 2.5rem;
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
     font-weight: 800;
-    color: var(--gray-900, #111827);
+    text-transform: uppercase;
+    color: #ffffff;
     margin-bottom: 1rem;
     line-height: 1.2;
 }
 
 .desc {
-    font-size: 1.05rem;
-    color: var(--gray-500, #6b7280);
-    max-width: 580px;
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 540px;
     margin: 0 auto;
     line-height: 1.7;
 }
@@ -47,38 +48,42 @@
 .grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
+    gap: 1px;
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(45, 158, 255, 0.08);
 }
 
 .card {
     position: relative;
-    background: white;
-    border-radius: 16px;
-    padding: 2rem 1.5rem 2.5rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-    border: 1px solid rgba(0, 0, 0, 0.06);
+    background: #14142a;
+    padding: 2.5rem 1.75rem 2.75rem;
     text-align: center;
     overflow: hidden;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transition: background-color 0.25s ease, box-shadow 0.25s ease;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: 1.1rem;
 }
 
 .card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+    background-color: #1c1c38;
+    box-shadow: inset 0 0 30px rgba(45, 158, 255, 0.06);
 }
 
 .iconWrap {
     width: 64px;
     height: 64px;
-    border-radius: 16px;
-    background-color: color-mix(in srgb, var(--brand-color) 12%, transparent);
+    border-radius: 14px;
+    background-color: color-mix(in srgb, var(--brand-color) 18%, #0a0a1a);
+    border: 1px solid color-mix(in srgb, var(--brand-color) 50%, transparent);
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 0 16px color-mix(in srgb, var(--brand-color) 20%, transparent);
 }
 
 .icon {
@@ -87,25 +92,24 @@
 }
 
 .brandName {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     font-weight: 800;
     letter-spacing: -0.02em;
     line-height: 1;
 }
 
 .we {
-    color: #1e293b;
+    color: #ffffff;
 }
 
 .brandSuffix {
-    /* color applied via inline style */
     font-weight: inherit;
 }
 
 .cardDesc {
-    font-size: 0.9rem;
-    color: var(--gray-500, #6b7280);
-    line-height: 1.6;
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.55);
+    line-height: 1.65;
     margin: 0;
     flex: 1;
 }
@@ -115,9 +119,8 @@
     bottom: 0;
     left: 0;
     right: 0;
-    height: 4px;
-    opacity: 0.7;
-    border-radius: 0 0 16px 16px;
+    height: 3px;
+    opacity: 1;
 }
 
 /* Responsive */
@@ -133,6 +136,6 @@
     }
 
     .title {
-        font-size: 1.9rem;
+        font-size: 1.8rem;
     }
 }

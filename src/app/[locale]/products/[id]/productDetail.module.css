@@ -229,3 +229,83 @@
 .submitBtn:hover {
     background-color: var(--primary-light);
 }
+
+/* Product Actions (Catalog & Contact) */
+.productActions {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.catalogBtn {
+    background-color: var(--primary);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.2s ease;
+}
+
+.catalogBtn:hover {
+    background-color: var(--primary-dark);
+}
+
+.contactBtn {
+    background-color: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.contactBtn:hover {
+    background-color: var(--primary);
+    color: white;
+}
+
+/* Specifications Table */
+.specsTable {
+    margin-top: 2rem;
+    border-top: 2px solid rgba(0, 0, 0, 0.05);
+    padding-top: 1.5rem;
+}
+
+.specsTitle {
+    font-size: 1.25rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.specRow {
+    display: flex;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 0.75rem 0;
+}
+
+.specRow:last-child {
+    border-bottom: none;
+}
+
+.specKey {
+    width: 40%;
+    font-weight: 600;
+    color: var(--gray-700);
+    padding-right: 1rem;
+}
+
+.specVal {
+    width: 60%;
+    color: var(--gray-600);
+}

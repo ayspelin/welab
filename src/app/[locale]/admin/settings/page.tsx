@@ -27,6 +27,16 @@ export default function SettingsPage() {
     const [refNotice_tr, setRefNoticeTr] = useState("");
     const [refNotice_en, setRefNoticeEn] = useState("");
 
+    // New Trust & Stats fields
+    const [trustFeatures_tr, setTrustFeaturesTr] = useState<string[]>(["", "", "", ""]);
+    const [trustFeatures_en, setTrustFeaturesEn] = useState<string[]>(["", "", "", ""]);
+    const [trustStats_tr, setTrustStatsTr] = useState<{ number: string, label: string }[]>([
+        { number: "", label: "" }, { number: "", label: "" }, { number: "", label: "" }, { number: "", label: "" }
+    ]);
+    const [trustStats_en, setTrustStatsEn] = useState<{ number: string, label: string }[]>([
+        { number: "", label: "" }, { number: "", label: "" }, { number: "", label: "" }, { number: "", label: "" }
+    ]);
+
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
 
@@ -53,6 +63,11 @@ export default function SettingsPage() {
                         setBgPreviewUrl(data.heroBgImageUrl || "");
                         setRefNoticeTr(data.refNotice_tr || "");
                         setRefNoticeEn(data.refNotice_en || "");
+
+                        if (data.trustFeatures_tr && Array.isArray(data.trustFeatures_tr)) setTrustFeaturesTr(data.trustFeatures_tr);
+                        if (data.trustFeatures_en && Array.isArray(data.trustFeatures_en)) setTrustFeaturesEn(data.trustFeatures_en);
+                        if (data.trustStats_tr && Array.isArray(data.trustStats_tr)) setTrustStatsTr(data.trustStats_tr);
+                        if (data.trustStats_en && Array.isArray(data.trustStats_en)) setTrustStatsEn(data.trustStats_en);
                     }
                 }
             } catch (error) {
@@ -134,6 +149,10 @@ export default function SettingsPage() {
                     heroBgImageUrl: finalBgImageUrl,
                     refNotice_tr,
                     refNotice_en,
+                    trustFeatures_tr,
+                    trustFeatures_en,
+                    trustStats_tr,
+                    trustStats_en,
                 })
             });
 
@@ -335,6 +354,117 @@ export default function SettingsPage() {
                                     placeholder="Örn: Our references will be uploaded soon."
                                     style={{ width: "100%", padding: "0.75rem", borderRadius: "0.375rem", border: "1px solid var(--gray-300)", fontFamily: "inherit" }}
                                 />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Trust & Stats Section */}
+                    <div style={{ padding: "1.5rem", border: "1px solid var(--gray-200)", borderRadius: "var(--radius-md)", backgroundColor: "var(--gray-50)" }}>
+                        <h3 style={{ marginBottom: "0.5rem", color: "var(--primary)", borderBottom: "1px solid var(--gray-200)", paddingBottom: "0.5rem" }}>Ana Sayfa İstatistikler ve Özellikler (Why Choose Us)</h3>
+                        <p style={{ fontSize: "0.85rem", color: "var(--gray-500)", marginBottom: "1.25rem" }}>
+                            Ana sayfadaki &quot;Neden Bizi Seçmelisiniz?&quot; bölümünü buradan düzenleyebilirsiniz. 4 adet özellik ve 4 adet istatistik ekleyebilirsiniz.
+                        </p>
+
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem", marginBottom: "2rem" }}>
+                            {/* Features TR/EN */}
+                            <div>
+                                <h4 style={{ marginBottom: "1rem", color: "var(--gray-700)" }}>Özellikler - Türkçe</h4>
+                                {trustFeatures_tr.map((feature, i) => (
+                                    <div key={`feat-tr-${i}`} style={{ marginBottom: "0.5rem" }}>
+                                        <input
+                                            type="text"
+                                            value={feature}
+                                            onChange={(e) => {
+                                                const newFeats = [...trustFeatures_tr];
+                                                newFeats[i] = e.target.value;
+                                                setTrustFeaturesTr(newFeats);
+                                            }}
+                                            placeholder={`${i + 1}. Özellik (Örn: Yetkili Türkiye Distribütörü)`}
+                                            style={{ width: "100%", padding: "0.5rem", borderRadius: "0.25rem", border: "1px solid var(--gray-300)" }}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                            <div>
+                                <h4 style={{ marginBottom: "1rem", color: "var(--gray-700)" }}>Özellikler - İngilizce</h4>
+                                {trustFeatures_en.map((feature, i) => (
+                                    <div key={`feat-en-${i}`} style={{ marginBottom: "0.5rem" }}>
+                                        <input
+                                            type="text"
+                                            value={feature}
+                                            onChange={(e) => {
+                                                const newFeats = [...trustFeatures_en];
+                                                newFeats[i] = e.target.value;
+                                                setTrustFeaturesEn(newFeats);
+                                            }}
+                                            placeholder={`${i + 1}. Feature (e.g: Authorized Global Distributor)`}
+                                            style={{ width: "100%", padding: "0.5rem", borderRadius: "0.25rem", border: "1px solid var(--gray-300)" }}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem" }}>
+                            {/* Stats TR */}
+                            <div>
+                                <h4 style={{ marginBottom: "1rem", color: "var(--gray-700)" }}>İstatistikler (Sayı & Etiket) - Türkçe</h4>
+                                {trustStats_tr.map((stat, i) => (
+                                    <div key={`stat-tr-${i}`} style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem" }}>
+                                        <input
+                                            type="text"
+                                            value={stat.number}
+                                            onChange={(e) => {
+                                                const newStats = [...trustStats_tr];
+                                                newStats[i].number = e.target.value;
+                                                setTrustStatsTr(newStats);
+                                            }}
+                                            placeholder="Sayı (Örn: 15+)"
+                                            style={{ width: "80px", padding: "0.5rem", borderRadius: "0.25rem", border: "1px solid var(--gray-300)" }}
+                                        />
+                                        <input
+                                            type="text"
+                                            value={stat.label}
+                                            onChange={(e) => {
+                                                const newStats = [...trustStats_tr];
+                                                newStats[i].label = e.target.value;
+                                                setTrustStatsTr(newStats);
+                                            }}
+                                            placeholder="Metin (Örn: Yıllık Tecrübe)"
+                                            style={{ flex: 1, padding: "0.5rem", borderRadius: "0.25rem", border: "1px solid var(--gray-300)" }}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                            {/* Stats EN */}
+                            <div>
+                                <h4 style={{ marginBottom: "1rem", color: "var(--gray-700)" }}>İstatistikler (Number & Label) - İngilizce</h4>
+                                {trustStats_en.map((stat, i) => (
+                                    <div key={`stat-en-${i}`} style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem" }}>
+                                        <input
+                                            type="text"
+                                            value={stat.number}
+                                            onChange={(e) => {
+                                                const newStats = [...trustStats_en];
+                                                newStats[i].number = e.target.value;
+                                                setTrustStatsEn(newStats);
+                                            }}
+                                            placeholder="Number (e.g: 15+)"
+                                            style={{ width: "80px", padding: "0.5rem", borderRadius: "0.25rem", border: "1px solid var(--gray-300)" }}
+                                        />
+                                        <input
+                                            type="text"
+                                            value={stat.label}
+                                            onChange={(e) => {
+                                                const newStats = [...trustStats_en];
+                                                newStats[i].label = e.target.value;
+                                                setTrustStatsEn(newStats);
+                                            }}
+                                            placeholder="Label (e.g: Years of Experience)"
+                                            style={{ flex: 1, padding: "0.5rem", borderRadius: "0.25rem", border: "1px solid var(--gray-300)" }}
+                                        />
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>

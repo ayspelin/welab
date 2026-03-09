@@ -18,8 +18,9 @@ export default function ProductsPage() {
     const [brandInput, setBrandInput] = useState("");
     const [categoryInput, setCategoryInput] = useState("");
     const [isFeatured, setIsFeatured] = useState(false);
-    const [technicalSpecsStr, setTechnicalSpecsStr] = useState("");
+    const [specs, setSpecs] = useState<{ key_tr: string, val_tr: string, key_en: string, val_en: string }[]>([]);
     const [file, setFile] = useState<File | null>(null);
+    const [pdfFile, setPdfFile] = useState<File | null>(null);
 
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
@@ -57,6 +58,12 @@ export default function ProductsPage() {
         }
     };
 
+    const handlePdfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            setPdfFile(e.target.files[0]);
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -76,6 +83,7 @@ export default function ProductsPage() {
 
         try {
             let imagesToSave = [];
+            let documentsToSave = [];
 
             // 1. Upload Product Image to S3
             if (file) {
@@ -92,17 +100,23 @@ export default function ProductsPage() {
                 imagesToSave.push({ url: uploadData.url });
             }
 
-            // Parse specs safely
-            let specsParsed = {};
-            if (technicalSpecsStr) {
-                try {
-                    specsParsed = JSON.parse(technicalSpecsStr);
-                } catch {
-                    setMessage("Hata: Teknik Özellikler geçerli bir JSON formatında olmalı. (Örn: {\"Voltaj\": \"220V\"})");
-                    setLoading(false);
-                    return;
-                }
+            // 1b. Upload Product Catalog to S3
+            if (pdfFile) {
+                const formData = new FormData();
+                formData.append("file", pdfFile);
+
+                const uploadRes = await fetch("/api/upload", {
+                    method: "POST",
+                    body: formData,
+                });
+
+                if (!uploadRes.ok) throw new Error("Katalog dosyası yüklenemedi");
+                const uploadData = await uploadRes.json();
+                documentsToSave.push({ title: `${name_en} Catalog`, type: "PDF", url: uploadData.url });
             }
+
+            // Parse specs safely
+            const specsParsed = specs.filter(s => s.key_tr.trim() !== "" || s.key_en.trim() !== "");
 
             let finalBrandId = "";
             const existingBrand = brands.find(b => b.name.toLowerCase() === brandInput.toLowerCase());
@@ -168,7 +182,8 @@ export default function ProductsPage() {
                     ...(finalBrandId && { brandId: finalBrandId }),
                     ...(finalCategoryId && { categoryId: finalCategoryId }),
                     isFeatured,
-                    ...(imagesToSave.length > 0 && { images: imagesToSave })
+                    ...(imagesToSave.length > 0 && { images: imagesToSave }),
+                    ...(documentsToSave.length > 0 && { documents: documentsToSave })
                 }),
             });
 
@@ -193,9 +208,10 @@ export default function ProductsPage() {
         setNameEn("");
         setDescriptionTr("");
         setDescriptionEn("");
-        setTechnicalSpecsStr("");
+        setSpecs([]);
         setIsFeatured(false);
         setFile(null);
+        setPdfFile(null);
         setBrandInput("");
         setCategoryInput("");
     };
@@ -209,8 +225,9 @@ export default function ProductsPage() {
         setBrandInput(prod.brand?.name || "");
         setCategoryInput(prod.category?.name || "");
         setIsFeatured(prod.isFeatured || false);
-        setTechnicalSpecsStr(prod.technicalSpecs ? JSON.stringify(prod.technicalSpecs, null, 2) : "");
+        setSpecs(Array.isArray(prod.technicalSpecs) ? prod.technicalSpecs : []);
         setFile(null);
+        setPdfFile(null);
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
@@ -338,25 +355,108 @@ export default function ProductsPage() {
                         </div>
                     </div>
 
-                    <div>
-                        <label style={{ display: "block", marginBottom: "0.5rem" }}>Teknik Özellikler (Opsiyonel, JSON formatında)</label>
-                        <textarea
-                            value={technicalSpecsStr}
-                            onChange={(e) => setTechnicalSpecsStr(e.target.value)}
-                            rows={3}
-                            placeholder='Örn: { "Voltaj": "220V", "Kapasite": "10L" }'
-                            style={{ width: "100%", padding: "0.5rem", borderRadius: "0.25rem", border: "1px solid var(--gray-300)", fontFamily: "monospace" }}
-                        />
+                    <div style={{ padding: "1.5rem", border: "1px solid var(--gray-200)", borderRadius: "var(--radius-md)", backgroundColor: "var(--gray-50)" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+                            <h3 style={{ margin: 0, color: "var(--primary)" }}>Teknik Özellikler (Opsiyonel)</h3>
+                            <button
+                                type="button"
+                                onClick={() => setSpecs([...specs, { key_tr: "", val_tr: "", key_en: "", val_en: "" }])}
+                                className="btn btn-secondary"
+                                style={{ fontSize: "0.85rem", padding: "0.4rem 0.8rem" }}
+                            >
+                                + Yeni Özellik Ekle
+                            </button>
+                        </div>
+
+                        {specs.map((spec, index) => (
+                            <div key={index} style={{ display: "grid", gridTemplateColumns: "1fr 1fr auto", gap: "1rem", marginBottom: "1rem", alignItems: "start" }}>
+                                <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                                    <input
+                                        type="text"
+                                        placeholder="Özellik Adı (TR) (Örn: Voltaj)"
+                                        value={spec.key_tr}
+                                        onChange={(e) => {
+                                            const newSpecs = [...specs];
+                                            newSpecs[index].key_tr = e.target.value;
+                                            setSpecs(newSpecs);
+                                        }}
+                                        style={{ width: "100%", padding: "0.5rem", borderRadius: "0.25rem", border: "1px solid var(--gray-300)" }}
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Değer (TR) (Örn: 220V)"
+                                        value={spec.val_tr}
+                                        onChange={(e) => {
+                                            const newSpecs = [...specs];
+                                            newSpecs[index].val_tr = e.target.value;
+                                            setSpecs(newSpecs);
+                                        }}
+                                        style={{ width: "100%", padding: "0.5rem", borderRadius: "0.25rem", border: "1px solid var(--gray-300)" }}
+                                    />
+                                </div>
+                                <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                                    <input
+                                        type="text"
+                                        placeholder="Spec Name (EN) (e.g: Voltage)"
+                                        value={spec.key_en}
+                                        onChange={(e) => {
+                                            const newSpecs = [...specs];
+                                            newSpecs[index].key_en = e.target.value;
+                                            setSpecs(newSpecs);
+                                        }}
+                                        style={{ width: "100%", padding: "0.5rem", borderRadius: "0.25rem", border: "1px solid var(--gray-300)" }}
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="Value (EN) (e.g: 220V)"
+                                        value={spec.val_en}
+                                        onChange={(e) => {
+                                            const newSpecs = [...specs];
+                                            newSpecs[index].val_en = e.target.value;
+                                            setSpecs(newSpecs);
+                                        }}
+                                        style={{ width: "100%", padding: "0.5rem", borderRadius: "0.25rem", border: "1px solid var(--gray-300)" }}
+                                    />
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        const newSpecs = specs.filter((_, i) => i !== index);
+                                        setSpecs(newSpecs);
+                                    }}
+                                    className="btn"
+                                    style={{ backgroundColor: "#fee2e2", color: "#b91c1c", padding: "0.5rem 0.75rem", borderRadius: "0.25rem" }}
+                                    title="Özelliği Sil"
+                                >
+                                    ✕
+                                </button>
+                            </div>
+                        ))}
+                        {specs.length === 0 && (
+                            <p style={{ fontSize: "0.85rem", color: "var(--gray-500)", margin: 0 }}>Ürüne ait bir teknik özellik bulunmuyor.</p>
+                        )}
                     </div>
 
-                    <div>
-                        <label style={{ display: "block", marginBottom: "0.5rem" }}>Ana Görsel (Opsiyonel)</label>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleFileChange}
-                            style={{ width: "100%", padding: "0.5rem", borderRadius: "0.25rem", border: "1px solid var(--gray-300)" }}
-                        />
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                        <div>
+                            <label style={{ display: "block", marginBottom: "0.5rem" }}>Ana Görsel (Opsiyonel)</label>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleFileChange}
+                                style={{ width: "100%", padding: "0.5rem", borderRadius: "0.25rem", border: "1px solid var(--gray-300)" }}
+                            />
+                        </div>
+                        <div>
+                            <label style={{ display: "block", marginBottom: "0.5rem" }}>Ürün Kataloğu (Opsiyonel PDF)</label>
+                            <input
+                                type="file"
+                                accept="application/pdf"
+                                onChange={handlePdfChange}
+                                style={{ width: "100%", padding: "0.5rem", borderRadius: "0.25rem", border: "1px solid var(--gray-300)" }}
+                            />
+                            <small style={{ color: "var(--gray-500)", display: "block", marginTop: "0.25rem" }}>Sadece PDF kabul edilir.</small>
+                        </div>
                     </div>
 
                     <button

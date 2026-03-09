@@ -12,16 +12,13 @@ export default async function Home(props: { params: Promise<{ locale: string }> 
   const { locale } = await props.params;
   const t = await getTranslations("Home");
 
-  // Fetch up to 3 categories from the database
   const dbCategories = await prisma.category.findMany({
     take: 3,
     orderBy: { createdAt: 'desc' }
   });
 
-  // Fetch Site Settings for Hero Texts
   const settings = await prisma.setting.findFirst();
 
-  // Determine dynamic copy, fallback to hardcoded localization
   const currentHeroTitle = locale === 'tr'
     ? (settings?.heroTitle_tr || t.raw('heroTitle'))
     : (settings?.heroTitle_en || t.raw('heroTitle'));
@@ -33,7 +30,30 @@ export default async function Home(props: { params: Promise<{ locale: string }> 
   const currentHeroImageUrl = settings?.heroImageUrl || "/images/quality_control.png";
   const currentHeroBgImageUrl = settings?.heroBgImageUrl || "/images/hero_bg.png";
 
-  // Default fallback categories with high-quality AI images
+  const defaultFeatures = [
+    'Authorized Global Distributorships',
+    '24/7 Technical Service Support',
+    'ISO 9001 Certified Quality Processes',
+    'Turnkey Laboratory Setup'
+  ];
+
+  const defaultStats = [
+    { number: '15+', label: 'Years of Experience' },
+    { number: '500+', label: 'Completed Projects' },
+    { number: '25', label: 'Global Brands' },
+    { number: '24/7', label: 'Technical Support' }
+  ];
+
+  const settingsAny = settings as any;
+  const featuresDb = locale === 'tr' ? settingsAny?.trustFeatures_tr : settingsAny?.trustFeatures_en;
+  const statsDb = locale === 'tr' ? settingsAny?.trustStats_tr : settingsAny?.trustStats_en;
+
+  const validFeatures = Array.isArray(featuresDb) ? featuresDb.filter(f => f && f.trim() !== '') : [];
+  const validStats = Array.isArray(statsDb) ? statsDb.filter(s => s && s.number && s.label) : [];
+
+  const displayFeatures = validFeatures.length > 0 ? validFeatures : defaultFeatures;
+  const displayStats = validStats.length > 0 ? validStats : defaultStats;
+
   const defaultCategories = [
     {
       id: "c1",
@@ -51,23 +71,22 @@ export default async function Home(props: { params: Promise<{ locale: string }> 
       id: "c3",
       name_en: "Water Purification",
       description_en: "Type 1, Type 2, and Type 3 ultra-pure water systems for sensitive research.",
-      imageUrl: "/images/water.png" // using existing water.png if available, we can also generate one
+      imageUrl: "/images/water.png"
     }
   ];
 
-  // If DB is empty, use defaults. Otherwise, use DB data (and fallback images if DB image is missing)
   const displayCategories = dbCategories.length > 0 ? dbCategories : defaultCategories;
 
   return (
     <>
-      {/* Hero Section */}
+      {/* ── Hero Section ── */}
       <section className={styles.hero}>
         <div className={styles.heroBackground}>
           <Image
             src={currentHeroBgImageUrl}
             alt="Laboratory Background"
             fill
-            style={{ objectFit: 'cover', zIndex: -1, opacity: 0.15 }}
+            style={{ objectFit: 'cover' }}
             priority
           />
         </div>
@@ -94,9 +113,9 @@ export default async function Home(props: { params: Promise<{ locale: string }> 
               <Image
                 src={currentHeroImageUrl}
                 alt="Advanced Laboratory Equipment"
-                width={600}
-                height={450}
-                style={{ objectFit: 'cover', borderRadius: '16px', boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}
+                width={520}
+                height={390}
+                style={{ objectFit: 'cover' }}
                 priority
               />
             </div>
@@ -104,7 +123,9 @@ export default async function Home(props: { params: Promise<{ locale: string }> 
         </div>
       </section>
 
-      {/* WeLab Sub-Brands Section */}
+      <div className={styles.gradientDivider} />
+
+      {/* ── WeLab Sub-Brands Section ── */}
       <WeLabBrandsSection
         subtitle={t('subBrandsSubtitle')}
         title={t('subBrandsTitle')}
@@ -115,17 +136,20 @@ export default async function Home(props: { params: Promise<{ locale: string }> 
         weconsultDesc={t('weconsultDesc')}
       />
 
-      {/* Brands Section */}
+      <div className={styles.gradientDivider} />
+
+      {/* ── Brands Section ── */}
       <BrandsSection />
 
-      {/* Featured Categories */}
-      <section className={`section ${styles.categoriesSection}`}>
+      <div className={styles.gradientDivider} />
+
+      {/* ── Featured Categories ── */}
+      <section className={styles.categoriesSection}>
         <div className="container">
           <div className={styles.sectionHeader}>
             <h2>{t('solutionsTitle')}</h2>
             <p>{t('solutionsDesc')}</p>
           </div>
-
           <div className={styles.categoryGrid}>
             {displayCategories.map((cat: any, index: number) => (
               <div key={cat.id} className={styles.categoryCard}>
@@ -139,63 +163,42 @@ export default async function Home(props: { params: Promise<{ locale: string }> 
                 </div>
                 <h3 className={styles.catTitle}>{cat.name_en}</h3>
                 <p className={styles.catDesc}>{cat.description_en}</p>
-                <Link href={`/products?category=${cat.id}`} className={styles.catLink}>View Details &rarr;</Link>
+                <Link href={`/products?category=${cat.id}`} className={styles.catLink}>
+                  View Details →
+                </Link>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Trust & Stats Section */}
+      <div className={styles.gradientDivider} />
+
+      {/* ── Trust & Stats Section ── */}
       <section className={styles.trustSection}>
         <div className={`container ${styles.trustGrid}`}>
           <div className={styles.trustContent}>
-            <h2 className={styles.trustTitle}>{t('trustTitle')}</h2>
-            <p className={styles.trustDesc}>
-              {t('trustDesc')}
-            </p>
+            <h2>{t('trustTitle')}</h2>
+            <p className={styles.trustDesc}>{t('trustDesc')}</p>
             <ul className={styles.trustList}>
-              <li>✔ Authorized Global Distributorships</li>
-              <li>✔ 24/7 Technical Service Support</li>
-              <li>✔ ISO 9001 Certified Quality Processes</li>
-              <li>✔ Turnkey Laboratory Setup</li>
+              {displayFeatures.map((item: string, idx: number) => (
+                <li key={`feature-${idx}`}>
+                  <span className={styles.trustCheckIcon}>✓</span>
+                  {item}
+                </li>
+              ))}
             </ul>
           </div>
           <div className={styles.statsWrapper}>
-            <div className={styles.statBox}>
-              <span className={styles.statNumber}>15+</span>
-              <span className={styles.statLabel}>Years of Experience</span>
-            </div>
-            <div className={styles.statBox}>
-              <span className={styles.statNumber}>500+</span>
-              <span className={styles.statLabel}>Completed Projects</span>
-            </div>
-            <div className={styles.statBox}>
-              <span className={styles.statNumber}>25</span>
-              <span className={styles.statLabel}>Global Brands</span>
-            </div>
-            <div className={styles.statBox}>
-              <span className={styles.statNumber}>24/7</span>
-              <span className={styles.statLabel}>Technical Support</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className={styles.ctaSection}>
-        <div className="container">
-          <div className={styles.ctaBox}>
-            <h2 className={styles.ctaTitle}>{t('ctaTitle')}</h2>
-            <p className={styles.ctaDesc}>{t('ctaDesc')}</p>
-            <div className={styles.ctaActions}>
-              <Link href="/contact" className="btn btn-primary" style={{ backgroundColor: 'white', color: 'var(--primary)' }}>{t('ctaContact')}</Link>
-              <Link href="/brands" className="btn" style={{ border: '1px solid white', color: 'white' }}>{t('ctaPartnerships')}</Link>
-            </div>
+            {displayStats.map((s: { number: string; label: string }, idx: number) => (
+              <div key={`stat-${idx}`} className={styles.statBox}>
+                <span className={styles.statNumber}>{s.number}</span>
+                <span className={styles.statLabel}>{s.label}</span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
     </>
   );
 }
-

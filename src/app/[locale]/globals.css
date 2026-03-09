@@ -1,52 +1,59 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,700;1,800&display=swap');
 
 :root {
-  /* Brand Colors (Blue and Green) */
-  --primary: #1378f4;
-  /* Brand Blue */
-  --primary-light: #4492f5;
+  /* Brand Colors — Dark Scantech Theme */
+  --primary: #2D9EFF;
+  --primary-light: #5CB8FF;
+  --primary-dark: #1a7dd4;
   --secondary: #8cc63f;
-  /* Brand Green */
-  --accent: #8cc63f;
+  --accent: #2D9EFF;
 
-  /* Grays */
-  --gray-50: #F8FAFC;
-  --gray-100: #F1F5F9;
-  --gray-200: #E2E8F0;
-  --gray-300: #CBD5E1;
-  --gray-400: #94A3B8;
-  --gray-500: #64748B;
-  --gray-600: #475569;
-  --gray-700: #334155;
-  --gray-800: #1E293B;
-  --gray-900: #0F172A;
+  /* Dark Backgrounds */
+  --background: #13151a;
+  --background-2: #1a1c23;
+  --background-card: #20222b;
+  --background-card-hover: #292b36;
+
+  /* Text Colors */
+  --foreground: #ffffff;
+  --text-muted: #8899aa;
+  --text-subtle: #aabbc8;
+
+  /* Border Colors */
+  --border: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(45, 158, 255, 0.4);
+
+  /* Legacy gray scale (adapated for dark) */
+  --gray-50: #15171d;
+  --gray-100: #1c1e26;
+  --gray-200: #252833;
+  --gray-300: #303442;
+  --gray-400: #4a4a6a;
+  --gray-500: #6a6a8a;
+  --gray-600: #8899aa;
+  --gray-700: #aabbc8;
+  --gray-800: #ccd5e0;
+  --gray-900: #f0f4f8;
 
   /* Typography */
-  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
   /* Utilities */
   --max-width: 1280px;
-  --radius-sm: 4px;
+  --radius-sm: 2px;
   --radius-md: 8px;
-  --radius-lg: 16px;
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --radius-lg: 12px;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 24px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 12px 40px rgb(0 0 0 / 0.5);
+  --shadow-xl: 0 20px 60px rgb(0 0 0 / 0.6);
+  --glow-blue: 0 0 20px rgba(45, 158, 255, 0.25), 0 0 60px rgba(45, 158, 255, 0.1);
 
-  --background: #FFFFFF;
-  --foreground: var(--gray-900);
+  /* Gradient accent line */
+  --gradient-line: linear-gradient(90deg, #2D9EFF 0%, #c850c0 100%);
 }
 
-@media (prefers-color-scheme: dark) {
-
-  /* Keep bright/light aesthetics standard as per requirements: "Beyaz ağırlıklı arka plan" 
-     If dark mode used, constrain to deeply elegant tech theme */
-  :root {
-    --background: #FFFFFF;
-    --foreground: var(--gray-900);
-    --primary: #1378f4;
-  }
-}
+/* Dark is the default and only theme */
 
 *,
 *::before,
@@ -64,6 +71,7 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
 }
 
 a {
@@ -159,17 +167,33 @@ h3 {
   }
 }
 
-/* Buttons */
+/* Buttons — Scantech style */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--radius-sm);
-  font-weight: 600;
+  gap: 0.5rem;
+  padding: 0.8rem 1.8rem;
+  border-radius: 2px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
   border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::after {
+  content: '»';
+  font-size: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.btn:hover::after {
+  transform: translateX(3px);
 }
 
 .btn-primary {
@@ -179,17 +203,27 @@ h3 {
 
 .btn-primary:hover {
   background-color: var(--primary-light);
+  box-shadow: var(--glow-blue);
   transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
 }
 
 .btn-secondary {
-  background-color: var(--secondary);
+  background-color: transparent;
   color: white;
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .btn-secondary:hover {
-  filter: brightness(1.1);
+  border-color: var(--primary);
+  color: var(--primary);
   transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+}
+
+/* Gradient divider line */
+.gradient-divider {
+  height: 1px;
+  background: var(--gradient-line);
+  border: none;
+  margin: 0;
+  opacity: 0.6;
 }

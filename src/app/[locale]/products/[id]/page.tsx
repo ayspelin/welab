@@ -12,7 +12,7 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
 
     const product = await prisma.product.findUnique({
         where: { id: resolvedParams.id },
-        include: { brand: true, category: true, images: { where: { isPrimary: true }, take: 1 } }
+        include: { brand: true, category: true, images: { where: { isPrimary: true }, take: 1 }, documents: true }
     });
 
     if (!product) {
@@ -21,6 +21,10 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
 
     const { brand, category } = product;
     const mainImage = product.images?.[0]?.url;
+    const catalogDoc = product.documents?.find(d => d.type === 'PDF');
+
+    const rawSpecs = product.technicalSpecs;
+    const specs = Array.isArray(rawSpecs) ? rawSpecs : [];
 
     return (
         <>
@@ -77,11 +81,39 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
                             </div>
                         </div>
 
+                        <div className={styles.productActions}>
+                            {catalogDoc && (
+                                <a href={catalogDoc.url} target="_blank" rel="noopener noreferrer" className={styles.catalogBtn}>
+                                    📥 {t('downloadCatalog')}
+                                </a>
+                            )}
+                            <Link href="/contact" className={styles.contactBtn}>
+                                📞 {t('contactForProduct')}
+                            </Link>
+                        </div>
+
                         <div className={styles.description}>
                             {((locale === 'tr' ? (product.description_tr || product.description_en) : product.description_en) || "").split('\n').map((line, i) => (
                                 <p key={i} style={{ marginBottom: line.trim() ? '1rem' : '0' }}>{line}</p>
                             ))}
                         </div>
+
+                        {specs.length > 0 && (
+                            <div className={styles.specsTable}>
+                                <h3 className={styles.specsTitle}>Teknik Özellikler</h3>
+                                {specs.map((spec: any, idx: number) => {
+                                    const key = locale === 'tr' ? (spec.key_tr || spec.key_en) : (spec.key_en || spec.key_tr);
+                                    const val = locale === 'tr' ? (spec.val_tr || spec.val_en) : (spec.val_en || spec.val_tr);
+                                    if (!key) return null;
+                                    return (
+                                        <div key={`spec-${idx}`} className={styles.specRow}>
+                                            <div className={styles.specKey}>{key}</div>
+                                            <div className={styles.specVal}>{val}</div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
                     </div>
 
                     {/* Right Column */}

@@ -129,6 +129,11 @@ model Setting {
   refNotice_tr   String?  @db.Text
   refNotice_en   String?  @db.Text
 
+  trustFeatures_tr Json?
+  trustFeatures_en Json?
+  trustStats_tr    Json?
+  trustStats_en    Json?
+
   updatedAt      DateTime @updatedAt
 }
 
