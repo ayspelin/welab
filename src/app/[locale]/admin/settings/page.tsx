@@ -24,6 +24,9 @@ export default function SettingsPage() {
     const [bgFile, setBgFile] = useState<File | null>(null);
     const [bgPreviewUrl, setBgPreviewUrl] = useState("");
 
+    const [refNotice_tr, setRefNoticeTr] = useState("");
+    const [refNotice_en, setRefNoticeEn] = useState("");
+
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
 
@@ -48,6 +51,8 @@ export default function SettingsPage() {
                         setPreviewUrl(data.heroImageUrl || "");
                         setHeroBgImageUrl(data.heroBgImageUrl || "");
                         setBgPreviewUrl(data.heroBgImageUrl || "");
+                        setRefNoticeTr(data.refNotice_tr || "");
+                        setRefNoticeEn(data.refNotice_en || "");
                     }
                 }
             } catch (error) {
@@ -126,7 +131,9 @@ export default function SettingsPage() {
                     heroDesc_tr,
                     heroDesc_en,
                     heroImageUrl: finalImageUrl,
-                    heroBgImageUrl: finalBgImageUrl
+                    heroBgImageUrl: finalBgImageUrl,
+                    refNotice_tr,
+                    refNotice_en,
                 })
             });
 
@@ -300,6 +307,36 @@ export default function SettingsPage() {
                             rows={3}
                             style={{ width: "100%", padding: "0.75rem", borderRadius: "0.375rem", border: "1px solid var(--gray-300)" }}
                         />
+                    </div>
+
+                    {/* References Coming Soon Notice */}
+                    <div style={{ padding: "1.5rem", border: "1px solid var(--gray-200)", borderRadius: "var(--radius-md)", backgroundColor: "var(--gray-50)" }}>
+                        <h3 style={{ marginBottom: "0.5rem", color: "var(--primary)", borderBottom: "1px solid var(--gray-200)", paddingBottom: "0.5rem" }}>Referanslar Sayfası Bildirimi</h3>
+                        <p style={{ fontSize: "0.85rem", color: "var(--gray-500)", marginBottom: "1.25rem" }}>
+                            Referanslar sayfasında gösterilecek bildirim metni (ör. &quot;Referanslarımız yakında yüklenecektir&quot;). Boş bırakılırsa bildirim gösterilmez.
+                        </p>
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
+                            <div>
+                                <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600", color: "var(--gray-700)" }}>Bildirim - Türkçe</label>
+                                <textarea
+                                    value={refNotice_tr}
+                                    onChange={(e) => setRefNoticeTr(e.target.value)}
+                                    rows={3}
+                                    placeholder="Örn: Referanslarımız yakında yüklenecektir."
+                                    style={{ width: "100%", padding: "0.75rem", borderRadius: "0.375rem", border: "1px solid var(--gray-300)", fontFamily: "inherit" }}
+                                />
+                            </div>
+                            <div>
+                                <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600", color: "var(--gray-700)" }}>Bildirim - İngilizce</label>
+                                <textarea
+                                    value={refNotice_en}
+                                    onChange={(e) => setRefNoticeEn(e.target.value)}
+                                    rows={3}
+                                    placeholder="Örn: Our references will be uploaded soon."
+                                    style={{ width: "100%", padding: "0.75rem", borderRadius: "0.375rem", border: "1px solid var(--gray-300)", fontFamily: "inherit" }}
+                                />
+                            </div>
+                        </div>
                     </div>
 
                     <div style={{ marginTop: "1rem" }}>

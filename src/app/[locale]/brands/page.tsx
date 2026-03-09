@@ -2,11 +2,11 @@ import styles from "./brands.module.css";
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import { getTranslations, getLocale } from "next-intl/server";
-
 import { prisma } from "@/lib/prisma";
 
 export default async function Brands() {
     const t = await getTranslations("Common");
+    const tb = await getTranslations("Brands");
     const locale = await getLocale();
     const brands = await prisma.brand.findMany({
         orderBy: { name: 'asc' }
@@ -17,9 +17,7 @@ export default async function Brands() {
             <section className={styles.pageHeader}>
                 <div className="container">
                     <h1 className={styles.pageTitle}>{t('ourBrands')}</h1>
-                    <p className={styles.pageDesc}>
-                        We are the authorized turkey distributor for the world's leading laboratory technology manufacturers.
-                    </p>
+                    <p className={styles.pageDesc}>{tb('pageDesc')}</p>
                 </div>
             </section>
 
@@ -47,7 +45,7 @@ export default async function Brands() {
                                                 {locale === 'tr' ? brand.description_tr : (brand.description_en || brand.description_tr)}
                                             </p>
                                         )}
-                                        <Link href={`/products?brand=${brand.id}`} className={styles.brandLink}>View Products &rarr;</Link>
+                                        <Link href={`/products?brand=${brand.id}`} className={styles.brandLink}>{tb('viewProducts')} &rarr;</Link>
                                     </div>
                                 </a>
                             ) : (
@@ -70,14 +68,14 @@ export default async function Brands() {
                                                 {locale === 'tr' ? brand.description_tr : (brand.description_en || brand.description_tr)}
                                             </p>
                                         )}
-                                        <Link href={`/products?brand=${brand.id}`} className={styles.brandLink}>View Products &rarr;</Link>
+                                        <Link href={`/products?brand=${brand.id}`} className={styles.brandLink}>{tb('viewProducts')} &rarr;</Link>
                                     </div>
                                 </>
                             )}
                         </div>
                     )) : (
                         <div style={{ padding: "3rem", textAlign: "center", gridColumn: "1 / -1", color: "var(--gray-500)" }}>
-                            Şu an listelenecek temsilcilik bulunmamaktadır.
+                            {tb('noBrands')}
                         </div>
                     )}
                 </div>
@@ -85,9 +83,9 @@ export default async function Brands() {
 
             <section className={styles.partnershipSection}>
                 <div className={`container ${styles.partnerBox}`}>
-                    <h2>Become a Partner</h2>
-                    <p>Are you an international laboratory equipment manufacturer looking for a strong representative in the regional market?</p>
-                    <Link href="/contact" className="btn btn-primary" style={{ backgroundColor: 'white', color: 'var(--primary)' }}>Contact Management</Link>
+                    <h2>{tb('partnerTitle')}</h2>
+                    <p>{tb('partnerDesc')}</p>
+                    <Link href="/contact" className="btn btn-primary" style={{ backgroundColor: 'white', color: 'var(--primary)' }}>{tb('partnerCta')}</Link>
                 </div>
             </section>
         </>

@@ -1,0 +1,138 @@
+.section {
+    padding-block: 5rem 6rem;
+    background: linear-gradient(135deg, #f8faff 0%, #f0f4ff 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(26, 111, 196, 0.06) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+}
+
+.subtitle {
+    display: block;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--primary, #1a6fc4);
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--gray-900, #111827);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.desc {
+    font-size: 1.05rem;
+    color: var(--gray-500, #6b7280);
+    max-width: 580px;
+    margin: 0 auto;
+    line-height: 1.7;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+}
+
+.card {
+    position: relative;
+    background: white;
+    border-radius: 16px;
+    padding: 2rem 1.5rem 2.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    text-align: center;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+}
+
+.iconWrap {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    background-color: color-mix(in srgb, var(--brand-color) 12%, transparent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon {
+    font-size: 1.75rem;
+    line-height: 1;
+}
+
+.brandName {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1;
+}
+
+.we {
+    color: #1e293b;
+}
+
+.brandSuffix {
+    /* color applied via inline style */
+    font-weight: inherit;
+}
+
+.cardDesc {
+    font-size: 0.9rem;
+    color: var(--gray-500, #6b7280);
+    line-height: 1.6;
+    margin: 0;
+    flex: 1;
+}
+
+.accent {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    opacity: 0.7;
+    border-radius: 0 0 16px 16px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .title {
+        font-size: 1.9rem;
+    }
+}

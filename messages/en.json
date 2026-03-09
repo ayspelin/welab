@@ -2,7 +2,8 @@
     "Navigation": {
         "home": "Home",
         "about": "About Us",
-        "brands": "Global Brands",
+        "brands": "Our Brands",
+        "references": "References",
         "products": "Products",
         "downloads": "Downloads",
         "contact": "Contact",
@@ -23,7 +24,7 @@
         "analytical": "Analytical Instruments",
         "qualityControl": "Quality Control",
         "waterPurification": "Water Purification",
-        "brands": "Global Brands",
+        "brands": "Our Brands",
         "privacy": "Privacy Policy",
         "terms": "Terms of Service"
     },
@@ -40,14 +41,21 @@
         "ctaTitle": "Looking for the Right System for Your Lab?",
         "ctaDesc": "Our experts are ready to assist you. Contact us for detailed info and a quote.",
         "ctaContact": "Contact Us",
-        "ctaPartnerships": "View Agencies",
+        "ctaPartnerships": "Our Brands",
         "brandsSubtitle": "WE ARE DISTRIBUTORS OF GLOBAL BRANDS!",
-        "brandsTitle": "Our Agencies",
-        "noBrands": "There are currently no agencies to list."
+        "brandsTitle": "Our Brands",
+        "noBrands": "There are currently no brands to list.",
+        "subBrandsSubtitle": "THE WELAB FAMILY",
+        "subBrandsTitle": "Our Sub-Brands",
+        "subBrandsDesc": "Service brands developed under the WeLab umbrella, exclusively for the laboratory world.",
+        "wesaleDesc": "Device sales and procurement solutions.",
+        "wecareDesc": "Service, maintenance and technical support.",
+        "weapplyDesc": "Application development and method support.",
+        "weconsultDesc": "Consulting and laboratory setup services."
     },
     "Common": {
         "aboutUs": "About Us",
-        "ourBrands": "Global Brands",
+        "ourBrands": "Our Brands",
         "contact": "Contact",
         "downloads": "Downloads",
         "readMore": "Read More",
@@ -68,5 +76,36 @@
         "refUrl": "Reference URL",
         "notes": "Notes",
         "submit": "SUBMIT"
+    },
+    "Cookie": {
+        "title": "Privacy Preferences",
+        "desc": "We use cookies to enhance your experience. You can choose which types of cookies you allow.",
+        "acceptAll": "Accept All",
+        "essential": "Essential Only",
+        "showDetails": "Show Details ▾",
+        "hideDetails": "Hide Details ▴",
+        "essentialTitle": "Essential Cookies",
+        "essentialDesc": "Required for the site to function properly and cannot be disabled.",
+        "analyticsTitle": "Analytics Cookies",
+        "analyticsDesc": "Used to understand visitor behaviour and improve the site.",
+        "marketingTitle": "Marketing Cookies",
+        "marketingDesc": "Used to deliver personalised content and ads to you."
+    },
+    "References": {
+        "pageTitle": "References & Events",
+        "pageDesc": "The institutions we work with and the industry events we attend.",
+        "tabRefs": "Our References",
+        "tabEvents": "Our Events",
+        "noRefs": "No references have been added yet.",
+        "noEvents": "No events have been added yet.",
+        "sector": "Sector"
+    },
+    "Brands": {
+        "pageDesc": "We are the authorized Turkey distributor for the world's leading laboratory technology manufacturers.",
+        "noBrands": "There are currently no brands to list.",
+        "partnerTitle": "Become a Partner",
+        "partnerDesc": "Are you an international laboratory equipment manufacturer looking for a strong representative in the regional market?",
+        "partnerCta": "Contact Management",
+        "viewProducts": "View Products"
     }
 }

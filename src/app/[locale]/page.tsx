@@ -2,6 +2,7 @@ import styles from "./page.module.css";
 import { Link } from "@/i18n/routing";
 import Image from "next/image";
 import BrandsSection from "@/components/BrandsSection";
+import WeLabBrandsSection from "@/components/WeLabBrandsSection";
 import { getTranslations } from "next-intl/server";
 import { PrismaClient } from "@prisma/client";
 
@@ -102,6 +103,17 @@ export default async function Home(props: { params: Promise<{ locale: string }> 
           </div>
         </div>
       </section>
+
+      {/* WeLab Sub-Brands Section */}
+      <WeLabBrandsSection
+        subtitle={t('subBrandsSubtitle')}
+        title={t('subBrandsTitle')}
+        desc={t('subBrandsDesc')}
+        wesaleDesc={t('wesaleDesc')}
+        wecareDesc={t('wecareDesc')}
+        weapplyDesc={t('weapplyDesc')}
+        weconsultDesc={t('weconsultDesc')}
+      />
 
       {/* Brands Section */}
       <BrandsSection />

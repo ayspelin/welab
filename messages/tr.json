@@ -2,7 +2,8 @@
     "Navigation": {
         "home": "Ana Sayfa",
         "about": "Hakkımızda",
-        "brands": "Temsilciliklerimiz",
+        "brands": "Markalarımız",
+        "references": "Referanslar",
         "products": "Ürünler",
         "downloads": "Katalog ve Dokümanlar",
         "contact": "İletişim",
@@ -23,7 +24,7 @@
         "analytical": "Analitik Cihazlar",
         "qualityControl": "Kalite Kontrol",
         "waterPurification": "Su Saflaştırma",
-        "brands": "Temsilciliklerimiz",
+        "brands": "Markalarımız",
         "privacy": "Gizlilik Politikası",
         "terms": "Kullanım Koşulları"
     },
@@ -40,14 +41,21 @@
         "ctaTitle": "Laboratuvarınız İçin Doğru Sistemi mi Arıyorsunuz?",
         "ctaDesc": "Uzmanlarımız size yardımcı olmaya hazır. Detaylı bilgi ve teklif için ulaşın.",
         "ctaContact": "İletişime Geç",
-        "ctaPartnerships": "Temsilcilikleri Gör",
+        "ctaPartnerships": "Markalarımızı Gör",
         "brandsSubtitle": "DÜNYA MARKALARININ DİSTRİBÜTÖRLÜĞÜNÜ YAPIYORUZ!",
-        "brandsTitle": "Temsilciliklerimiz",
-        "noBrands": "Şu an listelenecek temsilcilik bulunmamaktadır."
+        "brandsTitle": "Markalarımız",
+        "noBrands": "Şu an listelenecek marka bulunmamaktadır.",
+        "subBrandsSubtitle": "WELAB AİLESİ",
+        "subBrandsTitle": "Alt Markalarımız",
+        "subBrandsDesc": "WeLab çatısı altında laboratuvar dünyasına özel geliştirilen hizmet markaları.",
+        "wesaleDesc": "Cihaz satışı ve tedarik çözümleri.",
+        "wecareDesc": "Servis, bakım ve teknik destek hizmetleri.",
+        "weapplyDesc": "Aplikasyon geliştirme ve metot desteği.",
+        "weconsultDesc": "Danışmanlık ve laboratuvar kurulum hizmetleri."
     },
     "Common": {
         "aboutUs": "Hakkımızda",
-        "ourBrands": "Temsilciliklerimiz",
+        "ourBrands": "Markalarımız",
         "contact": "İletişim",
         "downloads": "Katalog ve Dokümanlar",
         "readMore": "Devamını Oku",
@@ -68,5 +76,36 @@
         "refUrl": "Referans URL",
         "notes": "Açıklamalar",
         "submit": "GÖNDER"
+    },
+    "Cookie": {
+        "title": "Gizlilik Tercihleri",
+        "desc": "Bu site deneyiminizi iyileştirmek için çerezler kullanmaktadır. Kabul ettiğiniz çerez türlerini seçebilirsiniz.",
+        "acceptAll": "Tümünü Kabul Et",
+        "essential": "Yalnızca Zorunlu",
+        "showDetails": "Detayları Göster ▾",
+        "hideDetails": "Detayları Gizle ▴",
+        "essentialTitle": "Zorunlu Çerezler",
+        "essentialDesc": "Sitenin düzgün çalışması için gereklidir, devre dışı bırakılamaz.",
+        "analyticsTitle": "Analitik Çerezler",
+        "analyticsDesc": "Ziyaretçi davranışlarını anlamak ve siteyi iyileştirmek için kullanılır.",
+        "marketingTitle": "Pazarlama Çerezleri",
+        "marketingDesc": "Size özel içerik ve reklamlar sunmak için kullanılır."
+    },
+    "References": {
+        "pageTitle": "Referanslar & Etkinlikler",
+        "pageDesc": "Birlikte çalıştığımız kurumlar ve katıldığımız sektörel etkinlikler.",
+        "tabRefs": "Referanslarımız",
+        "tabEvents": "Etkinliklerimiz",
+        "noRefs": "Henüz referans eklenmemiş.",
+        "noEvents": "Henüz etkinlik eklenmemiş.",
+        "sector": "Sektör"
+    },
+    "Brands": {
+        "pageDesc": "Dünyanın önde gelen laboratuvar teknolojisi üreticilerinin Türkiye yetkili distributörüyuz.",
+        "noBrands": "Şu an listelenecek marka bulunmamaktadır.",
+        "partnerTitle": "İş Ortağı Olun",
+        "partnerDesc": "Bölgesel pazarda güçlü bir temsilci arayan uluslararası bir laboratuvar cihazı üreticisi misiniz?",
+        "partnerCta": "Yönetimle İletişime Geçin",
+        "viewProducts": "Ürünleri Gör"
     }
 }

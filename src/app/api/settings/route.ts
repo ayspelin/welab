@@ -42,6 +42,8 @@ export async function POST(req: NextRequest) {
                     heroDesc_en: data.heroDesc_en,
                     heroImageUrl: data.heroImageUrl,
                     heroBgImageUrl: data.heroBgImageUrl,
+                    refNotice_tr: data.refNotice_tr ?? null,
+                    refNotice_en: data.refNotice_en ?? null,
                 }
             });
         } else {
@@ -58,6 +60,8 @@ export async function POST(req: NextRequest) {
                     heroDesc_en: data.heroDesc_en,
                     heroImageUrl: data.heroImageUrl,
                     heroBgImageUrl: data.heroBgImageUrl,
+                    refNotice_tr: data.refNotice_tr ?? null,
+                    refNotice_en: data.refNotice_en ?? null,
                 }
             });
         }

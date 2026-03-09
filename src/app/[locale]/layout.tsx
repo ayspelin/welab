@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import ClientLayoutWrapper from "@/components/ClientLayoutWrapper";
+import CookieBanner from "@/components/CookieBanner";
 
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
@@ -35,6 +36,7 @@ export default async function RootLayout({
         <NextIntlClientProvider messages={messages}>
           <AuthProvider>
             <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
+            <CookieBanner />
           </AuthProvider>
         </NextIntlClientProvider>
       </body>
