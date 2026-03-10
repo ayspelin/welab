@@ -12,6 +12,9 @@ interface Reference {
     sector_en?: string | null;
     logoUrl?: string | null;
     order: number;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    isActive?: boolean;
 }
 
 interface Event {
@@ -19,10 +22,13 @@ interface Event {
     title_tr: string;
     title_en?: string | null;
     location?: string | null;
-    date: string;
+    date: Date | string;
     imageUrl?: string | null;
     description_tr?: string | null;
     description_en?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    isActive?: boolean;
 }
 
 interface Labels {
@@ -46,7 +52,7 @@ interface Props {
 export default function ReferencesEventsClient({ references, events, locale, refNotice, labels }: Props) {
     const [activeTab, setActiveTab] = useState<'refs' | 'events'>('refs');
 
-    const formatDate = (d: string) => new Date(d).toLocaleDateString(locale === 'tr' ? 'tr-TR' : 'en-GB', {
+    const formatDate = (d: string | Date) => new Date(d).toLocaleDateString(locale === 'tr' ? 'tr-TR' : 'en-GB', {
         day: 'numeric', month: 'long', year: 'numeric'
     });
 

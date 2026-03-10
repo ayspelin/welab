@@ -16,10 +16,23 @@ export default async function ReferencesPage(props: { params: Promise<{ locale: 
         ? (settings?.refNotice_en || settings?.refNotice_tr || null)
         : (settings?.refNotice_tr || null);
 
+    const formattedEvents = events.map(e => ({
+        ...e,
+        date: e.date.toISOString(),
+        createdAt: e.createdAt.toISOString(),
+        updatedAt: e.updatedAt.toISOString(),
+    }));
+
+    const formattedReferences = references.map(r => ({
+        ...r,
+        createdAt: r.createdAt.toISOString(),
+        updatedAt: r.updatedAt.toISOString(),
+    }));
+
     return (
         <ReferencesEventsClient
-            references={references}
-            events={events}
+            references={formattedReferences}
+            events={formattedEvents}
             locale={locale}
             refNotice={refNotice}
             labels={{
