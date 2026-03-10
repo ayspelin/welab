@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import { Resend } from "resend";
 
 const prisma = new PrismaClient();
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY || "re_dummy_fallback_for_build");
 const JWT_SECRET = process.env.NEXTAUTH_SECRET || "fallback_secret_for_dev";
 
 export async function POST(req: Request) {
