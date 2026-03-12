@@ -80,7 +80,12 @@ export default function ContactUs() {
                                 <div className={styles.icon}>📍</div>
                                 <div>
                                     <h3>{isTr ? "Genel Merkez" : "Headquarters"}</h3>
-                                    <p>{isTr ? "Teknoloji Plaza, AR-GE Caddesi No: 42\nKadıköy / İstanbul, Türkiye" : "Technology Plaza, R&D Street No: 42\nKadikoy / Istanbul, Turkey"}</p>
+                                    <p>
+                                        WELAB LABORATUVAR CİHAZLARI TİC LTD STİ<br />
+                                        MUSTAFA KEMAL MAHALLESİ 2118 CADDE NO:4/A<br />
+                                        Maidan İş ve Yaşam Merkezi A/73<br />
+                                        Çankaya / Ankara
+                                    </p>
                                 </div>
                             </div>
 
@@ -96,7 +101,7 @@ export default function ContactUs() {
                                 <div className={styles.icon}>✉️</div>
                                 <div>
                                     <h3>{isTr ? "E-posta" : "Emails"}</h3>
-                                    <p>{isTr ? "Satış: sales@welab.com\nDestek: support@welab.com" : "Sales: sales@welab.com\nSupport: support@welab.com"}</p>
+                                    <p>info@welabtr.com</p>
                                 </div>
                             </div>
                         </div>

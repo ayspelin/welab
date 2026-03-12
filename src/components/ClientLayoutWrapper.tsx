@@ -6,7 +6,8 @@ import Footer from "@/components/Footer";
 
 export default function ClientLayoutWrapper({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
-    const isAdminRoute = pathname?.startsWith("/admin") || pathname?.startsWith("/dealer-portal");
+    // Pathname might include the locale e.g. /en/admin, /tr/admin
+    const isAdminRoute = pathname?.match(/^\/([a-z]{2}\/)?admin($|\/)/) || pathname?.match(/^\/([a-z]{2}\/)?dealer-portal($|\/)/);
 
     if (isAdminRoute) {
         return (
