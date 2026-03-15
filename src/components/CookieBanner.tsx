@@ -34,7 +34,6 @@ export default function CookieBanner() {
         <div className={`${styles.overlay} ${visible ? styles.show : ''}`}>
             <div className={styles.banner}>
                 <div className={styles.left}>
-                    <span className={styles.cookieIcon}>🍪</span>
                     <div>
                         <h3 className={styles.title}>{t('title')}</h3>
                         <p className={styles.desc}>{t('desc')}</p>

@@ -164,3 +164,16 @@ model Event {
   updatedAt      DateTime @updatedAt
 }
 
+model Dealer {
+  id        String   @id @default(uuid())
+  name      String
+  city      String   // E.g. "Ankara", "İstanbul"
+  address   String?  @db.Text
+  phone     String?
+  email     String?
+  website   String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+

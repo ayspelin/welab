@@ -1,0 +1,141 @@
+.mapContainer {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 2rem;
+    padding: 2rem;
+    background: var(--background-card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border);
+}
+
+.mapWrapper {
+    background: var(--background);
+    border-radius: var(--radius-md);
+    padding: 2rem;
+    position: relative;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+}
+
+.interactiveArea {
+    width: 100%;
+    position: relative;
+}
+
+.turkeySvg {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
+}
+
+.province {
+    fill: #334155;
+    stroke: var(--background-card);
+    stroke-width: 1;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.province:hover {
+    fill: var(--primary);
+    filter: brightness(1.2);
+}
+
+.selected {
+    fill: var(--primary-dark) !important;
+}
+
+.hoverTooltip {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--primary);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    font-weight: 600;
+    pointer-events: none;
+    box-shadow: var(--shadow-md);
+    z-index: 10;
+}
+
+.sidebar {
+    background: var(--background-2);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.sidebar h3 {
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+    color: var(--primary);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.75rem;
+}
+
+.dealerCard {
+    background: var(--background-card);
+    padding: 1.25rem;
+    border-radius: var(--radius-md);
+    margin-bottom: 1rem;
+    border: 1px solid var(--border);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.dealerCard:hover {
+    transform: translateY(-2px);
+    border-color: var(--primary-dark);
+}
+
+.dealerCard h4 {
+    margin: 0 0 1rem;
+    color: white;
+    font-size: 1.1rem;
+}
+
+.dealerDetails p {
+    font-size: 0.85rem;
+    margin: 0.4rem 0;
+    color: var(--text-subtle);
+    display: flex;
+    gap: 0.5rem;
+}
+
+.dealerDetails strong {
+    color: var(--text-muted);
+    min-width: 70px;
+}
+
+.webLink {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--primary);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.noDealers, .emptyState {
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 3rem;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 1024px) {
+    .mapContainer {
+        grid-template-columns: 1fr;
+    }
+    
+    .sidebar {
+        max-height: none;
+    }
+}
