@@ -1,0 +1,60 @@
+﻿
+> temp-app@0.1.0 build
+> prisma generate && next build
+
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+
+Ô£ö Generated Prisma Client (v5.22.0) to .\node_modules\@prisma\client in 161ms
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Curious about the SQL queries Prisma ORM generates? Optimize helps you enhance your visibility: https://pris.ly/tip-2-optimize
+
+Ôû▓ Next.js 16.1.6 (Turbopack)
+- Environments: .env
+
+node.exe : ÔÜá The "middleware" file convention is depre
+cated. Please use "proxy" instead. Learn more: https://n
+extjs.org/docs/messages/middleware-to-proxy
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files
+\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ÔÜá The "m 
+   iddle...leware-to-proxy:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  Creating an optimized production build ...
+Ô£ô Compiled successfully in 3.7s
+  Running TypeScript ...
+Failed to compile.
+
+./update_settings.ts:19:13
+Type error: Type '{ address: string; email: string; }' i
+s not assignable to type '(Without<SettingCreateInput, S
+ettingUncheckedCreateInput> & SettingUncheckedCreateInpu
+t) | (Without<...> & SettingCreateInput)'.
+  Type '{ address: string; email: string; }' is not assi
+gnable to type 'Without<SettingUncheckedCreateInput, Set
+tingCreateInput> & SettingCreateInput'.
+    Property 'aboutText_en' is missing in type '{ addres
+s: string; email: string; }' but required in type 'Setti
+ngCreateInput'.
+
+[0m [90m 17 |[39m     } [36melse[39m {
+ [90m 18 |[39m         [36mawait[39m prisma[33m.[3
+9msetting[33m.[39mcreate({
+[31m[1m>[22m[39m[90m 19 |[39m             data[33
+m:[39m { 
+ [90m    |[39m             [31m[1m^[22m[39m
+ [90m 20 |[39m                 address[33m:[39m [32
+m'WELAB LABORATUVAR C─░HAZLARI T─░C LTD ST─░\nMUSTAFA KE
+MAL MAHALLES─░ 2118 CADDE NO:4/A Maidan ─░┼ş ve Ya┼şam M
+erkezi A/73\nCANKAYA/ANKARA'[39m[33m,[39m 
+ [90m 21 |[39m                 email[33m:[39m [32m'
+info@welabtr.com'[39m 
+ [90m 22 |[39m             }[0m
+Next.js build worker exited with code: 1 and signal: nul
+l

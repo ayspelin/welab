@@ -1,0 +1,3 @@
+update_settings.ts(19,13): error TS2322: Type '{ address: string; email: string; }' is not assignable to type '(Without<SettingCreateInput, SettingUncheckedCreateInput> & SettingUncheckedCreateInput) | (Without<...> & SettingCreateInput)'.
+  Type '{ address: string; email: string; }' is not assignable to type 'Without<SettingUncheckedCreateInput, SettingCreateInput> & SettingCreateInput'.
+    Property 'aboutText_en' is missing in type '{ address: string; email: string; }' but required in type 'SettingCreateInput'.
