@@ -44,7 +44,16 @@ export async function POST(req: NextRequest) {
             trustFeatures_en: data.trustFeatures_en ?? null,
             trustStats_tr: data.trustStats_tr ?? null,
             trustStats_en: data.trustStats_en ?? null,
-        } as any; // Cast as any due to Prisma client not yet synced
+            // Footer & Social
+            footerDesc_tr: data.footerDesc_tr ?? null,
+            footerDesc_en: data.footerDesc_en ?? null,
+            footerQuickLinks: data.footerQuickLinks ?? null,
+            footerColumns: data.footerColumns ?? null,
+            instagramUrl: data.instagramUrl ?? null,
+            linkedinUrl: data.linkedinUrl ?? null,
+            twitterUrl: data.twitterUrl ?? null,
+            youtubeUrl: data.youtubeUrl ?? null,
+        } as any;
 
         let updatedSettings;
         if (existing) {

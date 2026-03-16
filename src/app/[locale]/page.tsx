@@ -3,21 +3,19 @@ import { Link } from "@/i18n/routing";
 import Image from "next/image";
 import BrandsSection from "@/components/BrandsSection";
 import WeLabBrandsSection from "@/components/WeLabBrandsSection";
+import HeroSlider from "@/components/HeroSlider";
 import { getTranslations } from "next-intl/server";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/prisma";
 
 export default async function Home(props: { params: Promise<{ locale: string }> }) {
   const { locale } = await props.params;
   const t = await getTranslations("Home");
 
-  const dbCategories = await prisma.category.findMany({
-    take: 3,
-    orderBy: { createdAt: 'desc' }
-  });
-
-  const settings = await prisma.setting.findFirst();
+  const [dbCategories, slides, settings] = await Promise.all([
+    prisma.category.findMany({ take: 3, orderBy: { createdAt: 'desc' } }),
+    prisma.heroSlide.findMany({ where: { isActive: true }, orderBy: { order: 'asc' } }),
+    prisma.setting.findFirst()
+  ]);
 
   const currentHeroTitle = locale === 'tr'
     ? (settings?.heroTitle_tr || t.raw('heroTitle'))
@@ -31,7 +29,7 @@ export default async function Home(props: { params: Promise<{ locale: string }> 
   const currentHeroBgImageUrl = settings?.heroBgImageUrl || "/images/hero_bg.png";
 
   const defaultFeatures = [
-    'Authorized Global Distributorships',
+    'Authorized Global Representations',
     '24/7 Technical Service Support',
     'ISO 9001 Certified Quality Processes',
     'Turnkey Laboratory Setup'
@@ -79,49 +77,17 @@ export default async function Home(props: { params: Promise<{ locale: string }> 
 
   return (
     <>
-      {/* ── Hero Section ── */}
-      <section className={styles.hero}>
-        <div className={styles.heroBackground}>
-          <Image
-            src={currentHeroBgImageUrl}
-            alt="Laboratory Background"
-            fill
-            style={{ objectFit: 'cover' }}
-            priority
-          />
-        </div>
-        <div className={`container ${styles.heroContainer}`}>
-          <div className={styles.heroContent}>
-            <span className={styles.heroBadge}>{t('heroBadge')}</span>
-            <div
-              className={styles.heroTitle}
-              role="heading"
-              aria-level={1}
-              dangerouslySetInnerHTML={{ __html: currentHeroTitle }}
-            />
-            <div
-              className={styles.heroDesc}
-              dangerouslySetInnerHTML={{ __html: currentHeroDesc }}
-            />
-            <div className={styles.heroActions}>
-              <Link href="/products" className="btn btn-primary">{t('explore')}</Link>
-              <Link href="/contact" className="btn btn-secondary">{t('quote')}</Link>
-            </div>
-          </div>
-          <div className={styles.heroImageWrapper}>
-            <div className={styles.heroImageContainer}>
-              <Image
-                src={currentHeroImageUrl}
-                alt="Advanced Laboratory Equipment"
-                width={520}
-                height={390}
-                style={{ objectFit: 'cover' }}
-                priority
-              />
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* ── Hero Slider Section ── */}
+      <HeroSlider 
+        slides={slides as any} 
+        locale={locale} 
+        fallback={{
+            title: currentHeroTitle,
+            desc: currentHeroDesc,
+            bgImage: currentHeroBgImageUrl,
+            image: currentHeroImageUrl
+        }}
+      />
 
       <div className={styles.gradientDivider} />
 

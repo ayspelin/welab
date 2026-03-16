@@ -3,13 +3,13 @@
         "home": "Ana Sayfa",
         "about": "Hakkımızda",
         "brands": "Markalarımız",
-        "references": "Referanslar",
+        "events": "Etkinlikler",
         "products": "Ürünler",
-        "downloads": "Katalog ve Dokümanlar",
+        "downloads": "Dokümanlar",
         "contact": "İletişim",
-        "dealers": "Bayilerimiz",
+        "dealers": "Çalışma Ortaklarımız",
         "login": "Bayi Girişi",
-        "admin": "Yönetici Paneli",
+        "admin": "Admin",
         "portal": "Bayi Portalı",
         "logout": "Çıkış"
     },
@@ -49,7 +49,7 @@
         "ctaDesc": "Uzmanlarımız size yardımcı olmaya hazır. Detaylı bilgi ve teklif için ulaşın.",
         "ctaContact": "İletişime Geç",
         "ctaPartnerships": "Markalarımızı Gör",
-        "brandsSubtitle": "DÜNYA MARKALARININ DİSTRİBÜTÖRLÜĞÜNÜ YAPIYORUZ!",
+        "brandsSubtitle": "ÇALIŞTIĞIMIZ MARKALAR",
         "brandsTitle": "Markalarımız",
         "noBrands": "Şu an listelenecek marka bulunmamaktadır.",
         "subBrandsSubtitle": "WELAB AİLESİ",
@@ -64,15 +64,16 @@
         "aboutUs": "Hakkımızda",
         "ourBrands": "Markalarımız",
         "contact": "İletişim",
-        "downloads": "Katalog ve Dokümanlar",
+        "downloads": "Dokümanlar",
         "readMore": "Devamını Oku",
-        "message_sent": "Mesajınız başarıyla iletilmiştir."
+        "message_sent": "Mesajınız başarıyla iletilmiştir.",
+        "references": "Referanslarımız"
     },
     "Products": {
         "title": "Ürünler",
         "home": "Ana Sayfa",
         "emptyCategory": "Henüz bu kategoriye ait ürün eklenmemiş.",
-        "manufacturer": "Üretici Firma",
+        "manufacturer": "Çalıştığımız Bayiler",
         "viewManufacturer": "Bu markanın tüm ürünlerini görmek için tıklayın",
         "requestQuote": "Teklif İste",
         "downloadCatalog": "Katalog İndir",
@@ -100,6 +101,11 @@
         "marketingTitle": "Pazarlama Çerezleri",
         "marketingDesc": "Size özel içerik ve reklamlar sunmak için kullanılır."
     },
+    "Events": {
+        "pageTitle": "Etkinlikler",
+        "pageDesc": "Katıldığımız sektörel etkinlikler ve duyurularımız.",
+        "noEvents": "Henüz etkinlik eklenmemiş."
+    },
     "References": {
         "pageTitle": "Referanslar & Etkinlikler",
         "pageDesc": "Birlikte çalıştığımız kurumlar ve katıldığımız sektörel etkinlikler.",
@@ -110,7 +116,7 @@
         "sector": "Sektör"
     },
     "Brands": {
-        "pageDesc": "Dünyanın önde gelen laboratuvar teknolojisi üreticilerinin Türkiye yetkili distributörüyuz.",
+        "pageDesc": "Laboratuvar teknolojilerinde dünya devleriyle çözüm ortağınız.",
         "noBrands": "Şu an listelenecek marka bulunmamaktadır.",
         "partnerTitle": "İş Ortağı Olun",
         "partnerDesc": "Bölgesel pazarda güçlü bir temsilci arayan uluslararası bir laboratuvar cihazı üreticisi misiniz?",

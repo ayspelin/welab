@@ -1,7 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './WeLabBrandsSection.module.css';
+import InquiryModal from './InquiryModal';
 
 interface SubBrand {
     name: string;
@@ -37,6 +38,8 @@ export default function WeLabBrandsSection({
     weapplyDesc,
     weconsultDesc,
 }: WeLabBrandsSectionProps) {
+    const [selectedService, setSelectedService] = useState<string | null>(null);
+
     const descriptions: Record<string, string> = {
         wesaleDesc,
         wecareDesc,
@@ -59,6 +62,7 @@ export default function WeLabBrandsSection({
                             key={brand.suffix}
                             className={styles.card}
                             style={{ '--brand-color': brand.color } as React.CSSProperties}
+                            onClick={() => setSelectedService(`We${brand.suffix}`)}
                         >
                             <div className={styles.iconWrap}>
                                 <span className={styles.icon}>{brand.icon}</span>
@@ -70,11 +74,22 @@ export default function WeLabBrandsSection({
                                 </span>
                             </div>
                             <p className={styles.cardDesc}>{descriptions[brand.descKey]}</p>
+                            
+                            <div className={styles.cardFooter}>
+                                <span className={styles.contactLink}>Göz At & Başvur &rarr;</span>
+                            </div>
+                            
                             <div className={styles.accent} style={{ backgroundColor: brand.color }} />
                         </div>
                     ))}
                 </div>
             </div>
+
+            <InquiryModal 
+                isOpen={!!selectedService}
+                onClose={() => setSelectedService(null)}
+                serviceName={selectedService || ''}
+            />
         </section>
     );
 }

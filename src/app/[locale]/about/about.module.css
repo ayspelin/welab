@@ -106,6 +106,97 @@
     line-height: 1.6;
 }
 
+.expertiseSection h2 {
+    font-size: 2.5rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.expertiseSection p {
+    color: var(--gray-500);
+    font-size: 1.1rem;
+}
+
+/* References Section */
+.referencesSection {
+    padding: 6rem 0;
+    background-color: var(--gray-50);
+}
+
+.sectionHeader {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.sectionHeader h2 {
+    font-size: 2.5rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.sectionHeader p {
+    color: var(--gray-500);
+}
+
+.referencesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 2rem;
+}
+
+.referenceCard {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--gray-200);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.referenceCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    border-color: var(--primary);
+}
+
+.refLogoWrapper {
+    position: relative;
+    width: 100%;
+    height: 60px;
+    margin-bottom: 1.5rem;
+}
+
+.refInitial {
+    width: 60px;
+    height: 60px;
+    background-color: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    border-radius: 50%;
+    margin-bottom: 1.5rem;
+}
+
+.refName {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--gray-800);
+    margin-bottom: 0.5rem;
+}
+
+.refSector {
+    font-size: 0.85rem;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
 @media (max-width: 1024px) {
     .contentGrid {
         grid-template-columns: 1fr;
@@ -113,5 +204,19 @@
 
     .missionVision {
         grid-template-columns: 1fr;
+    }
+}
+@media (max-width: 768px) {
+    .expertiseGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .expertiseSection h2 {
+        font-size: 2rem;
+    }
+
+    .referencesGrid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1.5rem;
     }
 }

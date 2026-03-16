@@ -101,13 +101,13 @@ export default function DealersAdminPage() {
     return (
         <div className={styles.adminMain}>
             <div className={styles.header}>
-                <h1 className={styles.title}>Bayi Yönetimi</h1>
-                <p className={styles.subtitle}>Harita üzerinde görünecek bayileri buradan yönetebilirsiniz.</p>
+                <h1 className={styles.title}>Çalışma Ortaklarımız (Harita)</h1>
+                <p className={styles.subtitle}>Harita üzerinde görünecek çalışma ortaklarımızı buradan yönetebilirsiniz.</p>
             </div>
 
             <div className={styles.contentGrid}>
                 <div className={styles.card}>
-                    <h2>{editingId ? "Bayiyi Düzenle" : "Yeni Bayi Ekle"}</h2>
+                    <h2>{editingId ? "Düzenle" : "Yeni Ekle"}</h2>
                     {message && (
                         <div className={`${styles.alert} ${message.includes("hata") ? styles.alertError : styles.alertSuccess}`}>
                             {message}
@@ -115,7 +115,7 @@ export default function DealersAdminPage() {
                     )}
                     <form onSubmit={handleSubmit} className={styles.form}>
                         <div className={styles.formGroup}>
-                            <label>Bayi Adı *</label>
+                            <label>Kurum/Kişi Adı *</label>
                             <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
                         </div>
                         <div className={styles.formGroup}>
@@ -155,7 +155,7 @@ export default function DealersAdminPage() {
                 </div>
 
                 <div className={styles.listCard}>
-                    <h2>Mevcut Bayiler ({dealers.length})</h2>
+                    <h2>Kayıtlı Lokasyonlar ({dealers.length})</h2>
                     <div className={styles.tableContainer}>
                         <table className={styles.table}>
                             <thead>

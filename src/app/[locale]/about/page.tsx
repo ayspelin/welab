@@ -69,6 +69,46 @@ export default async function AboutUs() {
                     </div>
                 </div>
             </section>
+
+            {/* References Section */}
+            <section className={styles.referencesSection}>
+                <div className="container">
+                    <div className={styles.sectionHeader}>
+                        <h2>{t('references')}</h2>
+                        <p>Trusted by leading institutions across various sectors.</p>
+                    </div>
+
+                    <div className={styles.referencesGrid}>
+                        {(await prisma.reference.findMany({
+                            where: { isActive: true },
+                            orderBy: [{ order: 'asc' }, { createdAt: 'desc' }]
+                        })).map((ref) => (
+                            <div key={ref.id} className={styles.referenceCard}>
+                                {ref.logoUrl ? (
+                                    <div className={styles.refLogoWrapper}>
+                                        <Image
+                                            src={ref.logoUrl}
+                                            alt={locale === 'tr' ? ref.name_tr : (ref.name_en || ref.name_tr)}
+                                            fill
+                                            style={{ objectFit: 'contain' }}
+                                        />
+                                    </div>
+                                ) : (
+                                    <div className={styles.refInitial}>
+                                        {(locale === 'tr' ? ref.name_tr : (ref.name_en || ref.name_tr)).charAt(0)}
+                                    </div>
+                                )}
+                                <h4 className={styles.refName}>{locale === 'tr' ? ref.name_tr : (ref.name_en || ref.name_tr)}</h4>
+                                {ref.sector_tr && (
+                                    <span className={styles.refSector}>
+                                        {locale === 'tr' ? ref.sector_tr : (ref.sector_en || ref.sector_tr)}
+                                    </span>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
         </>
     );
 }

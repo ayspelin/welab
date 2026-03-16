@@ -147,14 +147,14 @@ export default function BrandsAdminPage() {
     return (
         <div className={styles.adminMain}>
             <div className={styles.header}>
-                <h1 className={styles.title}>Marka (Temsilcilik) Yönetimi</h1>
-                <p className={styles.subtitle}>Ana sayfadaki "Temsilciliklerimiz" bölümünde görünecek markaları ve logoları buradan düzenleyebilirsiniz.</p>
+                <h1 className={styles.title}>Temsilcilik Yönetimi</h1>
+                <p className={styles.subtitle}>Ana sayfada ve markalar sayfasında görünecek temsilciliklerimizi buradan yönetebilirsiniz.</p>
             </div>
 
             <div className={styles.contentGrid}>
                 {/* Form Section */}
                 <div className={styles.card}>
-                    <h2>{editingId ? "Markayı Düzenle" : "Yeni Marka Ekle"}</h2>
+                    <h2>{editingId ? "Temsilciliği Düzenle" : "Yeni Temsilcilik Ekle"}</h2>
 
                     {message && (
                         <div className={`${styles.alert} ${message.includes("hata") || message.includes("edi") ? styles.alertError : styles.alertSuccess}`}>
@@ -164,7 +164,7 @@ export default function BrandsAdminPage() {
 
                     <form onSubmit={handleSubmit} className={styles.form}>
                         <div className={styles.formGroup}>
-                            <label>Marka Adı *</label>
+                            <label>Temsilcilik Adı *</label>
                             <input
                                 type="text"
                                 value={name}

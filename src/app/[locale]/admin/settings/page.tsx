@@ -37,6 +37,16 @@ export default function SettingsPage() {
         { number: "", label: "" }, { number: "", label: "" }, { number: "", label: "" }, { number: "", label: "" }
     ]);
 
+    // Footer & Social fields
+    const [footerDesc_tr, setFooterDescTr] = useState("");
+    const [footerDesc_en, setFooterDescEn] = useState("");
+    const [instagramUrl, setInstagramUrl] = useState("");
+    const [linkedinUrl, setLinkedinUrl] = useState("");
+    const [twitterUrl, setTwitterUrl] = useState("");
+    const [youtubeUrl, setYoutubeUrl] = useState("");
+    const [footerQuickLinks, setFooterQuickLinks] = useState("");
+    const [footerColumns, setFooterColumns] = useState<any[]>([]);
+
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
 
@@ -68,6 +78,23 @@ export default function SettingsPage() {
                         if (data.trustFeatures_en && Array.isArray(data.trustFeatures_en)) setTrustFeaturesEn(data.trustFeatures_en);
                         if (data.trustStats_tr && Array.isArray(data.trustStats_tr)) setTrustStatsTr(data.trustStats_tr);
                         if (data.trustStats_en && Array.isArray(data.trustStats_en)) setTrustStatsEn(data.trustStats_en);
+
+                        setFooterDescTr(data.footerDesc_tr || "");
+                        setFooterDescEn(data.footerDesc_en || "");
+                        setInstagramUrl(data.instagramUrl || "");
+                        setLinkedinUrl(data.linkedinUrl || "");
+                        setTwitterUrl(data.twitterUrl || "");
+                        setYoutubeUrl(data.youtubeUrl || "");
+                        setFooterQuickLinks(data.footerQuickLinks || "");
+                        if (data.footerColumns) {
+                            setFooterColumns(typeof data.footerColumns === 'string' ? JSON.parse(data.footerColumns) : data.footerColumns);
+                        } else {
+                            // Default columns if none exist
+                            setFooterColumns([
+                                { title_tr: "Hızlı Bağlantılar", title_en: "Quick Links", links: [{ label_tr: "Hakkımızda", label_en: "About", href: "/about" }] },
+                                { title_tr: "Ürünler ve Çözümler", title_en: "Products & Solutions", links: [{ label_tr: "Analitik Cihazlar", label_en: "Analytical", href: "/products?category=c1" }] }
+                            ]);
+                        }
                     }
                 }
             } catch (error) {
@@ -153,6 +180,14 @@ export default function SettingsPage() {
                     trustFeatures_en,
                     trustStats_tr,
                     trustStats_en,
+                    footerDesc_tr,
+                    footerDesc_en,
+                    instagramUrl,
+                    linkedinUrl,
+                    twitterUrl,
+                    youtubeUrl,
+                    footerQuickLinks,
+                    footerColumns,
                 })
             });
 
@@ -465,6 +500,184 @@ export default function SettingsPage() {
                                         />
                                     </div>
                                 ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Footer Links Management */}
+                    <div style={{ padding: "1.5rem", border: "1px solid var(--gray-200)", borderRadius: "var(--radius-md)", backgroundColor: "var(--gray-50)" }}>
+                        <h3 style={{ marginBottom: "0.5rem", color: "var(--primary)", borderBottom: "1px solid var(--gray-200)", paddingBottom: "0.5rem" }}>Alt Bilgi (Footer) Linkleri</h3>
+                        <p style={{ fontSize: "0.85rem", color: "var(--gray-500)", marginBottom: "1.25rem" }}>
+                            Alt bilgideki link sütunlarını ve linkleri buradan yönetebilirsiniz.
+                        </p>
+
+                        <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+                            {footerColumns.map((col, colIndex) => (
+                                <div key={colIndex} style={{ padding: "1rem", border: "1px solid var(--gray-300)", borderRadius: "8px", backgroundColor: "white" }}>
+                                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "1rem" }}>
+                                        <div style={{ display: "flex", gap: "1rem", flex: 1 }}>
+                                            <input 
+                                                type="text" 
+                                                value={col.title_tr} 
+                                                onChange={(e) => {
+                                                    const newCols = [...footerColumns];
+                                                    newCols[colIndex].title_tr = e.target.value;
+                                                    setFooterColumns(newCols);
+                                                }}
+                                                placeholder="Sütun Başlığı (TR)" 
+                                                style={{ padding: "0.5rem", border: "1px solid var(--gray-300)", borderRadius: "4px", flex: 1 }}
+                                            />
+                                            <input 
+                                                type="text" 
+                                                value={col.title_en} 
+                                                onChange={(e) => {
+                                                    const newCols = [...footerColumns];
+                                                    newCols[colIndex].title_en = e.target.value;
+                                                    setFooterColumns(newCols);
+                                                }}
+                                                placeholder="Sütun Başlığı (EN)" 
+                                                style={{ padding: "0.5rem", border: "1px solid var(--gray-300)", borderRadius: "4px", flex: 1 }}
+                                            />
+                                        </div>
+                                        <button 
+                                            type="button" 
+                                            onClick={() => {
+                                                const newCols = footerColumns.filter((_, i) => i !== colIndex);
+                                                setFooterColumns(newCols);
+                                            }}
+                                            style={{ marginLeft: "1rem", color: "red", background: "none", border: "none", cursor: "pointer" }}
+                                        >Sil</button>
+                                    </div>
+
+                                    <div style={{ paddingLeft: "1rem", borderLeft: "2px solid var(--gray-200)" }}>
+                                        {col.links.map((link: any, linkIndex: number) => (
+                                            <div key={linkIndex} style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem", alignItems: "center" }}>
+                                                <input 
+                                                    type="text" 
+                                                    value={link.label_tr} 
+                                                    onChange={(e) => {
+                                                        const newCols = [...footerColumns];
+                                                        newCols[colIndex].links[linkIndex].label_tr = e.target.value;
+                                                        setFooterColumns(newCols);
+                                                    }}
+                                                    placeholder="Etiket (TR)" 
+                                                    style={{ flex: 1, padding: "0.4rem", border: "1px solid var(--gray-300)", borderRadius: "4px" }}
+                                                />
+                                                <input 
+                                                    type="text" 
+                                                    value={link.label_en} 
+                                                    onChange={(e) => {
+                                                        const newCols = [...footerColumns];
+                                                        newCols[colIndex].links[linkIndex].label_en = e.target.value;
+                                                        setFooterColumns(newCols);
+                                                    }}
+                                                    placeholder="Etiket (EN)" 
+                                                    style={{ flex: 1, padding: "0.4rem", border: "1px solid var(--gray-300)", borderRadius: "4px" }}
+                                                />
+                                                <input 
+                                                    type="text" 
+                                                    value={link.href} 
+                                                    onChange={(e) => {
+                                                        const newCols = [...footerColumns];
+                                                        newCols[colIndex].links[linkIndex].href = e.target.value;
+                                                        setFooterColumns(newCols);
+                                                    }}
+                                                    placeholder="URL (örn: /about)" 
+                                                    style={{ flex: 1, padding: "0.4rem", border: "1px solid var(--gray-300)", borderRadius: "4px" }}
+                                                />
+                                                <button 
+                                                    type="button" 
+                                                    onClick={() => {
+                                                        const newCols = [...footerColumns];
+                                                        newCols[colIndex].links = newCols[colIndex].links.filter((_: any, i: number) => i !== linkIndex);
+                                                        setFooterColumns(newCols);
+                                                    }}
+                                                    style={{ color: "red", background: "none", border: "none", cursor: "pointer" }}
+                                                >×</button>
+                                            </div>
+                                        ))}
+                                        <button 
+                                            type="button" 
+                                            onClick={() => {
+                                                const newCols = [...footerColumns];
+                                                newCols[colIndex].links.push({ label_tr: "", label_en: "", href: "" });
+                                                setFooterColumns(newCols);
+                                            }}
+                                            style={{ fontSize: "0.85rem", color: "var(--primary)", background: "none", border: "none", cursor: "pointer", padding: "0.5rem 0" }}
+                                        >+ Yeni Link Ekle</button>
+                                    </div>
+                                </div>
+                            ))}
+                            <button 
+                                type="button" 
+                                onClick={() => setFooterColumns([...footerColumns, { title_tr: "", title_en: "", links: [] }])}
+                                className="btn btn-secondary" 
+                                style={{ alignSelf: "flex-start" }}
+                            >+ Yeni Sütun Ekle</button>
+                        </div>
+                    </div>
+
+                    {/* Footer Description & Social Media */}
+                    <div style={{ padding: "1.5rem", border: "1px solid var(--gray-200)", borderRadius: "var(--radius-md)", backgroundColor: "var(--gray-50)" }}>
+                        <h3 style={{ marginBottom: "0.5rem", color: "var(--primary)", borderBottom: "1px solid var(--gray-200)", paddingBottom: "0.5rem" }}>Footer Açıklama ve Sosyal Medya</h3>
+                        
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem", marginBottom: "1.5rem" }}>
+                            <div>
+                                <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600", color: "var(--gray-700)" }}>Şirket Kısa Açıklaması - TR</label>
+                                <textarea
+                                    value={footerDesc_tr}
+                                    onChange={(e) => setFooterDescTr(e.target.value)}
+                                    rows={3}
+                                    style={{ width: "100%", padding: "0.75rem", borderRadius: "0.375rem", border: "1px solid var(--gray-300)" }}
+                                />
+                            </div>
+                            <div>
+                                <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600", color: "var(--gray-700)" }}>Şirket Kısa Açıklaması - EN</label>
+                                <textarea
+                                    value={footerDesc_en}
+                                    onChange={(e) => setFooterDescEn(e.target.value)}
+                                    rows={3}
+                                    style={{ width: "100%", padding: "0.75rem", borderRadius: "0.375rem", border: "1px solid var(--gray-300)" }}
+                                />
+                            </div>
+                        </div>
+
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
+                            <div>
+                                <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600", color: "var(--gray-700)" }}>Instagram URL</label>
+                                <input
+                                    type="url"
+                                    value={instagramUrl}
+                                    onChange={(e) => setInstagramUrl(e.target.value)}
+                                    style={{ width: "100%", padding: "0.75rem", borderRadius: "0.375rem", border: "1px solid var(--gray-300)" }}
+                                />
+                            </div>
+                            <div>
+                                <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600", color: "var(--gray-700)" }}>LinkedIn URL</label>
+                                <input
+                                    type="url"
+                                    value={linkedinUrl}
+                                    onChange={(e) => setLinkedinUrl(e.target.value)}
+                                    style={{ width: "100%", padding: "0.75rem", borderRadius: "0.375rem", border: "1px solid var(--gray-300)" }}
+                                />
+                            </div>
+                            <div>
+                                <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600", color: "var(--gray-700)" }}>Twitter URL</label>
+                                <input
+                                    type="url"
+                                    value={twitterUrl}
+                                    onChange={(e) => setTwitterUrl(e.target.value)}
+                                    style={{ width: "100%", padding: "0.75rem", borderRadius: "0.375rem", border: "1px solid var(--gray-300)" }}
+                                />
+                            </div>
+                            <div>
+                                <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600", color: "var(--gray-700)" }}>YouTube URL</label>
+                                <input
+                                    type="url"
+                                    value={youtubeUrl}
+                                    onChange={(e) => setYoutubeUrl(e.target.value)}
+                                    style={{ width: "100%", padding: "0.75rem", borderRadius: "0.375rem", border: "1px solid var(--gray-300)" }}
+                                />
                             </div>
                         </div>
                     </div>

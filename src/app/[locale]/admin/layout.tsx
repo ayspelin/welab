@@ -23,15 +23,18 @@ export default function AdminLayout({
                     </div>
                     <nav className={styles.nav}>
                         <ul className={styles.navList}>
-                            <li><Link href="/admin" className={styles.navLink}>Kontrol Paneli</Link></li>
-                            <li><Link href="/admin/products" className={styles.navLink}>Ürünler</Link></li>
-                            <li><Link href="/admin/brands" className={styles.navLink}>Markalar</Link></li>
-                            <li><Link href="/admin/dealers" className={styles.navLink}>Bayiler</Link></li>
-                            <li><Link href="/admin/categories" className={styles.navLink}>Kategoriler</Link></li>
-                            <li><Link href="/admin/references" className={styles.navLink}>Referanslar</Link></li>
-                            <li><Link href="/admin/events" className={styles.navLink}>Etkinlikler</Link></li>
-                            <li><Link href="/admin/users" className={styles.navLink}>Kullanıcılar</Link></li>
-                            <li><Link href="/admin/settings" className={styles.navLink}>Ayarlar</Link></li>
+                            <li><Link href="/admin" className={styles.navLink}>📊 kontrol paneli</Link></li>
+                            <li><Link href="/admin/products" className={styles.navLink}>📦 ürünler</Link></li>
+                            <li><Link href="/admin/brands" className={styles.navLink}>🤝 temsilcilikler</Link></li>
+                            <li><Link href="/admin/categories" className={styles.navLink}>📁 kategoriler</Link></li>
+                            <li><Link href="/admin/hero-slides" className={styles.navLink}>🖼️ banner yönetimi</Link></li>
+                            <li><Link href="/admin/references" className={styles.navLink}>🏢 referanslar</Link></li>
+                            <li><Link href="/admin/events" className={styles.navLink}>📅 etkinlikler</Link></li>
+                            <li><Link href="/admin/inquiries" className={styles.navLink}>📩 gelen talepler</Link></li>
+                            <li><Link href="/admin/dealers" className={styles.navLink}>📍 çalışma ortaklarımız</Link></li>
+                            <li><Link href="/admin/documents" className={styles.navLink}>📄 dokümanlar</Link></li>
+                            <li><Link href="/admin/users" className={styles.navLink}>👥 kullanıcılar</Link></li>
+                            <li><Link href="/admin/settings" className={styles.navLink}>⚙️ ayarlar</Link></li>
                         </ul>
                     </nav>
                     <div className={styles.sidebarFooter}>

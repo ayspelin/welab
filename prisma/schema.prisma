@@ -134,7 +134,35 @@ model Setting {
   trustStats_tr    Json?
   trustStats_en    Json?
 
+  // Extended Footer Fields
+  footerDesc_tr   String?  @db.Text
+  footerDesc_en   String?  @db.Text
+  footerQuickLinks Json?   // Deprecated
+  footerColumns    Json?   // [{ title_tr: string, title_en: string, links: [{ label_tr: string, label_en: string, href: string }] }]
+  
+  instagramUrl    String?
+  linkedinUrl     String?
+  twitterUrl      String?
+  youtubeUrl      String?
+
   updatedAt      DateTime @updatedAt
+}
+
+model HeroSlide {
+  id          String   @id @default(uuid())
+  title_tr    String?  @db.Text
+  title_en    String?  @db.Text
+  desc_tr     String?  @db.Text
+  desc_en     String?  @db.Text
+  buttonText_tr String?
+  buttonText_en String?
+  buttonUrl     String?
+  imageUrl      String
+  order         Int      @default(0)
+  isActive      Boolean  @default(true)
+  isSpecialDay  Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model Reference {
@@ -176,4 +204,38 @@ model Dealer {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+model Service {
+  id             String   @id @default(uuid())
+  name           String   // e.g., "WeCARE"
+  name_tr        String?
+  name_en        String?
+  suffix         String   // e.g., "Care"
+  description_tr String?  @db.Text
+  description_en String?  @db.Text
+  icon           String?  // e.g., "🛠️" or "custom-icon"
+  color          String?  // e.g., "#0e9c6a"
+  order          Int      @default(0)
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
 
+model Inquiry {
+  id          String   @id @default(uuid())
+  serviceName String?  // Which service they clicked
+  name        String
+  company     String?
+  email       String
+  phone       String
+  message     String   @db.Text
+  status      InquiryStatus @default(NEW)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum InquiryStatus {
+  NEW
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
