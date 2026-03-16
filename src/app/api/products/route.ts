@@ -9,17 +9,21 @@ export async function GET(req: NextRequest) {
     const brandId = searchParams.get("brandId");
 
     try {
+        const session = await getServerSession(authOptions);
+        const isAdmin = session && (session.user.role === "ADMIN" || session.user.role === "SUPER_ADMIN");
+
         const products = await prisma.product.findMany({
             where: {
                 ...(categoryId && { categoryId }),
                 ...(brandId && { brandId }),
+                ...(!isAdmin && { isPublic: true }),
             },
             include: {
                 brand: true,
                 category: true,
                 images: true
             },
-            orderBy: { createdAt: 'desc' }
+            orderBy: { name_tr: 'asc' }
         });
         return NextResponse.json(products);
     } catch (error) {
@@ -46,6 +50,7 @@ export async function POST(req: NextRequest) {
             brandId,
             categoryId,
             isFeatured,
+            isPublic,
             images,
             documents
         } = data;
@@ -65,6 +70,7 @@ export async function POST(req: NextRequest) {
                 brandId,
                 categoryId,
                 isFeatured: isFeatured || false,
+                isPublic: isPublic !== undefined ? isPublic : true,
                 images: {
                     create: images && Array.isArray(images) ? images.map((img: any, index: number) => ({
                         url: img.url,

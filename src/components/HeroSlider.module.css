@@ -60,12 +60,20 @@
     text-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
+.slideTitle p {
+    margin: 0;
+}
+
 .slideDesc {
     font-size: 1.25rem;
     color: var(--gray-300);
     margin-bottom: 2.5rem;
     line-height: 1.6;
     max-width: 600px;
+}
+
+.slideDesc p {
+    margin: 0;
 }
 
 .dots {

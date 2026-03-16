@@ -71,8 +71,20 @@ export default function DealersAdminPage() {
         }
     };
 
+    const validatePhone = (p: string) => {
+        // Allow digits, spaces, plus, and parentheses
+        const phoneRegex = /^[\d\s\+\(\)-]{7,20}$/;
+        return phoneRegex.test(p);
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (phone && !validatePhone(phone)) {
+            setMessage("Hata: Geçersiz telefon numarası formatı! (Sadece rakam ve + ( ) - kullanın)");
+            return;
+        }
+
         setLoading(true);
         setMessage("");
 
@@ -131,7 +143,12 @@ export default function DealersAdminPage() {
                         </div>
                         <div className={styles.formGroup}>
                             <label>Telefon</label>
-                            <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                            <input 
+                                type="text" 
+                                value={phone} 
+                                onChange={(e) => setPhone(e.target.value)} 
+                                placeholder="Örn: +90 5XX XXX XX XX"
+                            />
                         </div>
                         <div className={styles.formGroup}>
                             <label>Email</label>

@@ -147,14 +147,14 @@ export default function BrandsAdminPage() {
     return (
         <div className={styles.adminMain}>
             <div className={styles.header}>
-                <h1 className={styles.title}>Temsilcilik Yönetimi</h1>
-                <p className={styles.subtitle}>Ana sayfada ve markalar sayfasında görünecek temsilciliklerimizi buradan yönetebilirsiniz.</p>
+                <h1 className={styles.title}>Marka Yönetimi</h1>
+                <p className={styles.subtitle}>Ana sayfada ve markalar sayfasında görünecek markalarımızı buradan yönetebilirsiniz.</p>
             </div>
 
             <div className={styles.contentGrid}>
                 {/* Form Section */}
                 <div className={styles.card}>
-                    <h2>{editingId ? "Temsilciliği Düzenle" : "Yeni Temsilcilik Ekle"}</h2>
+                    <h2>{editingId ? "Markayı Düzenle" : "Yeni Marka Ekle"}</h2>
 
                     {message && (
                         <div className={`${styles.alert} ${message.includes("hata") || message.includes("edi") ? styles.alertError : styles.alertSuccess}`}>
@@ -164,7 +164,7 @@ export default function BrandsAdminPage() {
 
                     <form onSubmit={handleSubmit} className={styles.form}>
                         <div className={styles.formGroup}>
-                            <label>Temsilcilik Adı *</label>
+                            <label>Marka Adı *</label>
                             <input
                                 type="text"
                                 value={name}
@@ -210,7 +210,7 @@ export default function BrandsAdminPage() {
 
                             {previewUrl && (
                                 <div className={styles.imagePreview}>
-                                    <Image src={previewUrl} alt="Preview" fill style={{ objectFit: 'contain' }} />
+                                    <Image src={previewUrl} alt="Marka Logosu Önizleme" fill style={{ objectFit: 'contain' }} />
                                     <button type="button" className={styles.removeImageBtn} onClick={() => setPreviewUrl("")}>×</button>
                                 </div>
                             )}
@@ -245,7 +245,7 @@ export default function BrandsAdminPage() {
 
                 {/* List Section */}
                 <div className={styles.listCard}>
-                    <h2>Mevcut Temsilcilikler ({brands.length})</h2>
+                    <h2>Mevcut Markalar ({brands.length})</h2>
                     <div className={styles.tableContainer}>
                         <table className={styles.table}>
                             <thead>

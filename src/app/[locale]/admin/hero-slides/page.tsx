@@ -3,7 +3,11 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import dynamic from 'next/dynamic';
+import 'react-quill-new/dist/quill.snow.css';
 import styles from "../admin.module.css";
+
+const ReactQuill = dynamic(() => import('react-quill-new'), { ssr: false });
 
 interface HeroSlide {
     id: string;
@@ -18,7 +22,21 @@ interface HeroSlide {
     isActive: boolean;
     isSpecialDay: boolean;
     order: number;
+    titleSize?: string | null;
+    descSize?: string | null;
 }
+
+const quillModules = {
+    toolbar: [
+        [{ 'header': [1, 2, 3, false] }],
+        [{ 'size': ['small', false, 'large', 'huge'] }],
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ 'color': [] }, { 'background': [] }],
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        [{ 'align': [] }],
+        ['clean']
+    ],
+};
 
 export default function AdminHeroSlides() {
     const [slides, setSlides] = useState<HeroSlide[]>([]);
@@ -58,32 +76,32 @@ export default function AdminHeroSlides() {
             });
 
             if (res.ok) {
-                alert("Slide saved successfully");
+                alert("Slayt başarıyla kaydedildi");
                 setEditingSlide(null);
                 fetchSlides();
             } else {
-                alert("Failed to save slide");
+                alert("Slayt kaydedilemedi");
             }
         } catch (error) {
-            alert("An error occurred");
+            alert("Bir hata oluştu");
         } finally {
             setIsSaving(false);
         }
     };
 
     const handleDelete = async (id: string) => {
-        if (!confirm("Are you sure you want to delete this slide?")) return;
-
+        if (!confirm("Bu slaytı silmek istediğinize emin misiniz?")) return;
+ 
         try {
             const res = await fetch(`/api/admin/hero-slides/${id}`, { method: "DELETE" });
             if (res.ok) {
-                alert("Slide deleted");
+                alert("Slayt silindi");
                 fetchSlides();
             } else {
-                alert("Failed to delete slide");
+                alert("Slayt silinemedi");
             }
         } catch (error) {
-            alert("An error occurred");
+            alert("Bir hata oluştu");
         }
     };
 
@@ -102,22 +120,22 @@ export default function AdminHeroSlides() {
             const data = await res.json();
             if (data.url) {
                 setEditingSlide({ ...editingSlide, imageUrl: data.url });
-                alert("Image uploaded");
+                alert("Görsel yüklendi");
             }
         } catch (error) {
-            alert("Upload failed");
+            alert("Yükleme başarısız");
         }
     };
-
-    if (loading) return <div className={styles.loading}>Loading...</div>;
+ 
+    if (loading) return <div className={styles.loading}>Yükleniyor...</div>;
 
     return (
         <div className={styles.adminContainer}>
             <div className={styles.header}>
-                <h1 className={styles.title}>Hero Slider Management</h1>
+                <h1 className={styles.title}>Hero Slider Yönetimi</h1>
                 <div style={{ display: "flex", gap: "1rem" }}>
                     <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", background: "var(--gray-100)", padding: "0.5rem", borderRadius: "8px" }}>
-                        <span style={{ fontSize: "0.85rem", fontWeight: "600", color: "var(--gray-600)" }}>Presets:</span>
+                        <span style={{ fontSize: "0.85rem", fontWeight: "600", color: "var(--gray-600)" }}>Hazır Şablonlar:</span>
                         <button 
                             className={styles.smallBtn}
                             onClick={() => setEditingSlide({ 
@@ -127,7 +145,9 @@ export default function AdminHeroSlides() {
                                 desc_en: "We proudly celebrate October 29th Republic Day.",
                                 isActive: true,
                                 isSpecialDay: true,
-                                order: -1
+                                order: -1,
+                                titleSize: "4rem",
+                                descSize: "1.25rem"
                             })}
                         >🇹🇷 29 Ekim</button>
                         <button 
@@ -139,15 +159,17 @@ export default function AdminHeroSlides() {
                                 desc_en: "Happy Eid to all the Islamic world.",
                                 isActive: true,
                                 isSpecialDay: true,
-                                order: -1
+                                order: -1,
+                                titleSize: "4rem",
+                                descSize: "1.25rem"
                             })}
                         >🌙 Bayram</button>
                     </div>
                     <button 
                         className={styles.addButton}
-                        onClick={() => setEditingSlide({ isActive: true, order: 0, isSpecialDay: false })}
+                        onClick={() => setEditingSlide({ isActive: true, order: 0, isSpecialDay: false, titleSize: "4rem", descSize: "1.25rem" })}
                     >
-                        + Add New Slide
+                        + Yeni Slayt Ekle
                     </button>
                 </div>
             </div>
@@ -156,16 +178,16 @@ export default function AdminHeroSlides() {
                 {slides.map(slide => (
                     <div key={slide.id} className={styles.card}>
                         <div className={styles.cardImage}>
-                            <Image src={slide.imageUrl} alt="Slide" fill style={{ objectFit: 'cover' }} />
-                            {slide.isSpecialDay && <span className={styles.badge}>Special Day</span>}
-                            {!slide.isActive && <span className={styles.inactiveBadge}>Inactive</span>}
+                            <Image src={slide.imageUrl} alt="Slayt" fill style={{ objectFit: 'cover' }} />
+                            {slide.isSpecialDay && <span className={styles.badge}>Özel Gün</span>}
+                            {!slide.isActive && <span className={styles.inactiveBadge}>Pasif</span>}
                         </div>
                         <div className={styles.cardContent}>
-                            <h3>{slide.title_tr || "No Title"}</h3>
+                            <h3>{slide.title_tr || "Başlıksız"}</h3>
                             <p>{slide.desc_tr?.substring(0, 100)}...</p>
                             <div className={styles.cardActions}>
-                                <button onClick={() => setEditingSlide(slide)}>Edit</button>
-                                <button onClick={() => handleDelete(slide.id)} className={styles.deleteBtn}>Delete</button>
+                                <button onClick={() => setEditingSlide(slide)}>Düzenle</button>
+                                <button onClick={() => handleDelete(slide.id)} className={styles.deleteBtn}>Sil</button>
                             </div>
                         </div>
                     </div>
@@ -175,56 +197,64 @@ export default function AdminHeroSlides() {
             {editingSlide && (
                 <div className={styles.modal}>
                     <div className={styles.modalContent}>
-                        <h2>{editingSlide.id ? "Edit Slide" : "New Slide"}</h2>
+                        <h2>{editingSlide.id ? "Slaytı Düzenle" : "Yeni Slayt"}</h2>
                         <form onSubmit={handleSave} className={styles.form}>
                             <div className={styles.formGroup}>
-                                <label>Image</label>
+                                <label>Görsel</label>
                                 <input type="file" onChange={handleImageUpload} accept="image/*" />
                                 {editingSlide.imageUrl && (
                                     <div className={styles.preview}>
-                                        <Image src={editingSlide.imageUrl} alt="Preview" width={200} height={100} />
+                                        <Image src={editingSlide.imageUrl} alt="Önizleme" width={200} height={100} />
                                     </div>
                                 )}
                             </div>
-
-                            <div className={styles.formRow}>
-                                <div className={styles.formGroup}>
-                                    <label>Title (TR)</label>
-                                    <input 
-                                        type="text" 
-                                        value={editingSlide.title_tr || ""} 
-                                        onChange={e => setEditingSlide({ ...editingSlide, title_tr: e.target.value })} 
-                                    />
-                                </div>
-                                <div className={styles.formGroup}>
-                                    <label>Title (EN)</label>
-                                    <input 
-                                        type="text" 
-                                        value={editingSlide.title_en || ""} 
-                                        onChange={e => setEditingSlide({ ...editingSlide, title_en: e.target.value })} 
-                                    />
-                                </div>
+ 
+                            <div className={styles.formGroup}>
+                                <label>Başlık (TR)</label>
+                                <ReactQuill 
+                                    theme="snow"
+                                    value={editingSlide.title_tr || ""} 
+                                    onChange={val => setEditingSlide({ ...editingSlide, title_tr: val })}
+                                    modules={quillModules}
+                                    style={{ backgroundColor: 'white' }}
+                                />
+                            </div>
+                            <div className={styles.formGroup}>
+                                <label>Başlık (EN)</label>
+                                <ReactQuill 
+                                    theme="snow"
+                                    value={editingSlide.title_en || ""} 
+                                    onChange={val => setEditingSlide({ ...editingSlide, title_en: val })}
+                                    modules={quillModules}
+                                    style={{ backgroundColor: 'white' }}
+                                />
                             </div>
 
                             <div className={styles.formGroup}>
-                                <label>Description (TR)</label>
-                                <textarea 
+                                <label>Açıklama (TR)</label>
+                                <ReactQuill 
+                                    theme="snow"
                                     value={editingSlide.desc_tr || ""} 
-                                    onChange={e => setEditingSlide({ ...editingSlide, desc_tr: e.target.value })} 
+                                    onChange={val => setEditingSlide({ ...editingSlide, desc_tr: val })}
+                                    modules={quillModules}
+                                    style={{ backgroundColor: 'white' }}
                                 />
                             </div>
 
                             <div className={styles.formGroup}>
-                                <label>Description (EN)</label>
-                                <textarea 
+                                <label>Açıklama (EN)</label>
+                                <ReactQuill 
+                                    theme="snow"
                                     value={editingSlide.desc_en || ""} 
-                                    onChange={e => setEditingSlide({ ...editingSlide, desc_en: e.target.value })} 
+                                    onChange={val => setEditingSlide({ ...editingSlide, desc_en: val })}
+                                    modules={quillModules}
+                                    style={{ backgroundColor: 'white' }}
                                 />
                             </div>
-
+ 
                             <div className={styles.formRow}>
                                 <div className={styles.formGroup}>
-                                    <label>Button Text (TR)</label>
+                                    <label>Buton Yazısı (TR)</label>
                                     <input 
                                         type="text" 
                                         value={editingSlide.buttonText_tr || ""} 
@@ -232,7 +262,7 @@ export default function AdminHeroSlides() {
                                     />
                                 </div>
                                 <div className={styles.formGroup}>
-                                    <label>Button URL</label>
+                                    <label>Buton Linki (URL)</label>
                                     <input 
                                         type="text" 
                                         value={editingSlide.buttonUrl || ""} 
@@ -240,10 +270,10 @@ export default function AdminHeroSlides() {
                                     />
                                 </div>
                             </div>
-
+ 
                             <div className={styles.formRow}>
                                 <div className={styles.formGroup}>
-                                    <label>Order</label>
+                                    <label>Sıralama</label>
                                     <input 
                                         type="number" 
                                         value={editingSlide.order} 
@@ -257,7 +287,7 @@ export default function AdminHeroSlides() {
                                             checked={editingSlide.isActive} 
                                             onChange={e => setEditingSlide({ ...editingSlide, isActive: e.target.checked })} 
                                         />
-                                        Active
+                                        Aktif
                                     </label>
                                     <label>
                                         <input 
@@ -265,15 +295,15 @@ export default function AdminHeroSlides() {
                                             checked={editingSlide.isSpecialDay} 
                                             onChange={e => setEditingSlide({ ...editingSlide, isSpecialDay: e.target.checked })} 
                                         />
-                                        Special Day
+                                        Özel Gün
                                     </label>
                                 </div>
                             </div>
-
+ 
                             <div className={styles.modalActions}>
-                                <button type="button" onClick={() => setEditingSlide(null)}>Cancel</button>
+                                <button type="button" onClick={() => setEditingSlide(null)}>İptal</button>
                                 <button type="submit" disabled={isSaving}>
-                                    {isSaving ? "Saving..." : "Save Slide"}
+                                    {isSaving ? "Kaydediliyor..." : "Slaytı Kaydet"}
                                 </button>
                             </div>
                         </form>

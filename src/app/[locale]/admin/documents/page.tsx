@@ -14,6 +14,7 @@ export default function DocumentsPage() {
     const [isPublic, setIsPublic] = useState(true);
     const [productId, setProductId] = useState("");
     const [file, setFile] = useState<File | null>(null);
+    const [docSearchTerm, setDocSearchTerm] = useState("");
 
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
@@ -33,7 +34,10 @@ export default function DocumentsPage() {
     const fetchProducts = async () => {
         try {
             const res = await fetch("/api/products");
-            if (res.ok) setProducts(await res.json());
+            if (res.ok) {
+                const data = await res.json();
+                setProducts(data.sort((a: any, b: any) => (a.name_tr || a.name_en || "").localeCompare(b.name_tr || b.name_en || "")));
+            }
         } catch (error) { console.error(error); }
     };
 
@@ -109,6 +113,20 @@ export default function DocumentsPage() {
         }
     };
 
+    const handleDelete = async (id: string) => {
+        if (!confirm("Bu belgeyi silmek istediğinize emin misiniz?")) return;
+        try {
+            const res = await fetch(`/api/documents/${id}`, { method: "DELETE" });
+            if (res.ok) fetchDocuments();
+        } catch (error) { console.error(error); }
+    };
+
+    const filteredDocs = documents.filter(doc => 
+        doc.title.toLowerCase().includes(docSearchTerm.toLowerCase()) ||
+        (doc.product?.name_tr || "").toLowerCase().includes(docSearchTerm.toLowerCase()) ||
+        (doc.product?.name_en || "").toLowerCase().includes(docSearchTerm.toLowerCase())
+    );
+
     return (
         <div>
             <div className={styles.header}>
@@ -179,7 +197,7 @@ export default function DocumentsPage() {
                             >
                                 <option value="">-- Genel Belge (Ürün Bağımsız) --</option>
                                 {products.map(p => (
-                                    <option key={p.id} value={p.id}>{p.name}</option>
+                                    <option key={p.id} value={p.id}>{p.name_tr || p.name_en}</option>
                                 ))}
                             </select>
                         </div>
@@ -208,7 +226,19 @@ export default function DocumentsPage() {
             </div>
 
             <div>
-                <h2>Sistemdeki Belgeler</h2>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                    <h2>Sistemdeki Belgeler ({filteredDocs.length})</h2>
+                    <div style={{ position: 'relative', width: '300px' }}>
+                        <input 
+                            type="text" 
+                            placeholder="Belge veya Ürün Ara..." 
+                            value={docSearchTerm}
+                            onChange={(e) => setDocSearchTerm(e.target.value)}
+                            style={{ width: '100%', padding: '0.6rem 1rem', borderRadius: '20px', border: '1px solid var(--gray-300)', fontSize: '0.9rem' }}
+                        />
+                        <span style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--gray-400)' }}>🔍</span>
+                    </div>
+                </div>
                 <div className={styles.tableContainer} style={{ marginTop: "1rem" }}>
                     <table className={styles.table}>
                         <thead>
@@ -217,11 +247,11 @@ export default function DocumentsPage() {
                                 <th>Başlık</th>
                                 <th>İlişkili Ürün</th>
                                 <th>Erişim</th>
-                                <th>Bağlantı</th>
+                                <th>İşlemler</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {documents.map((doc) => (
+                            {filteredDocs.map((doc) => (
                                 <tr key={doc.id}>
                                     <td>
                                         <span style={{
@@ -236,7 +266,7 @@ export default function DocumentsPage() {
                                         </span>
                                     </td>
                                     <td><strong>{doc.title}</strong></td>
-                                    <td>{doc.product ? doc.product.name : <span style={{ color: "var(--gray-500)" }}>Genel</span>}</td>
+                                    <td>{doc.product ? (doc.product.name_tr || doc.product.name_en) : <span style={{ color: "var(--gray-500)" }}>Genel</span>}</td>
                                     <td>
                                         {doc.isPublic ? (
                                             <span style={{ color: "var(--primary)" }}>Herkese Açık</span>
@@ -245,9 +275,17 @@ export default function DocumentsPage() {
                                         )}
                                     </td>
                                     <td>
-                                        <Link href={doc.url} target="_blank" style={{ color: "var(--primary)", textDecoration: "underline" }}>
-                                            İndir / Görüntüle
-                                        </Link>
+                                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                            <Link href={doc.url} target="_blank" style={{ color: "var(--primary)", fontWeight: "600", textDecoration: "none" }}>
+                                                Görüntüle
+                                            </Link>
+                                            <button 
+                                                onClick={() => handleDelete(doc.id)}
+                                                style={{ border: 'none', background: 'none', color: '#dc2626', cursor: 'pointer', fontSize: '0.9rem', padding: 0 }}
+                                            >
+                                                Sil
+                                            </button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}

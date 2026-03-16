@@ -227,7 +227,7 @@ export default function CategoriesAdminPage() {
 
                             {previewUrl && (
                                 <div className={styles.imagePreview}>
-                                    <Image src={previewUrl} alt="Preview" fill style={{ objectFit: 'contain' }} />
+                                    <Image src={previewUrl} alt="Kategori Önizleme" fill style={{ objectFit: 'contain' }} />
                                     <button type="button" className={styles.removeImageBtn} onClick={() => setPreviewUrl("")}>×</button>
                                 </div>
                             )}
@@ -279,7 +279,7 @@ export default function CategoriesAdminPage() {
                                         <td>
                                             <div className={styles.thumbContainer}>
                                                 {category.imageUrl ? (
-                                                    <Image src={category.imageUrl} alt={category.name} fill style={{ objectFit: 'contain' }} />
+                                                    <Image src={category.imageUrl} alt={category.name_tr || "Kategori Görseli"} fill style={{ objectFit: 'contain' }} />
                                                 ) : (
                                                     <div className={styles.noLogo}>Yok</div>
                                                 )}

@@ -33,6 +33,8 @@ export async function POST(req: NextRequest) {
                 buttonText_en: data.buttonText_en,
                 buttonUrl: data.buttonUrl,
                 imageUrl: data.imageUrl,
+                titleSize: data.titleSize || "4rem",
+                descSize: data.descSize || "1.25rem",
                 isActive: data.isActive ?? true,
                 isSpecialDay: data.isSpecialDay ?? false,
                 order: data.order ?? 0,

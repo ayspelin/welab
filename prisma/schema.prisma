@@ -76,6 +76,7 @@ model Product {
   category       Category       @relation(fields: [categoryId], references: [id])
   
   isFeatured     Boolean        @default(false)
+  isPublic       Boolean        @default(true)
   
   images         ProductImage[]
   documents      Document[]
@@ -158,6 +159,8 @@ model HeroSlide {
   buttonText_en String?
   buttonUrl     String?
   imageUrl      String
+  titleSize     String   @default("4rem")
+  descSize      String   @default("1.25rem")
   order         Int      @default(0)
   isActive      Boolean  @default(true)
   isSpecialDay  Boolean  @default(false)

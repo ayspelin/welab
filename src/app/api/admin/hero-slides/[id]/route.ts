@@ -27,6 +27,8 @@ export async function PATCH(
                 buttonText_en: data.buttonText_en,
                 buttonUrl: data.buttonUrl,
                 imageUrl: data.imageUrl,
+                titleSize: data.titleSize,
+                descSize: data.descSize,
                 isActive: data.isActive,
                 isSpecialDay: data.isSpecialDay,
                 order: data.order,

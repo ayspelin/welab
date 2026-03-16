@@ -17,6 +17,8 @@ interface HeroSlide {
     imageUrl: string;
     isActive: boolean;
     isSpecialDay: boolean;
+    titleSize?: string | null;
+    descSize?: string | null;
 }
 
 interface Props {
@@ -84,12 +86,14 @@ export default function HeroSlider({ slides, locale, fallback }: Props) {
                     
                     <div className={`container ${styles.slideContainer}`}>
                         <div className={styles.slideContent}>
-                            <h1 className={styles.slideTitle}>
-                                {locale === 'tr' ? slide.title_tr : (slide.title_en || slide.title_tr)}
-                            </h1>
-                            <p className={styles.slideDesc}>
-                                {locale === 'tr' ? slide.desc_tr : (slide.desc_en || slide.desc_tr)}
-                            </p>
+                            <h1 
+                                className={styles.slideTitle} 
+                                dangerouslySetInnerHTML={{ __html: (locale === 'tr' ? slide.title_tr : (slide.title_en || slide.title_tr)) || "" }}
+                            />
+                            <p 
+                                className={styles.slideDesc}
+                                dangerouslySetInnerHTML={{ __html: (locale === 'tr' ? slide.desc_tr : (slide.desc_en || slide.desc_tr)) || "" }}
+                            />
                             {(slide.buttonText_tr || slide.buttonText_en) && (
                                 <Link 
                                     href={slide.buttonUrl || "/products"} 

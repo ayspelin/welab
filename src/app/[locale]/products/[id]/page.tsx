@@ -75,18 +75,14 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
                     <div className={styles.middleCol}>
                         <div className={styles.headerRow}>
                             <h2 className={styles.productTitle}>{locale === 'tr' ? (product.name_tr || product.name_en) : product.name_en}</h2>
-                            <div className={styles.actionIcons}>
-                                <button className={styles.iconBtn} title="Share">🔗</button>
-                                <button className={styles.iconBtn} title="Print">🖨️</button>
-                            </div>
                         </div>
 
                         <div className={styles.productActions}>
-                            {catalogDoc && (
-                                <a href={catalogDoc.url} target="_blank" rel="noopener noreferrer" className={styles.catalogBtn}>
-                                    📥 {t('downloadCatalog')}
+                            {product.documents && product.documents.length > 0 && product.documents.map((doc: any) => (
+                                <a key={doc.id} href={doc.url} target="_blank" rel="noopener noreferrer" className={styles.catalogBtn}>
+                                    {doc.type === 'PDF' ? '📄' : '📁'} {doc.title}
                                 </a>
-                            )}
+                            ))}
                             <Link href="/contact" className={styles.contactBtn}>
                                 📞 {t('contactForProduct')}
                             </Link>
