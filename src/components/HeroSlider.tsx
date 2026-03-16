@@ -86,11 +86,11 @@ export default function HeroSlider({ slides, locale, fallback }: Props) {
                     
                     <div className={`container ${styles.slideContainer}`}>
                         <div className={styles.slideContent}>
-                            <h1 
-                                className={styles.slideTitle} 
+                            <div
+                                className={styles.slideTitle}
                                 dangerouslySetInnerHTML={{ __html: (locale === 'tr' ? slide.title_tr : (slide.title_en || slide.title_tr)) || "" }}
                             />
-                            <p 
+                            <div
                                 className={styles.slideDesc}
                                 dangerouslySetInnerHTML={{ __html: (locale === 'tr' ? slide.desc_tr : (slide.desc_en || slide.desc_tr)) || "" }}
                             />
