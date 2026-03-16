@@ -12,7 +12,12 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
 
     const product = await prisma.product.findUnique({
         where: { id: resolvedParams.id },
-        include: { brand: true, category: true, images: { where: { isPrimary: true }, take: 1 }, documents: true }
+        include: {
+            brand: true,
+            category: true,
+            images: { where: { isPrimary: true }, take: 1 },
+            documents: true
+        }
     });
 
     if (!product) {
@@ -21,7 +26,7 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
 
     const { brand, category } = product;
     const mainImage = product.images?.[0]?.url;
-    const catalogDoc = product.documents?.find(d => d.type === 'PDF');
+    const visibleDocuments = (product.documents || []).filter((d: any) => d.isPublic);
 
     const rawSpecs = product.technicalSpecs;
     const specs = Array.isArray(rawSpecs) ? rawSpecs : [];
@@ -78,7 +83,7 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
                         </div>
 
                         <div className={styles.productActions}>
-                            {product.documents && product.documents.length > 0 && product.documents.map((doc: any) => (
+                            {visibleDocuments.length > 0 && visibleDocuments.map((doc: any) => (
                                 <a key={doc.id} href={doc.url} target="_blank" rel="noopener noreferrer" className={styles.catalogBtn}>
                                     {doc.type === 'PDF' ? '📄' : '📁'} {doc.title}
                                 </a>

@@ -121,6 +121,17 @@ export default function DocumentsPage() {
         } catch (error) { console.error(error); }
     };
 
+    const handleToggleAccess = async (doc: { id: string; isPublic: boolean }) => {
+        try {
+            const res = await fetch(`/api/documents/${doc.id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ isPublic: !doc.isPublic }),
+            });
+            if (res.ok) fetchDocuments();
+        } catch (error) { console.error(error); }
+    };
+
     const filteredDocs = documents.filter(doc => 
         doc.title.toLowerCase().includes(docSearchTerm.toLowerCase()) ||
         (doc.product?.name_tr || "").toLowerCase().includes(docSearchTerm.toLowerCase()) ||
@@ -275,7 +286,23 @@ export default function DocumentsPage() {
                                         )}
                                     </td>
                                     <td>
-                                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                                            <button
+                                                onClick={() => handleToggleAccess(doc)}
+                                                title={doc.isPublic ? "Erişimi kapat (sadece bayiler görsün)" : "Erişimi aç (herkese aç)"}
+                                                style={{
+                                                    padding: '0.35rem 0.6rem',
+                                                    fontSize: '0.8rem',
+                                                    borderRadius: '0.25rem',
+                                                    border: '1px solid ' + (doc.isPublic ? '#d97706' : 'var(--primary)'),
+                                                    background: doc.isPublic ? '#fffbeb' : '#eff6ff',
+                                                    color: doc.isPublic ? '#d97706' : 'var(--primary)',
+                                                    cursor: 'pointer',
+                                                    fontWeight: '600'
+                                                }}
+                                            >
+                                                {doc.isPublic ? "Erişimi Kapat" : "Erişimi Aç"}
+                                            </button>
                                             <Link href={doc.url} target="_blank" style={{ color: "var(--primary)", fontWeight: "600", textDecoration: "none" }}>
                                                 Görüntüle
                                             </Link>

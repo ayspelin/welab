@@ -40,11 +40,6 @@ export default function ProductDropdown() {
                             </Link>
                         </li>
                     ))}
-                    <li>
-                        <Link href="/products" className={styles.dropdownItemAll}>
-                            All Products &rarr;
-                        </Link>
-                    </li>
                 </ul>
             )}
         </li>

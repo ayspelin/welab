@@ -122,5 +122,11 @@
         "partnerDesc": "Bölgesel pazarda güçlü bir temsilci arayan uluslararası bir laboratuvar cihazı üreticisi misiniz?",
         "partnerCta": "Yönetimle İletişime Geçin",
         "viewProducts": "Ürünleri Gör"
+    },
+    "Dealers": {
+        "pageDesc": "Türkiye genelindeki yetkili bayi ağımızı aşağıda yer alan interaktif harita üzerinden inceleyebilirsiniz.",
+        "noDealersInCity": "Bu ilde kayıtlı bayimiz bulunmamaktadır.",
+        "clickCityPrompt": "Lütfen bayi bilgilerini görmek istediğiniz şehre tıklayın.",
+        "dealersInCity": "{city} Bayilerimiz"
     }
 }

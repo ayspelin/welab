@@ -122,5 +122,11 @@
         "partnerDesc": "Are you an international laboratory equipment manufacturer looking for a strong representative in the regional market?",
         "partnerCta": "Contact Management",
         "viewProducts": "View Products"
+    },
+    "Dealers": {
+        "pageDesc": "You can explore our authorized dealer network across Turkey on the interactive map below.",
+        "noDealersInCity": "There are no registered dealers in this city.",
+        "clickCityPrompt": "Please click on a city to view dealer information.",
+        "dealersInCity": "Our Dealers in {city}"
     }
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import styles from "./TurkeyMap.module.css";
 
 interface Dealer {
@@ -591,6 +592,7 @@ const provinces = [
 ];
 
 export default function TurkeyMap() {
+    const t = useTranslations("Dealers");
     const [dealers, setDealers] = useState<Dealer[]>([]);
     const [selectedCity, setSelectedCity] = useState<string | null>(null);
     const [cityDealers, setCityDealers] = useState<Dealer[]>([]);
@@ -645,7 +647,7 @@ export default function TurkeyMap() {
             <div className={styles.sidebar}>
                 {selectedCity ? (
                     <div className={styles.dealerInfo}>
-                        <h3>{selectedCity} Bayilerimiz</h3>
+                        <h3>{t('dealersInCity', { city: selectedCity })}</h3>
                         {cityDealers.length > 0 ? (
                             cityDealers.map(dealer => (
                                 <div key={dealer.id} className={styles.dealerCard}>
@@ -659,12 +661,12 @@ export default function TurkeyMap() {
                                 </div>
                             ))
                         ) : (
-                            <p className={styles.noDealers}>Bu ilde kayıtlı bayimiz bulunmamaktadır.</p>
+                            <p className={styles.noDealers}>{t('noDealersInCity')}</p>
                         )}
                     </div>
                 ) : (
                     <div className={styles.emptyState}>
-                        <p>Lütfen bayi bilgilerini görmek istediğiniz şehre tıklayın.</p>
+                        <p>{t('clickCityPrompt')}</p>
                     </div>
                 )}
             </div>
