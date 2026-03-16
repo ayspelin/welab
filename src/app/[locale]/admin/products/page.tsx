@@ -320,6 +320,18 @@ export default function ProductsPage() {
         } catch (error) { console.error(error); }
     };
 
+    const handleToggleDocVisibility = async (id: string, currentPublicStatus: boolean, productId: string) => {
+        try {
+            const res = await fetch(`/api/documents/${id}/visibility`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ isPublic: !currentPublicStatus })
+            });
+            if (res.ok) fetchProductDocs(productId);
+        } catch (error) { console.error("Error toggling document visibility:", error); }
+    };
+
+
     const filteredProducts = products.filter(p => 
         (p.name_tr || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
         (p.name_en || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -699,6 +711,7 @@ export default function ProductsPage() {
                                 <thead>
                                     <tr>
                                         <th>Başlık</th>
+                                        <th>Görünürlük</th>
                                         <th>İşlem</th>
                                     </tr>
                                 </thead>
@@ -706,6 +719,25 @@ export default function ProductsPage() {
                                     {productDocs.map(doc => (
                                         <tr key={doc.id}>
                                             <td>{doc.title}</td>
+                                            <td>
+                                                <button
+                                                    onClick={() => handleToggleDocVisibility(doc.id, doc.isPublic, selectedProduct.id)}
+                                                    style={{
+                                                        padding: '0.25rem 0.5rem',
+                                                        borderRadius: '12px',
+                                                        fontSize: '0.75rem',
+                                                        fontWeight: '600',
+                                                        cursor: 'pointer',
+                                                        border: 'none',
+                                                        backgroundColor: doc.isPublic ? '#dcfce7' : '#fee2e2',
+                                                        color: doc.isPublic ? '#166534' : '#991b1b',
+                                                        transition: 'all 0.2s ease'
+                                                    }}
+                                                    title="Tıklayarak durumu değiştirin"
+                                                >
+                                                    {doc.isPublic ? "Herkese Açık" : "Gizli"}
+                                                </button>
+                                            </td>
                                             <td style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
                                                 <a href={doc.url} target="_blank" style={{ color: 'var(--primary)', fontWeight: '600', textDecoration: 'none' }}>Görüntüle</a>
                                                 <button 
@@ -718,7 +750,7 @@ export default function ProductsPage() {
                                         </tr>
                                     ))}
                                     {productDocs.length === 0 && (
-                                        <tr><td colSpan={2} style={{ textAlign: 'center', padding: '1rem' }}>Belge bulunamadı.</td></tr>
+                                        <tr><td colSpan={3} style={{ textAlign: 'center', padding: '1rem' }}>Belge bulunamadı.</td></tr>
                                     )}
                                 </tbody>
                             </table>

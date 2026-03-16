@@ -30,12 +30,12 @@ export async function POST(req: Request) {
         }
 
         // Determine destination: Try the setting email, otherwise the onboarding email requires sending to your own verified account email. 
-        // TEMPORARY: User requested to send emails to pelingilik1@gmail.com for testing.
-        const toEmail = "pelingilik1@gmail.com";
+        // Admin recipient: pelingilik1@gmail.com (per user request)
+        const toEmails = ["info@welabtr.com", "pelingilik1@gmail.com"];
 
         const data = await resend.emails.send({
-            from: "Welab Website <onboarding@resend.dev>", // Needs to be a verified domain in production
-            to: [toEmail],
+            from: "Welab <info@welabtr.com>", 
+            to: toEmails,
             replyTo: email,
             subject: `New Contact Form Message: ${subject || "General Inquiry"}`,
             html: `

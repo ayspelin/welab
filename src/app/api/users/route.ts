@@ -44,8 +44,8 @@ export async function PATCH(req: Request) {
 
             if (process.env.RESEND_API_KEY) {
                 await resend.emails.send({
-                    from: "Welab Security <onboarding@resend.dev>",
-                    to: ["pelingilik1@gmail.com"], // TEMPORARY: testing email requested by user
+                    from: "Welab Security <info@welabtr.com>",
+                    to: [user.email],
                     subject: "Your Dealer Account has been Approved",
                     html: `
                         <h2>Account Approved</h2>

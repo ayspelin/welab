@@ -127,6 +127,11 @@
         "pageDesc": "Türkiye genelindeki yetkili bayi ağımızı aşağıda yer alan interaktif harita üzerinden inceleyebilirsiniz.",
         "noDealersInCity": "Bu ilde kayıtlı bayimiz bulunmamaktadır.",
         "clickCityPrompt": "Lütfen bayi bilgilerini görmek istediğiniz şehre tıklayın.",
-        "dealersInCity": "{city} Bayilerimiz"
+        "dealersInCity": "{city} Bayilerimiz",
+        "address": "Adres:",
+        "phone": "Telefon:",
+        "email": "E-posta:",
+        "website": "Websitesi",
+        "notSpecified": "Belirtilmemiş"
     }
 }

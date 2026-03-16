@@ -37,10 +37,20 @@ export async function POST(req: Request) {
     // Send email notification
     if (process.env.RESEND_API_KEY) {
       try {
-        const toEmail = "pelingilik1@gmail.com"; // From contact route logic
+        const toEmails = ["info@welabtr.com", "pelingilik1@gmail.com"];
+        
+        // Add specific department emails if applicable
+        const lowerService = serviceName?.toLowerCase() || "";
+        if (lowerService.includes("sale")) {
+          toEmails.push("satis@welabtr.com");
+        }
+        if (lowerService.includes("care") || lowerService.includes("servis")) {
+          toEmails.push("servis@welabtr.com");
+        }
+
         await resend.emails.send({
-          from: "Welab Service Inquiry <onboarding@resend.dev>",
-          to: [toEmail],
+          from: "Welab Service Inquiry <info@welabtr.com>",
+          to: toEmails,
           replyTo: email,
           subject: `New Service Inquiry: ${serviceName || "General"}`,
           html: `

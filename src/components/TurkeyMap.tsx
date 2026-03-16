@@ -653,10 +653,10 @@ export default function TurkeyMap() {
                                 <div key={dealer.id} className={styles.dealerCard}>
                                     <h4>{dealer.name}</h4>
                                     <div className={styles.dealerDetails}>
-                                        <p><strong>Adres:</strong> {dealer.address || "Belirtilmemiş"}</p>
-                                        <p><strong>Telefon:</strong> {dealer.phone || "Belirtilmemiş"}</p>
-                                        <p><strong>E-posta:</strong> {dealer.email || "Belirtilmemiş"}</p>
-                                        {dealer.website && <a href={dealer.website} target="_blank" rel="noopener noreferrer" className={styles.webLink}>Websitesi</a>}
+                                        <p><strong>{t('address')}</strong> {dealer.address || t('notSpecified')}</p>
+                                        <p><strong>{t('phone')}</strong> {dealer.phone || t('notSpecified')}</p>
+                                        <p><strong>{t('email')}</strong> {dealer.email || t('notSpecified')}</p>
+                                        {dealer.website && <a href={dealer.website} target="_blank" rel="noopener noreferrer" className={styles.webLink}>{t('website')}</a>}
                                     </div>
                                 </div>
                             ))

@@ -48,8 +48,8 @@ export async function POST(req: Request) {
             console.log("Verification Link:", verifyLink, "\n");
         } else {
             await resend.emails.send({
-                from: "Welab Security <onboarding@resend.dev>",
-                to: ["pelingilik1@gmail.com"], // TEMPORARY: testing email requested by user
+                from: "Welab Security <info@welabtr.com>",
+                to: [email],
                 subject: "Please verify your email address",
                 html: `
                     <h2>Welcome to Welab Dealer Portal</h2>

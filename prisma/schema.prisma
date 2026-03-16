@@ -19,9 +19,11 @@ model User {
   passwordHash String
   role         Role     @default(DEALER)
   isApproved   Boolean  @default(false)
-  emailVerified Boolean @default(false)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  emailVerified     Boolean   @default(false)
+  resetToken        String?   @unique
+  resetTokenExpires DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 }
 
 enum Role {

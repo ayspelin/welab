@@ -114,22 +114,27 @@ export default function DocumentsPage() {
     };
 
     const handleDelete = async (id: string) => {
-        if (!confirm("Bu belgeyi silmek istediğinize emin misiniz?")) return;
+        if (!confirm("Belgeyi silmek istediğinize emin misiniz?")) return;
+
         try {
             const res = await fetch(`/api/documents/${id}`, { method: "DELETE" });
-            if (res.ok) fetchDocuments();
-        } catch (error) { console.error(error); }
+            if (!res.ok) throw new Error("Silinirken bir hata oluştu");
+            fetchDocuments();
+        } catch (error) {
+            console.error(error);
+            setMessage("Belge silinemedi.");
+        }
     };
 
-    const handleToggleAccess = async (doc: { id: string; isPublic: boolean }) => {
+    const handleToggleVisibility = async (id: string, currentPublicStatus: boolean) => {
         try {
-            const res = await fetch(`/api/documents/${doc.id}`, {
+            const res = await fetch(`/api/documents/${id}/visibility`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ isPublic: !doc.isPublic }),
+                body: JSON.stringify({ isPublic: !currentPublicStatus })
             });
             if (res.ok) fetchDocuments();
-        } catch (error) { console.error(error); }
+        } catch (error) { console.error("Error toggling document visibility:", error); }
     };
 
     const filteredDocs = documents.filter(doc => 
@@ -254,61 +259,72 @@ export default function DocumentsPage() {
                     <table className={styles.table}>
                         <thead>
                             <tr>
-                                <th>Tür</th>
                                 <th>Başlık</th>
-                                <th>İlişkili Ürün</th>
-                                <th>Erişim</th>
-                                <th>İşlemler</th>
+                                <th>Tür</th>
+                                <th>İlgili Ürün</th>
+                                <th>Görünürlük</th>
+                                <th>Tarih</th>
+                                <th>İşlem</th>
                             </tr>
                         </thead>
                         <tbody>
                             {filteredDocs.map((doc) => (
                                 <tr key={doc.id}>
+                                    <td><strong>{doc.title}</strong></td>
                                     <td>
-                                        <span style={{
-                                            padding: "0.25rem 0.5rem",
-                                            borderRadius: "0.25rem",
-                                            fontSize: "0.8rem",
-                                            fontWeight: "bold",
-                                            backgroundColor: doc.type === 'PDF' ? '#fee2e2' : doc.type === 'EXCEL' ? '#dcfce7' : '#e0e7ff',
-                                            color: doc.type === 'PDF' ? '#991b1b' : doc.type === 'EXCEL' ? '#166534' : '#3730a3'
+                                        <span style={{ 
+                                            padding: '0.25rem 0.5rem', 
+                                            borderRadius: '4px', 
+                                            fontSize: '0.8rem', 
+                                            backgroundColor: 'var(--gray-200)', 
+                                            color: 'var(--gray-800)' 
                                         }}>
                                             {doc.type}
                                         </span>
                                     </td>
-                                    <td><strong>{doc.title}</strong></td>
-                                    <td>{doc.product ? (doc.product.name_tr || doc.product.name_en) : <span style={{ color: "var(--gray-500)" }}>Genel</span>}</td>
                                     <td>
-                                        {doc.isPublic ? (
-                                            <span style={{ color: "var(--primary)" }}>Herkese Açık</span>
+                                        {doc.product ? (
+                                            <span style={{ color: 'var(--primary)' }}>{doc.product.name_tr || doc.product.name_en}</span>
                                         ) : (
-                                            <span style={{ color: "#d97706", fontWeight: "bold" }}>Sadece Bayiler</span>
+                                            <span style={{ color: 'var(--gray-500)' }}>Genel Belge</span>
                                         )}
                                     </td>
                                     <td>
-                                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                                            <button
-                                                onClick={() => handleToggleAccess(doc)}
-                                                title={doc.isPublic ? "Erişimi kapat (sadece bayiler görsün)" : "Erişimi aç (herkese aç)"}
-                                                style={{
-                                                    padding: '0.35rem 0.6rem',
-                                                    fontSize: '0.8rem',
-                                                    borderRadius: '0.25rem',
-                                                    border: '1px solid ' + (doc.isPublic ? '#d97706' : 'var(--primary)'),
-                                                    background: doc.isPublic ? '#fffbeb' : '#eff6ff',
-                                                    color: doc.isPublic ? '#d97706' : 'var(--primary)',
-                                                    cursor: 'pointer',
-                                                    fontWeight: '600'
-                                                }}
+                                        <button
+                                            onClick={() => handleToggleVisibility(doc.id, doc.isPublic)}
+                                            style={{
+                                                padding: '0.25rem 0.5rem',
+                                                borderRadius: '12px',
+                                                fontSize: '0.75rem',
+                                                fontWeight: '600',
+                                                cursor: 'pointer',
+                                                border: 'none',
+                                                backgroundColor: doc.isPublic ? '#dcfce7' : '#fee2e2',
+                                                color: doc.isPublic ? '#166534' : '#991b1b',
+                                                transition: 'all 0.2s ease'
+                                            }}
+                                            title="Tıklayarak durumu değiştirin"
+                                        >
+                                            {doc.isPublic ? "Herkese Açık" : "Gizli"}
+                                        </button>
+                                    </td>
+                                    <td style={{ fontSize: '0.9rem', color: 'var(--gray-600)' }}>
+                                        {new Date(doc.createdAt).toLocaleDateString("tr-TR")}
+                                    </td>
+                                    <td>
+                                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                            <a 
+                                                href={doc.url} 
+                                                target="_blank" 
+                                                className="btn" 
+                                                style={{ padding: '0.3rem 0.6rem', fontSize: '0.85rem', backgroundColor: 'var(--primary)', color: 'white', textDecoration: 'none' }}
                                             >
-                                                {doc.isPublic ? "Erişimi Kapat" : "Erişimi Aç"}
-                                            </button>
-                                            <Link href={doc.url} target="_blank" style={{ color: "var(--primary)", fontWeight: "600", textDecoration: "none" }}>
                                                 Görüntüle
-                                            </Link>
+                                            </a>
                                             <button 
-                                                onClick={() => handleDelete(doc.id)}
-                                                style={{ border: 'none', background: 'none', color: '#dc2626', cursor: 'pointer', fontSize: '0.9rem', padding: 0 }}
+                                                onClick={() => handleDelete(doc.id)} 
+                                                className="btn" 
+                                                style={{ padding: '0.3rem 0.6rem', fontSize: '0.85rem', backgroundColor: '#dc2626', color: 'white' }}
                                             >
                                                 Sil
                                             </button>
@@ -318,7 +334,7 @@ export default function DocumentsPage() {
                             ))}
                             {documents.length === 0 && (
                                 <tr>
-                                    <td colSpan={5} style={{ textAlign: "center", padding: "2rem" }}>
+                                    <td colSpan={6} style={{ textAlign: "center", padding: "2rem" }}>
                                         Henüz belge eklenmemiş.
                                     </td>
                                 </tr>
