@@ -79,7 +79,7 @@ export default function HeroSlider({ slides, locale, fallback }: Props) {
                         src={slide.imageUrl} 
                         alt="Hero Slide" 
                         fill 
-                        style={{ objectFit: 'cover' }} 
+                        style={{ objectFit: 'contain' }} 
                         priority={index === 0} 
                     />
                     <div className={styles.overlay} />

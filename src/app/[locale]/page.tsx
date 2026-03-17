@@ -17,16 +17,10 @@ export default async function Home(props: { params: Promise<{ locale: string }> 
     prisma.setting.findFirst()
   ]);
 
-  const currentHeroTitle = locale === 'tr'
-    ? (settings?.heroTitle_tr || t.raw('heroTitle'))
-    : (settings?.heroTitle_en || t.raw('heroTitle'));
-
-  const currentHeroDesc = locale === 'tr'
-    ? (settings?.heroDesc_tr || t('heroDesc'))
-    : (settings?.heroDesc_en || t('heroDesc'));
-
-  const currentHeroImageUrl = settings?.heroImageUrl || "/images/quality_control.png";
-  const currentHeroBgImageUrl = settings?.heroBgImageUrl || "/images/hero_bg.png";
+  const currentHeroTitle = t.raw('heroTitle');
+  const currentHeroDesc = t('heroDesc');
+  const currentHeroImageUrl = "/images/quality_control.png";
+  const currentHeroBgImageUrl = "/images/hero_bg.png";
 
   const defaultFeatures = [
     'Authorized Global Representations',
@@ -52,28 +46,7 @@ export default async function Home(props: { params: Promise<{ locale: string }> 
   const displayFeatures = validFeatures.length > 0 ? validFeatures : defaultFeatures;
   const displayStats = validStats.length > 0 ? validStats : defaultStats;
 
-  const defaultCategories = [
-    {
-      id: "c1",
-      name_en: "Analytical Instruments",
-      description_en: "High precision chromatography, spectroscopy, and basic analytical systems.",
-      imageUrl: "/images/analytical_instruments.png"
-    },
-    {
-      id: "c2",
-      name_en: "Quality Control",
-      description_en: "Durability tests, material analysis, and physical measurement devices.",
-      imageUrl: "/images/quality_control.png"
-    },
-    {
-      id: "c3",
-      name_en: "Water Purification",
-      description_en: "Type 1, Type 2, and Type 3 ultra-pure water systems for sensitive research.",
-      imageUrl: "/images/water.png"
-    }
-  ];
-
-  const displayCategories = dbCategories.length > 0 ? dbCategories : defaultCategories;
+  const displayCategories = dbCategories;
 
   return (
     <>
@@ -110,33 +83,35 @@ export default async function Home(props: { params: Promise<{ locale: string }> 
       <div className={styles.gradientDivider} />
 
       {/* ── Featured Categories ── */}
-      <section className={styles.categoriesSection}>
-        <div className="container">
-          <div className={styles.sectionHeader}>
-            <h2>{t('solutionsTitle')}</h2>
-            <p>{t('solutionsDesc')}</p>
-          </div>
-          <div className={styles.categoryGrid}>
-            {displayCategories.map((cat: any, index: number) => (
-              <div key={cat.id} className={styles.categoryCard}>
-                <div className={styles.catImageContainer}>
-                  <Image
-                    src={cat.imageUrl || defaultCategories[index % 3].imageUrl}
-                    alt={cat.name_en}
-                    fill
-                    style={{ objectFit: 'cover' }}
-                  />
+      {displayCategories.length > 0 && (
+        <section className={styles.categoriesSection}>
+          <div className="container">
+            <div className={styles.sectionHeader}>
+              <h2>{t('solutionsTitle')}</h2>
+              <p>{t('solutionsDesc')}</p>
+            </div>
+            <div className={styles.categoryGrid}>
+              {displayCategories.map((cat: any, index: number) => (
+                <div key={cat.id} className={styles.categoryCard}>
+                  <div className={styles.catImageContainer}>
+                    <Image
+                      src={cat.imageUrl || "/images/placeholder.png"}
+                      alt={cat.name_en}
+                      fill
+                      style={{ objectFit: 'cover' }}
+                    />
+                  </div>
+                  <h3 className={styles.catTitle}>{locale === 'tr' ? (cat.name_tr || cat.name_en) : cat.name_en}</h3>
+                  <p className={styles.catDesc}>{locale === 'tr' ? (cat.description_tr || cat.description_en) : cat.description_en}</p>
+                  <Link href={`/products?category=${cat.id}`} className={styles.catLink}>
+                    {t('viewDetails') || 'View Details'} →
+                  </Link>
                 </div>
-                <h3 className={styles.catTitle}>{cat.name_en}</h3>
-                <p className={styles.catDesc}>{cat.description_en}</p>
-                <Link href={`/products?category=${cat.id}`} className={styles.catLink}>
-                  View Details →
-                </Link>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <div className={styles.gradientDivider} />
 

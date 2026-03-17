@@ -11,18 +11,9 @@ export default function SettingsPage() {
     const [email, setEmail] = useState("");
     const [address, setAddress] = useState("");
 
-    // New Hero Fields
-    const [heroTitle_tr, setHeroTitleTr] = useState("");
-    const [heroTitle_en, setHeroTitleEn] = useState("");
-    const [heroDesc_tr, setHeroDescTr] = useState("");
-    const [heroDesc_en, setHeroDescEn] = useState("");
-    const [heroImageUrl, setHeroImageUrl] = useState("");
-    const [file, setFile] = useState<File | null>(null);
-    const [previewUrl, setPreviewUrl] = useState("");
-
-    const [heroBgImageUrl, setHeroBgImageUrl] = useState("");
-    const [bgFile, setBgFile] = useState<File | null>(null);
-    const [bgPreviewUrl, setBgPreviewUrl] = useState("");
+    // New Expertise Fields
+    const [expertise_tr, setExpertiseTr] = useState<{ icon: string, title: string, desc: string }[]>([]);
+    const [expertise_en, setExpertiseEn] = useState<{ icon: string, title: string, desc: string }[]>([]);
 
     const [refNotice_tr, setRefNoticeTr] = useState("");
     const [refNotice_en, setRefNoticeEn] = useState("");
@@ -63,14 +54,28 @@ export default function SettingsPage() {
                         setEmail(data.email || "");
                         setAddress(data.address || "");
 
-                        setHeroTitleTr(data.heroTitle_tr || "");
-                        setHeroTitleEn(data.heroTitle_en || "");
-                        setHeroDescTr(data.heroDesc_tr || "");
-                        setHeroDescEn(data.heroDesc_en || "");
-                        setHeroImageUrl(data.heroImageUrl || "");
-                        setPreviewUrl(data.heroImageUrl || "");
-                        setHeroBgImageUrl(data.heroBgImageUrl || "");
-                        setBgPreviewUrl(data.heroBgImageUrl || "");
+                        if (data.expertise_tr && Array.isArray(data.expertise_tr)) {
+                            setExpertiseTr(data.expertise_tr);
+                        } else {
+                            setExpertiseTr([
+                                { icon: '⚙️', title: 'Anahtar Teslim Kurulum', desc: 'Cihazların doğru konumlandırılması ve devreye alınması.' },
+                                { icon: '✅', title: 'Kalibrasyon & Validasyon', desc: 'Uluslararası standartlara uygun IQ/OQ/PQ validasyonları.' },
+                                { icon: '🎓', title: 'Aplikasyon Eğitimi', desc: 'Analiz yöntemlerinize özel kullanıcı eğitimleri.' },
+                                { icon: '🔧', title: 'Bakım & Onarım', desc: 'Hızlı müdahale ve önleyici bakım hizmetleri.' },
+                            ]);
+                        }
+
+                        if (data.expertise_en && Array.isArray(data.expertise_en)) {
+                            setExpertiseEn(data.expertise_en);
+                        } else {
+                            setExpertiseEn([
+                                { icon: '⚙️', title: 'Turnkey Installation', desc: 'Site preparation and hardware installation required for commissioning.' },
+                                { icon: '✅', title: 'Calibration & Validation', desc: 'Regular validation processes complying with international procedures.' },
+                                { icon: '🎓', title: 'Application Training', desc: 'Customized theoretical and practical user trainings.' },
+                                { icon: '🔧', title: 'Maintenance & Repair', desc: 'Fast intervention and preventive maintenance agreements.' },
+                            ]);
+                        }
+                        
                         setRefNoticeTr(data.refNotice_tr || "");
                         setRefNoticeEn(data.refNotice_en || "");
 
@@ -104,60 +109,13 @@ export default function SettingsPage() {
         fetchSettings();
     }, []);
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length > 0) {
-            const selectedFile = e.target.files[0];
-            setFile(selectedFile);
-            setPreviewUrl(URL.createObjectURL(selectedFile));
-        }
-    };
-
-    const handleBgFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length > 0) {
-            const selectedFile = e.target.files[0];
-            setBgFile(selectedFile);
-            setBgPreviewUrl(URL.createObjectURL(selectedFile));
-        }
-    };
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         setMessage("");
 
         try {
-            let finalImageUrl = heroImageUrl;
-            let finalBgImageUrl = heroBgImageUrl;
-
-            // Upload new Image to S3 if file selected
-            if (file) {
-                const formData = new FormData();
-                formData.append("file", file);
-
-                const uploadRes = await fetch("/api/upload", {
-                    method: "POST",
-                    body: formData,
-                });
-
-                if (!uploadRes.ok) throw new Error("Görsel yüklenemedi");
-                const uploadData = await uploadRes.json();
-                finalImageUrl = uploadData.url;
-            }
-
-            // Upload Background Image to S3 if file selected
-            if (bgFile) {
-                const formData = new FormData();
-                formData.append("file", bgFile);
-
-                const uploadRes = await fetch("/api/upload", {
-                    method: "POST",
-                    body: formData,
-                });
-
-                if (!uploadRes.ok) throw new Error("Arkaplan görseli yüklenemedi");
-                const uploadData = await uploadRes.json();
-                finalBgImageUrl = uploadData.url;
-            }
+            // Hero uploads removed
 
             const res = await fetch("/api/settings", {
                 method: "POST",
@@ -168,12 +126,8 @@ export default function SettingsPage() {
                     phone,
                     email,
                     address,
-                    heroTitle_tr,
-                    heroTitle_en,
-                    heroDesc_tr,
-                    heroDesc_en,
-                    heroImageUrl: finalImageUrl,
-                    heroBgImageUrl: finalBgImageUrl,
+                    expertise_tr,
+                    expertise_en,
                     refNotice_tr,
                     refNotice_en,
                     trustFeatures_tr,
@@ -216,102 +170,78 @@ export default function SettingsPage() {
 
                 <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
 
+                    {/* Hero Section Removed */}
+                    
+                    {/* Expertise Section */}
                     <div style={{ padding: "1.5rem", border: "1px solid var(--gray-200)", borderRadius: "var(--radius-md)", backgroundColor: "var(--gray-50)" }}>
-                        <h3 style={{ marginBottom: "1rem", color: "var(--primary)", borderBottom: "1px solid var(--gray-200)", paddingBottom: "0.5rem" }}>Ana Sayfa Başlıkları (Hero Section)</h3>
-                        <p style={{ fontSize: "0.875rem", color: "var(--gray-500)", marginBottom: "0.5rem" }}>
-                            ✍️ <strong>İpucu:</strong> Ana sayfada mavi/vurgulu görünmesini istediğiniz kelimeleri seçip <strong>Kalın (B)</strong> yapmanız yeterlidir. HTML kodu yazmanıza gerek yoktur.
+                        <h3 style={{ marginBottom: "1rem", color: "var(--primary)", borderBottom: "1px solid var(--gray-200)", paddingBottom: "0.5rem" }}>Teknik Uzmanlığımız (Hakkımızda Sayfası)</h3>
+                        <p style={{ fontSize: "0.85rem", color: "var(--gray-500)", marginBottom: "1.25rem" }}>
+                            Hakkımızda sayfasında yer alan 4&apos;lü uzmanlık kartlarını buradan düzenleyebilirsiniz. İkonlar için Emoji klavyesini kullanabilirsiniz (Windows: Win + <b>.</b>, Mac: Cmd + Ctrl + Space).
                         </p>
-                        <p style={{ fontSize: "0.875rem", color: "var(--gray-500)", marginBottom: "1.5rem" }}>
-                            🗑️ <strong>Görsel Silme:</strong> Editöre eklediğiniz bir görseli silmek için <strong>üzerine bir kez tıklayıp klavyenizden Backspace (Silme) veya Delete</strong> tuşuna basabilirsiniz.
-                        </p>
-
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem", marginBottom: "1.5rem" }}>
+                        
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem", marginBottom: "1rem" }}>
+                            {/* TR */}
                             <div>
-                                <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600", color: "var(--gray-700)" }}>Başlık - Türkçe</label>
-                                <RichTextEditor
-                                    value={heroTitle_tr}
-                                    onChange={setHeroTitleTr}
-                                    placeholder="Örn: Geleceği Analiz Edin Bilimin Gücüyle"
-                                />
+                                <h4 style={{ marginBottom: "1rem", color: "var(--gray-700)" }}>Türkçe</h4>
+                                {expertise_tr.map((exp, i) => (
+                                    <div key={`exp-tr-${i}`} style={{ marginBottom: "1rem", padding: "1rem", border: "1px solid var(--gray-300)", borderRadius: "8px", backgroundColor: "white" }}>
+                                        <div style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem" }}>
+                                            <input 
+                                                type="text" 
+                                                value={exp.icon} 
+                                                onChange={(e) => { const newExp = [...expertise_tr]; newExp[i].icon = e.target.value; setExpertiseTr(newExp); }}
+                                                placeholder="İkon (Örn: ⚙️)"
+                                                style={{ width: "80px", padding: "0.5rem", border: "1px solid var(--gray-300)", borderRadius: "4px" }} 
+                                            />
+                                            <input 
+                                                type="text" 
+                                                value={exp.title} 
+                                                onChange={(e) => { const newExp = [...expertise_tr]; newExp[i].title = e.target.value; setExpertiseTr(newExp); }}
+                                                placeholder="Başlık (Örn: Anahtar Teslim Kurulum)"
+                                                style={{ flex: 1, padding: "0.5rem", border: "1px solid var(--gray-300)", borderRadius: "4px" }} 
+                                            />
+                                        </div>
+                                        <textarea 
+                                            value={exp.desc} 
+                                            onChange={(e) => { const newExp = [...expertise_tr]; newExp[i].desc = e.target.value; setExpertiseTr(newExp); }}
+                                            placeholder="Açıklama"
+                                            rows={2}
+                                            style={{ width: "100%", padding: "0.5rem", border: "1px solid var(--gray-300)", borderRadius: "4px", fontSize: "0.9rem" }}
+                                        />
+                                    </div>
+                                ))}
                             </div>
+                            {/* EN */}
                             <div>
-                                <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600", color: "var(--gray-700)" }}>Başlık - İngilizce</label>
-                                <RichTextEditor
-                                    value={heroTitle_en}
-                                    onChange={setHeroTitleEn}
-                                    placeholder="Örn: Analyze the Future with The Power of Science"
-                                />
+                                <h4 style={{ marginBottom: "1rem", color: "var(--gray-700)" }}>İngilizce</h4>
+                                {expertise_en.map((exp, i) => (
+                                    <div key={`exp-en-${i}`} style={{ marginBottom: "1rem", padding: "1rem", border: "1px solid var(--gray-300)", borderRadius: "8px", backgroundColor: "white" }}>
+                                        <div style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem" }}>
+                                            <input 
+                                                type="text" 
+                                                value={exp.icon} 
+                                                onChange={(e) => { const newExp = [...expertise_en]; newExp[i].icon = e.target.value; setExpertiseEn(newExp); }}
+                                                placeholder="İkon (Örn: ⚙️)"
+                                                style={{ width: "80px", padding: "0.5rem", border: "1px solid var(--gray-300)", borderRadius: "4px" }} 
+                                            />
+                                            <input 
+                                                type="text" 
+                                                value={exp.title} 
+                                                onChange={(e) => { const newExp = [...expertise_en]; newExp[i].title = e.target.value; setExpertiseEn(newExp); }}
+                                                placeholder="Başlık (Örn: Turnkey Installation)"
+                                                style={{ flex: 1, padding: "0.5rem", border: "1px solid var(--gray-300)", borderRadius: "4px" }} 
+                                            />
+                                        </div>
+                                        <textarea 
+                                            value={exp.desc} 
+                                            onChange={(e) => { const newExp = [...expertise_en]; newExp[i].desc = e.target.value; setExpertiseEn(newExp); }}
+                                            placeholder="Açıklama"
+                                            rows={2}
+                                            style={{ width: "100%", padding: "0.5rem", border: "1px solid var(--gray-300)", borderRadius: "4px", fontSize: "0.9rem" }}
+                                        />
+                                    </div>
+                                ))}
                             </div>
-                        </div>
-
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
-                            <div>
-                                <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600", color: "var(--gray-700)" }}>Açıklama - Türkçe</label>
-                                <RichTextEditor
-                                    value={heroDesc_tr}
-                                    onChange={setHeroDescTr}
-                                />
-                            </div>
-                            <div>
-                                <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600", color: "var(--gray-700)" }}>Açıklama - İngilizce</label>
-                                <RichTextEditor
-                                    value={heroDesc_en}
-                                    onChange={setHeroDescEn}
-                                />
-                            </div>
-                        </div>
-
-                        <div style={{ marginTop: "1.5rem", borderTop: "1px solid var(--gray-200)", paddingTop: "1.5rem" }}>
-                            <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600", color: "var(--gray-700)" }}>Ana Sayfa Görseli (Hero Image)</label>
-                            <p style={{ fontSize: "0.875rem", color: "var(--gray-500)", marginBottom: "1rem" }}>Ana sayfanın sağ tarafında görünen büyük görseli buradan değiştirebilirsiniz.</p>
-
-                            {previewUrl && (
-                                <div style={{ position: "relative", width: "100%", maxWidth: "400px", height: "200px", marginBottom: "1rem", borderRadius: "8px", overflow: "hidden", border: "1px solid var(--gray-200)" }}>
-                                    <img src={previewUrl} alt="Hero Preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                                    <button
-                                        type="button"
-                                        onClick={() => { setPreviewUrl(""); setFile(null); setHeroImageUrl(""); }}
-                                        style={{ position: "absolute", top: "0.5rem", right: "0.5rem", backgroundColor: "rgba(255,0,0,0.8)", color: "white", border: "none", borderRadius: "50%", width: "24px", height: "24px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
-                                    >×</button>
-                                </div>
-                            )}
-
-                            <label className={styles.fileUploadBtn}>
-                                <span>Görsel Seç</span>
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleFileChange}
-                                    style={{ display: 'none' }}
-                                />
-                            </label>
-                        </div>
-
-                        {/* Background Image Uploader */}
-                        <div style={{ marginTop: "1.5rem", borderTop: "1px solid var(--gray-200)", paddingTop: "1.5rem" }}>
-                            <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600", color: "var(--gray-700)" }}>Ana Sayfa Arkaplan Görseli (Blur & Background Image)</label>
-                            <p style={{ fontSize: "0.875rem", color: "var(--gray-500)", marginBottom: "1rem" }}>Ana sayfanın arkasında flulaştırılmış (blur) şekilde görünen tam ekran arkaplan görselini buradan değiştirebilirsiniz.</p>
-
-                            {bgPreviewUrl && (
-                                <div style={{ position: "relative", width: "100%", maxWidth: "400px", height: "200px", marginBottom: "1rem", borderRadius: "8px", overflow: "hidden", border: "1px solid var(--gray-200)" }}>
-                                    <img src={bgPreviewUrl} alt="Hero Background Preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                                    <button
-                                        type="button"
-                                        onClick={() => { setBgPreviewUrl(""); setBgFile(null); setHeroBgImageUrl(""); }}
-                                        style={{ position: "absolute", top: "0.5rem", right: "0.5rem", backgroundColor: "rgba(255,0,0,0.8)", color: "white", border: "none", borderRadius: "50%", width: "24px", height: "24px", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
-                                    >×</button>
-                                </div>
-                            )}
-
-                            <label className={styles.fileUploadBtn}>
-                                <span>Arkaplan Görseli Seç</span>
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleBgFileChange}
-                                    style={{ display: 'none' }}
-                                />
-                            </label>
                         </div>
                     </div>
 

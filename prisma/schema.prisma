@@ -122,12 +122,9 @@ model Setting {
   email          String?
   address        String?
   
-  heroTitle_tr   String?  @db.Text
-  heroTitle_en   String?  @db.Text
-  heroDesc_tr    String?  @db.Text
-  heroDesc_en    String?  @db.Text
-  heroImageUrl   String?
-  heroBgImageUrl String?
+  // Deprecated Hero Fields Removed
+
+
 
   refNotice_tr   String?  @db.Text
   refNotice_en   String?  @db.Text
@@ -147,6 +144,12 @@ model Setting {
   linkedinUrl     String?
   twitterUrl      String?
   youtubeUrl      String?
+
+  // Content Management (About Page & General Site Translations)
+  expertise_tr    Json?
+  expertise_en    Json?
+  translations_tr Json?
+  translations_en Json?
 
   updatedAt      DateTime @updatedAt
 }

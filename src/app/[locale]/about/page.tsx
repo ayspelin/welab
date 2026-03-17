@@ -11,6 +11,27 @@ export default async function AboutUs() {
         ? (settings?.aboutText_tr || "<p>Hakkımızda yazısı henüz eklenmedi. Lütfen admin panelinden güncelleyiniz.</p>")
         : (settings?.aboutText_en || settings?.aboutText_tr || "<p>About Us text not added yet. Please update from admin panel.</p>");
 
+    const defaultExpertiseTr = [
+        { icon: '⚙️', title: 'Anahtar Teslim Kurulum', desc: 'Cihazların doğru konumlandırılması ve devreye alınması.' },
+        { icon: '✅', title: 'Kalibrasyon & Validasyon', desc: 'Uluslararası standartlara uygun IQ/OQ/PQ validasyonları.' },
+        { icon: '🎓', title: 'Aplikasyon Eğitimi', desc: 'Analiz yöntemlerinize özel kullanıcı eğitimleri.' },
+        { icon: '🔧', title: 'Bakım & Onarım', desc: 'Hızlı müdahale ve önleyici bakım hizmetleri.' },
+    ];
+
+    const defaultExpertiseEn = [
+        { icon: '⚙️', title: 'Turnkey Installation', desc: 'Site preparation and hardware installation required for commissioning.' },
+        { icon: '✅', title: 'Calibration & Validation', desc: 'Regular validation processes complying with international procedures.' },
+        { icon: '🎓', title: 'Application Training', desc: 'Customized theoretical and practical user trainings.' },
+        { icon: '🔧', title: 'Maintenance & Repair', desc: 'Fast intervention and preventive maintenance agreements.' },
+    ];
+
+    const settingsAny = settings as any;
+    let expertiseData = locale === 'tr' ? settingsAny?.expertise_tr : settingsAny?.expertise_en;
+    
+    if (!expertiseData || !Array.isArray(expertiseData) || expertiseData.length === 0) {
+        expertiseData = locale === 'tr' ? defaultExpertiseTr : defaultExpertiseEn;
+    }
+
     return (
         <>
             <section className={styles.pageHeader}>
@@ -41,31 +62,18 @@ export default async function AboutUs() {
             <section className={styles.expertiseSection}>
                 <div className="container">
                     <div className={styles.expertiseHeader}>
-                        <h2>Our Technical Expertise</h2>
-                        <p>Every device we deliver is under the guarantee of our specialized engineers.</p>
+                        <h2>{locale === 'tr' ? 'Teknik Uzmanlığımız' : 'Our Technical Expertise'}</h2>
+                        <p>{locale === 'tr' ? 'Teslim ettiğimiz her cihaz, uzman mühendislerimizin güvencesi altındadır.' : 'Every device we deliver is under the guarantee of our specialized engineers.'}</p>
                     </div>
 
                     <div className={styles.expertiseGrid}>
-                        <div className={styles.expertiseCard}>
-                            <div className={styles.expIcon}>⚙️</div>
-                            <h3>Turnkey Installation</h3>
-                            <p>Site preparation, hardware installation, and preliminary tests required for the correct positioning and commissioning of the devices.</p>
-                        </div>
-                        <div className={styles.expertiseCard}>
-                            <div className={styles.expIcon}>✅</div>
-                            <h3>Calibration & Validation</h3>
-                            <p>Regular IQ/OQ/PQ validation processes and calibration services complying with international standard procedures.</p>
-                        </div>
-                        <div className={styles.expertiseCard}>
-                            <div className={styles.expIcon}>🎓</div>
-                            <h3>Application Training</h3>
-                            <p>Theoretical and practical customized user trainings provided by our application specialists for your analysis methods.</p>
-                        </div>
-                        <div className={styles.expertiseCard}>
-                            <div className={styles.expIcon}>🔧</div>
-                            <h3>Maintenance & Repair</h3>
-                            <p>Fast intervention, original spare part supply, and preventive periodic maintenance agreements.</p>
-                        </div>
+                        {expertiseData.map((exp: any, idx: number) => (
+                            <div key={`exp-${idx}`} className={styles.expertiseCard}>
+                                <div className={styles.expIcon}>{exp.icon}</div>
+                                <h3>{exp.title}</h3>
+                                <p>{exp.desc}</p>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </section>

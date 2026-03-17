@@ -35,6 +35,7 @@ export default function AdminLayout({
                             <li><Link href="/admin/documents" className={styles.navLink}>📄 dokümanlar</Link></li>
                             <li><Link href="/admin/users" className={styles.navLink}>👥 kullanıcılar</Link></li>
                             <li><Link href="/admin/settings" className={styles.navLink}>⚙️ ayarlar</Link></li>
+                            <li><Link href="/admin/translations" className={styles.navLink}>🌍 site metinleri</Link></li>
                         </ul>
                     </nav>
                     <div className={styles.sidebarFooter}>
