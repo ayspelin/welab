@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import styles from "../login/login.module.css";
 import { Link } from "@/i18n/routing";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function ResetPassword() {
+function ResetPasswordContent() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [message, setMessage] = useState("");
@@ -126,5 +126,17 @@ export default function ResetPassword() {
                 </div>
             </section>
         </>
+    );
+}
+
+export default function ResetPassword() {
+    return (
+        <Suspense fallback={
+            <div className="container" style={{ padding: "100px 0", textAlign: "center" }}>
+                <p>Sayfa yükleniyor, lütfen bekleyin...</p>
+            </div>
+        }>
+            <ResetPasswordContent />
+        </Suspense>
     );
 }

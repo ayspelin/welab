@@ -117,11 +117,14 @@ export default function ContactUs() {
                                 <div className={styles.icon}>📞</div>
                                 <div>
                                     <h3>{isTr ? "Telefon & Destek" : "Phone & Support"}</h3>
-                                    <p dangerouslySetInnerHTML={{ 
-                                        __html: settings?.phone 
-                                            ? settings.phone.replace(/\n/g, '<br />') 
-                                            : '+90 850 123 45 67<br />+90 216 987 65 43' 
-                                    }} />
+                                    <p style={{ display: "flex", flexDirection: "column", gap: "0.25rem", margin: 0 }}>
+                                        {(settings?.phone || '+90 850 123 45 67\n+90 216 987 65 43')
+                                            .split(/[\n\r,/;]+|\s+(?=\+)/)
+                                            .map((p: string, i: number) => {
+                                                const numStr = p.trim();
+                                                return numStr ? <span key={i} style={{ display: "block", color: "inherit" }}>{numStr}</span> : null;
+                                        })}
+                                    </p>
                                 </div>
                             </div>
 
@@ -129,7 +132,13 @@ export default function ContactUs() {
                                 <div className={styles.icon}>✉️</div>
                                 <div>
                                     <h3>{isTr ? "E-posta" : "Emails"}</h3>
-                                    <p>{settings?.email || 'info@welabtr.com'}</p>
+                                    <p style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+                                        {(settings?.email || 'info@welabtr.com').split(/[,/;\s]+/).filter(Boolean).map((e: string, i: number) => (
+                                            <a key={i} href={`mailto:${e.trim()}`} style={{ color: "inherit", textDecoration: "none" }}>
+                                                {e.trim()}
+                                            </a>
+                                        ))}
+                                    </p>
                                 </div>
                             </div>
                         </div>

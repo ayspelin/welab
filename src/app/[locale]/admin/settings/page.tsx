@@ -276,9 +276,10 @@ export default function SettingsPage() {
                         <div>
                             <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600", color: "var(--gray-700)" }}>E-posta Adresi</label>
                             <input
-                                type="email"
+                                type="text"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
+                                placeholder="Örn: info@welabtr.com, satis@welabtr.com"
                                 style={{ width: "100%", padding: "0.75rem", borderRadius: "0.375rem", border: "1px solid var(--gray-300)" }}
                             />
                         </div>

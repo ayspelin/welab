@@ -100,8 +100,23 @@ export default function Footer() {
                 <div className={styles.linksBlock}>
                     <h3 className={styles.linksTitle}>{t('contact')}</h3>
                     <ul className={styles.linksList}>
-                        {settings?.email && <li>{settings.email}</li>}
-                        {settings?.phone && <li>{settings.phone}</li>}
+                        {settings?.email && (
+                            <li style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+                                {settings.email.split(/[,/;\s]+/).filter(Boolean).map((e: string, i: number) => (
+                                    <a key={i} href={`mailto:${e.trim()}`} style={{ display: "block", color: "inherit", textDecoration: "none" }}>
+                                        {e.trim()}
+                                    </a>
+                                ))}
+                            </li>
+                        )}
+                        {settings?.phone && (
+                            <li style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+                                {settings.phone.split(/[\n\r,/;]+|\s+(?=\+)/).map((p: string, i: number) => {
+                                    const numStr = p.trim();
+                                    return numStr ? <span key={i} style={{ display: "block" }}>{numStr}</span> : null;
+                                })}
+                            </li>
+                        )}
                         {settings?.address && <li><span dangerouslySetInnerHTML={{ __html: settings.address.replace(/\n/g, '<br />') }} /></li>}
                     </ul>
                 </div>
