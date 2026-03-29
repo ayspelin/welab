@@ -36,7 +36,8 @@ export async function POST(req: Request) {
             },
         });
 
-        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+        const url = new URL(req.url);
+        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || `${url.protocol}//${url.host}`;
         const resetUrl = `${baseUrl}/reset-password?token=${resetToken}`;
 
         if (!process.env.RESEND_API_KEY) {
