@@ -18,11 +18,22 @@ export default function InquiryModal({ isOpen, onClose, serviceName }: InquiryMo
     message: '',
   });
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
 
   if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMessage('');
+
+    // Phone Validation
+    const cleanPhone = formData.phone.replace(/[\s\-\(\)\+]/g, '');
+    if (!/^\d+$/.test(cleanPhone) || cleanPhone.length < 10) {
+        setErrorMessage('Lütfen geçerli bir telefon numarası girin (en az 10 hane).');
+        setStatus('error');
+        return;
+    }
+
     setStatus('loading');
 
     try {
@@ -115,7 +126,9 @@ export default function InquiryModal({ isOpen, onClose, serviceName }: InquiryMo
               />
             </div>
             {status === 'error' && (
-              <p className={styles.errorMsg}>Bir hata oluştu. Lütfen tekrar deneyin.</p>
+              <p className={styles.errorMsg}>
+                {errorMessage || 'Bir hata oluştu. Lütfen tekrar deneyin.'}
+              </p>
             )}
             <button
               type="submit"

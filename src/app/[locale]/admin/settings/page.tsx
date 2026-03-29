@@ -265,10 +265,11 @@ export default function SettingsPage() {
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
                         <div>
                             <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600", color: "var(--gray-700)" }}>Telefon Numarası</label>
-                            <input
-                                type="text"
+                            <textarea
                                 value={phone}
                                 onChange={(e) => setPhone(e.target.value)}
+                                rows={2}
+                                placeholder="Örn: +90 850 123 45 67 (Alt alta birden fazla girebilirsiniz)"
                                 style={{ width: "100%", padding: "0.75rem", borderRadius: "0.375rem", border: "1px solid var(--gray-300)" }}
                             />
                         </div>

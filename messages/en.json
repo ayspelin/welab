@@ -8,7 +8,7 @@
         "downloads": "Downloads",
         "contact": "Contact",
         "dealers": "Our Business Partners",
-        "login": "Dealer Login",
+        "login": "Partner Login",
         "admin": "Admin",
         "portal": "Portal",
         "logout": "Logout"
@@ -73,7 +73,7 @@
         "title": "Products",
         "home": "Home",
         "emptyCategory": "No categories have been added yet.",
-        "manufacturer": "Our Dealers",
+        "manufacturer": "Our Partners",
         "viewManufacturer": "Click here to see all products from this manufacturer",
         "requestQuote": "Request Quote",
         "downloadCatalog": "Download Catalog",
@@ -124,10 +124,10 @@
         "viewProducts": "View Products"
     },
     "Dealers": {
-        "pageDesc": "You can explore our authorized dealer network across Turkey on the interactive map below.",
-        "noDealersInCity": "There are no registered dealers in this city.",
-        "clickCityPrompt": "Please click on a city to view dealer information.",
-        "dealersInCity": "Our Dealers in {city}",
+        "pageDesc": "You can explore our authorized partner network across Turkey on the interactive map below.",
+        "noDealersInCity": "There are no registered partners in this city.",
+        "clickCityPrompt": "Please click on a city to view partner information.",
+        "dealersInCity": "Our Partners in {city}",
         "address": "Address:",
         "phone": "Phone:",
         "email": "Email:",

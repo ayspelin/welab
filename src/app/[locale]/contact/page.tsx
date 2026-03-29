@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./contact.module.css";
 import { Link } from "@/i18n/routing";
 import { useTranslations, useLocale } from "next-intl";
@@ -20,6 +20,18 @@ export default function ContactUs() {
 
     const [loading, setLoading] = useState(false);
     const [statusMessage, setStatusMessage] = useState({ type: "", text: "" });
+    const [settings, setSettings] = useState<any>(null);
+
+    useEffect(() => {
+        fetch('/api/settings')
+            .then(res => res.json())
+            .then(data => {
+                if (data && !data.error) {
+                    setSettings(data);
+                }
+            })
+            .catch(console.error);
+    }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -29,6 +41,19 @@ export default function ContactUs() {
         e.preventDefault();
         setLoading(true);
         setStatusMessage({ type: "", text: "" });
+
+        // Phone Validation (must contain at least 10 digits after removing formatting)
+        if (formData.phone) {
+            const cleanPhone = formData.phone.replace(/[\s\-\(\)\+]/g, '');
+            if (!/^\d+$/.test(cleanPhone) || cleanPhone.length < 10) {
+                setStatusMessage({ 
+                    type: "error", 
+                    text: isTr ? "Lütfen geçerli bir telefon numarası girin (örn: 05xx xxx xx xx)." : "Please enter a valid phone number (at least 10 digits)." 
+                });
+                setLoading(false);
+                return;
+            }
+        }
 
         try {
             const res = await fetch("/api/contact", {
@@ -80,12 +105,11 @@ export default function ContactUs() {
                                 <div className={styles.icon}>📍</div>
                                 <div>
                                     <h3>{isTr ? "Genel Merkez" : "Headquarters"}</h3>
-                                    <p>
-                                        WELAB LABORATUVAR CİHAZLARI TİC LTD STİ<br />
-                                        MUSTAFA KEMAL MAHALLESİ 2118 CADDE NO:4/A<br />
-                                        Maidan İş ve Yaşam Merkezi A/73<br />
-                                        Çankaya / Ankara
-                                    </p>
+                                    <p dangerouslySetInnerHTML={{ 
+                                        __html: settings?.address 
+                                            ? settings.address.replace(/\n/g, '<br />') 
+                                            : 'WELAB LABORATUVAR CİHAZLARI TİC LTD STİ<br />MUSTAFA KEMAL MAHALLESİ 2118 CADDE NO:4/A<br />Maidan İş ve Yaşam Merkezi A/73<br />Çankaya / Ankara' 
+                                    }} />
                                 </div>
                             </div>
 
@@ -93,7 +117,11 @@ export default function ContactUs() {
                                 <div className={styles.icon}>📞</div>
                                 <div>
                                     <h3>{isTr ? "Telefon & Destek" : "Phone & Support"}</h3>
-                                    <p>+90 850 123 45 67<br />+90 216 987 65 43</p>
+                                    <p dangerouslySetInnerHTML={{ 
+                                        __html: settings?.phone 
+                                            ? settings.phone.replace(/\n/g, '<br />') 
+                                            : '+90 850 123 45 67<br />+90 216 987 65 43' 
+                                    }} />
                                 </div>
                             </div>
 
@@ -101,7 +129,7 @@ export default function ContactUs() {
                                 <div className={styles.icon}>✉️</div>
                                 <div>
                                     <h3>{isTr ? "E-posta" : "Emails"}</h3>
-                                    <p>info@welabtr.com</p>
+                                    <p>{settings?.email || 'info@welabtr.com'}</p>
                                 </div>
                             </div>
                         </div>

@@ -8,9 +8,9 @@
         "downloads": "Dokümanlar",
         "contact": "İletişim",
         "dealers": "Çalışma Ortaklarımız",
-        "login": "Bayi Girişi",
+        "login": "Çalışma Ortağı Girişi",
         "admin": "Admin",
-        "portal": "Bayi Portalı",
+        "portal": "Çalışma Ortağı Portalı",
         "logout": "Çıkış"
     },
     "Footer": {
@@ -73,7 +73,7 @@
         "title": "Ürünler",
         "home": "Ana Sayfa",
         "emptyCategory": "Henüz bu kategoriye ait ürün eklenmemiş.",
-        "manufacturer": "Çalıştığımız Bayiler",
+        "manufacturer": "Çalıştığımız Ortaklar",
         "viewManufacturer": "Bu markanın tüm ürünlerini görmek için tıklayın",
         "requestQuote": "Teklif İste",
         "downloadCatalog": "Katalog İndir",
@@ -124,10 +124,10 @@
         "viewProducts": "Ürünleri Gör"
     },
     "Dealers": {
-        "pageDesc": "Türkiye genelindeki yetkili bayi ağımızı aşağıda yer alan interaktif harita üzerinden inceleyebilirsiniz.",
-        "noDealersInCity": "Bu ilde kayıtlı bayimiz bulunmamaktadır.",
-        "clickCityPrompt": "Lütfen bayi bilgilerini görmek istediğiniz şehre tıklayın.",
-        "dealersInCity": "{city} Bayilerimiz",
+        "pageDesc": "Türkiye genelindeki yetkili çalışma ortağı ağımızı aşağıda yer alan interaktif harita üzerinden inceleyebilirsiniz.",
+        "noDealersInCity": "Bu ilde kayıtlı çalışma ortağımız bulunmamaktadır.",
+        "clickCityPrompt": "Lütfen çalışma ortağı bilgilerini görmek istediğiniz şehre tıklayın.",
+        "dealersInCity": "{city} Çalışma Ortaklarımız",
         "address": "Adres:",
         "phone": "Telefon:",
         "email": "E-posta:",

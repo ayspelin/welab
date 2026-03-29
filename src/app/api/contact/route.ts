@@ -31,7 +31,7 @@ export async function POST(req: Request) {
 
         // Determine destination: Try the setting email, otherwise the onboarding email requires sending to your own verified account email. 
         // Admin recipient: pelingilik1@gmail.com (per user request)
-        const toEmails = ["info@welabtr.com", "pelingilik1@gmail.com"];
+        const toEmails = ["info@welabtr.com", "pelingilik1@gmail.com", "ytanriverdi@welabtr.com", "cpekel@welabtr.com"];
 
         const data = await resend.emails.send({
             from: "Welab <info@welabtr.com>", 

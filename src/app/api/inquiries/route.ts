@@ -37,7 +37,7 @@ export async function POST(req: Request) {
     // Send email notification
     if (process.env.RESEND_API_KEY) {
       try {
-        const toEmails = ["info@welabtr.com", "pelingilik1@gmail.com"];
+        const toEmails = ["info@welabtr.com", "pelingilik1@gmail.com", "ytanriverdi@welabtr.com", "cpekel@welabtr.com"];
         
         // Add specific department emails if applicable
         const lowerService = serviceName?.toLowerCase() || "";

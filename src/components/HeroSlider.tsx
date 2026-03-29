@@ -75,40 +75,54 @@ export default function HeroSlider({ slides, locale, fallback }: Props) {
                     key={slide.id} 
                     className={`${styles.slide} ${index === current ? styles.active : ''}`}
                 >
-                    <Image 
-                        src={slide.imageUrl} 
-                        alt="Hero Slide" 
-                        fill 
-                        style={{ objectFit: 'contain' }} 
-                        priority={index === 0} 
-                    />
-                    <div className={styles.overlay} />
-                    
-                    <div className={`container ${styles.slideContainer}`}>
-                        <div className={styles.slideContent}>
-                            <div
-                                className={styles.slideTitle}
-                                dangerouslySetInnerHTML={{ __html: (locale === 'tr' ? slide.title_tr : (slide.title_en || slide.title_tr)) || "" }}
+                    {/* Right Side Image Block (or Top on Mobile) */}
+                    <div className={styles.imageBlock}>
+                        <div className={styles.blurredBackground}>
+                            <Image 
+                                src={slide.imageUrl} 
+                                alt="Background Blur" 
+                                fill 
+                                style={{ objectFit: 'cover' }} 
+                                priority={index === 0} 
                             />
-                            <div
-                                className={styles.slideDesc}
-                                dangerouslySetInnerHTML={{ __html: (locale === 'tr' ? slide.desc_tr : (slide.desc_en || slide.desc_tr)) || "" }}
-                            />
-                            {(slide.buttonText_tr || slide.buttonText_en) && (
-                                <Link 
-                                    href={slide.buttonUrl || "/products"} 
-                                    className="btn btn-primary"
-                                >
-                                    {locale === 'tr' ? slide.buttonText_tr : (slide.buttonText_en || slide.buttonText_tr)}
-                                </Link>
-                            )}
                         </div>
+                        <Image 
+                            src={slide.imageUrl} 
+                            alt="Hero Slide" 
+                            fill 
+                            priority={index === 0} 
+                            className={styles.mainImage}
+                        />
                     </div>
-                    {slide.isSpecialDay && (
-                        <div className={styles.specialDayBadge}>
-                            ✨ Authorized Global Representations ✨
+                    
+                    {/* Left Side Text Block (or Bottom on Mobile) */}
+                    <div className={styles.textContainerWrapper}>
+                        <div className={`container ${styles.slideContainer}`}>
+                            <div className={styles.slideContent}>
+                                <div
+                                    className={styles.slideTitle}
+                                    dangerouslySetInnerHTML={{ __html: (locale === 'tr' ? slide.title_tr : (slide.title_en || slide.title_tr)) || "" }}
+                                />
+                                <div
+                                    className={styles.slideDesc}
+                                    dangerouslySetInnerHTML={{ __html: (locale === 'tr' ? slide.desc_tr : (slide.desc_en || slide.desc_tr)) || "" }}
+                                />
+                                {(slide.buttonText_tr || slide.buttonText_en) && (
+                                    <Link 
+                                        href={slide.buttonUrl || "/products"} 
+                                        className="btn btn-primary"
+                                    >
+                                        {locale === 'tr' ? slide.buttonText_tr : (slide.buttonText_en || slide.buttonText_tr)}
+                                    </Link>
+                                )}
+                            </div>
                         </div>
-                    )}
+                        {slide.isSpecialDay && (
+                            <div className={styles.specialDayBadge}>
+                                ✨ Authorized Global Representations ✨
+                            </div>
+                        )}
+                    </div>
                 </div>
             ))}
 
