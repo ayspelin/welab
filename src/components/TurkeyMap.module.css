@@ -159,9 +159,32 @@
 @media (max-width: 1024px) {
     .mapContainer {
         grid-template-columns: 1fr;
+        padding: 1rem;
     }
     
     .sidebar {
         max-height: none;
+    }
+
+    .mapWrapper {
+        min-height: 350px;
+        padding: 1rem;
+    }
+
+    .kktcButton {
+        bottom: 1rem;
+        right: 1rem;
+        padding: 0.4rem 1rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .mapContainer {
+        padding: 0.5rem;
+    }
+
+    .mapWrapper {
+        min-height: 250px;
     }
 }

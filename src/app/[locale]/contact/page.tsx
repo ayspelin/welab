@@ -103,7 +103,7 @@ export default function ContactUs() {
                         <div className={styles.infoBlocks}>
                             <div className={styles.infoCard}>
                                 <div className={styles.icon}>📍</div>
-                                <div>
+                                <div className={styles.infoContent}>
                                     <h3>{isTr ? "Genel Merkez" : "Headquarters"}</h3>
                                     <p dangerouslySetInnerHTML={{ 
                                         __html: settings?.address 
@@ -115,7 +115,7 @@ export default function ContactUs() {
 
                             <div className={styles.infoCard}>
                                 <div className={styles.icon}>📞</div>
-                                <div>
+                                <div className={styles.infoContent}>
                                     <h3>{isTr ? "Telefon & Destek" : "Phone & Support"}</h3>
                                     <p style={{ display: "flex", flexDirection: "column", gap: "0.25rem", margin: 0 }}>
                                         {(settings?.phone || '+90 850 123 45 67\n+90 216 987 65 43')
@@ -130,7 +130,7 @@ export default function ContactUs() {
 
                             <div className={styles.infoCard}>
                                 <div className={styles.icon}>✉️</div>
-                                <div>
+                                <div className={styles.infoContent}>
                                     <h3>{isTr ? "E-posta" : "Emails"}</h3>
                                     <p style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
                                         {(settings?.email || 'info@welabtr.com').split(/[,/;\s]+/).filter(Boolean).map((e: string, i: number) => (
@@ -226,9 +226,16 @@ export default function ContactUs() {
             </section>
 
             <section className={styles.mapSection}>
-                <div className={styles.mapPlaceholder}>
-                    <span>{isTr ? "İnteraktif Google Haritalar (İstanbul Merkez) Alanı" : "Interactive Google Maps (Istanbul Headquarters) Area"}</span>
-                </div>
+                <iframe
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    loading="lazy"
+                    allowFullScreen
+                    referrerPolicy="no-referrer-when-downgrade"
+                    src={`https://maps.google.com/maps?q=${encodeURIComponent("Mustafa Kemal Mahallesi 2118 Cadde No:4/A Maidan İş ve Yaşam Merkezi Çankaya Ankara")}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
+                    title="Google Maps Location"
+                ></iframe>
             </section>
         </>
     );
