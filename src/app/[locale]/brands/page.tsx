@@ -25,16 +25,16 @@ export default async function Brands() {
                 <div className={`container ${styles.brandsGrid}`}>
                     {brands.length > 0 ? brands.map((brand) => {
                         const logoContent = brand.logoUrl && brand.logoUrl !== '/images/placeholder.jpg' ? (
-                            <div style={{ position: "relative", width: "100%", height: "100%" }}>
+                            <div style={{ position: "relative", width: "100%", height: "120px" }}>
                                 <Image src={brand.logoUrl} alt={brand.name} fill style={{ objectFit: 'contain' }} />
                             </div>
                         ) : (
                             <span className={styles.logoPlaceholder}>{brand.name}</span>
                         );
 
-                        return (
-                            <div key={brand.id} className={styles.brandCard}>
-                                <div className={styles.brandLogoWrapper}>
+                        const cardContent = (
+                            <div className={styles.brandCard}>
+                                <div className={styles.brandLogo}>
                                     {logoContent}
                                 </div>
                                 <div className={styles.brandInfo}>
@@ -48,8 +48,17 @@ export default async function Brands() {
                                             {locale === 'tr' ? brand.description_tr : (brand.description_en || brand.description_tr)}
                                         </p>
                                     )}
-                                    <Link href={`/products?brand=${brand.id}`} className={styles.brandLink}>{tb('viewProducts')} &rarr;</Link>
                                 </div>
+                            </div>
+                        );
+
+                        return brand.url ? (
+                            <a key={brand.id} href={brand.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
+                                {cardContent}
+                            </a>
+                        ) : (
+                            <div key={brand.id} style={{ display: 'block' }}>
+                                {cardContent}
                             </div>
                         );
                     }) : (

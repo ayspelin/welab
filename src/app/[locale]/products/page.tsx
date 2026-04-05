@@ -36,6 +36,7 @@ export default async function Products() {
                                             src={cat.imageUrl}
                                             alt={locale === 'tr' ? (cat.name_tr || cat.name_en) : cat.name_en}
                                             fill
+                                            unoptimized
                                             style={{ objectFit: 'contain', padding: '1rem' }}
                                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                         />

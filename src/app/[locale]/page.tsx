@@ -98,6 +98,7 @@ export default async function Home(props: { params: Promise<{ locale: string }> 
                       src={cat.imageUrl || "/images/placeholder.png"}
                       alt={cat.name_en}
                       fill
+                      unoptimized
                       style={{ objectFit: 'cover' }}
                     />
                   </div>

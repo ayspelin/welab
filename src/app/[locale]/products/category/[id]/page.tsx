@@ -8,6 +8,7 @@ import { prisma } from "@/lib/prisma";
 export default async function CategoryProducts({ params }: { params: Promise<{ id: string }> }) {
     const resolvedParams = await params;
     const t = await getTranslations("Products");
+    const tFooter = await getTranslations("Footer");
     const locale = await getLocale();
 
     // Fetch real category from database
@@ -38,8 +39,11 @@ export default async function CategoryProducts({ params }: { params: Promise<{ i
 
             <section className={`container ${styles.productGridSection}`}>
                 {products.length === 0 ? (
-                    <div className={styles.noProducts}>
+                    <div className={styles.noProducts} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem' }}>
                         <p>{t('emptyCategory')}</p>
+                        <Link href="/contact" style={{ display: 'inline-block', backgroundColor: 'var(--primary)', color: 'white', padding: '0.75rem 2rem', borderRadius: '100px', textDecoration: 'none', fontWeight: '500', transition: 'opacity 0.2s' }}>
+                            {tFooter('talkToExpert')} &rarr;
+                        </Link>
                     </div>
                 ) : (
                     <div className={styles.productGrid}>

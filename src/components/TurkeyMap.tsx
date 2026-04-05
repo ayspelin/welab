@@ -641,6 +641,13 @@ export default function TurkeyMap() {
                         </g>
                     </svg>
                     {hoveredCity && <div className={styles.hoverTooltip}>{hoveredCity}</div>}
+                    
+                    <button 
+                        className={`${styles.kktcButton} ${selectedCity === 'KKTC' ? styles.kktcSelected : ''}`}
+                        onClick={() => handleCityClick('KKTC')}
+                    >
+                        KKTC
+                    </button>
                 </div>
             </div>
 

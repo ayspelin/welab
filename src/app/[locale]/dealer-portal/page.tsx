@@ -13,7 +13,7 @@ export default function DealerPortal() {
             <div className={`container ${styles.portalLayout}`}>
                 <aside className={styles.sidebar}>
                     <div className={styles.userInfo}>
-                        <div className={styles.avatar}>{user?.name.charAt(0)}</div>
+                        <div className={styles.avatar}>{user?.name?.charAt(0) || ''}</div>
                         <h3>{user?.name}</h3>
                         <span className={styles.roleBadge}>{user?.role}</span>
                     </div>

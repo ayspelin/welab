@@ -58,7 +58,8 @@
         "wesaleDesc": "Device sales and procurement solutions.",
         "wecareDesc": "Service, maintenance and technical support.",
         "weapplyDesc": "Application development and method support.",
-        "weconsultDesc": "Consulting and laboratory setup services."
+        "weconsultDesc": "Consulting and laboratory setup services.",
+        "viewDetails": "View Details"
     },
     "Common": {
         "aboutUs": "About Us",

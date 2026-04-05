@@ -11,7 +11,7 @@ function ResetPasswordContent() {
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    
+
     const router = useRouter();
     const searchParams = useSearchParams();
     const token = searchParams.get("token");
@@ -76,10 +76,10 @@ function ResetPasswordContent() {
                 <div className="container">
                     <div className={styles.loginCard}>
                         <h2>Şifre Yenileme</h2>
-                        
+
                         {error && <div className={styles.errorAlert}>{error}</div>}
                         {message && <div className={styles.successAlert} style={{ padding: "12px", backgroundColor: "#ecfdf5", color: "#065f46", borderRadius: "5px", marginBottom: "15px", border: "1px solid #a7f3d0" }}>{message}</div>}
-                        
+
                         {!token && !error && (
                             <div className={styles.errorAlert}>Yükleniyor...</div>
                         )}
