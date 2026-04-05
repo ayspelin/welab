@@ -56,46 +56,16 @@ export default function Footer() {
                     </div>
                 </div>
 
-                {settings?.footerColumns ? (
-                    // Parse if string (from API), otherwise use as array
-                    (typeof settings.footerColumns === 'string' ? JSON.parse(settings.footerColumns) : settings.footerColumns).map((col: any, colIdx: number) => (
-                        <div key={colIdx} className={styles.linksBlock}>
-                            <h3 className={styles.linksTitle}>
-                                {locale === 'tr' ? col.title_tr : (col.title_en || col.title_tr)}
-                            </h3>
-                            <ul className={styles.linksList}>
-                                {col.links.map((link: any, linkIdx: number) => (
-                                    <li key={linkIdx}>
-                                        <Link href={link.href}>
-                                            {locale === 'tr' ? link.label_tr : (link.label_en || link.label_tr)}
-                                        </Link>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    ))
-                ) : (
-                    // Fallback to translations/static if no settings
-                    <>
-                        <div className={styles.linksBlock}>
-                            <h3 className={styles.linksTitle}>{t('links')}</h3>
-                            <ul className={styles.linksList}>
-                                <li><Link href="/about">{t('about')}</Link></li>
-                                <li><Link href="/quality">{t('quality')}</Link></li>
-                                <li><Link href="/careers">{t('careers')}</Link></li>
-                            </ul>
-                        </div>
-                        <div className={styles.linksBlock}>
-                            <h3 className={styles.linksTitle}>{t('productsTitle')}</h3>
-                            <ul className={styles.linksList}>
-                                <li><Link href="/products?category=c1">{t('analytical')}</Link></li>
-                                <li><Link href="/products?category=c2">{t('qualityControl')}</Link></li>
-                                <li><Link href="/products?category=c3">{t('waterPurification')}</Link></li>
-                                <li><Link href="/brands">{t('brands')}</Link></li>
-                            </ul>
-                        </div>
-                    </>
-                )}
+                {/* Main links container: We simplified the columns as requested */}
+                <div className={styles.linksBlock}>
+                    <h3 className={styles.linksTitle}>{t('links')}</h3>
+                    <ul className={styles.linksList}>
+                        <li><Link href="/about">{t('about')}</Link></li>
+                        <li><Link href="/events">{t('events') || "Events"}</Link></li>
+                        <li><Link href="/downloads">{t('downloads') || "Downloads"}</Link></li>
+                        <li><Link href="/brands">{t('brands')}</Link></li>
+                    </ul>
+                </div>
 
                 <div className={styles.linksBlock}>
                     <h3 className={styles.linksTitle}>{t('contact')}</h3>
