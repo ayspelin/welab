@@ -15,9 +15,17 @@ export default function DocumentsPage() {
     const [productId, setProductId] = useState("");
     const [file, setFile] = useState<File | null>(null);
     const [docSearchTerm, setDocSearchTerm] = useState("");
+    const [coverFile, setCoverFile] = useState<File | null>(null);
 
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
+
+    // Edit Modal State
+    const [editingDoc, setEditingDoc] = useState<any>(null);
+    const [editTitle, setEditTitle] = useState("");
+    const [editCoverFile, setEditCoverFile] = useState<File | null>(null);
+    const [editLoading, setEditLoading] = useState(false);
+    const [removeCover, setRemoveCover] = useState(false);
 
     useEffect(() => {
         fetchDocuments();
@@ -68,20 +76,47 @@ export default function DocumentsPage() {
         try {
             let fileUrl = "";
 
-            // 1. Upload Document to S3
-            const formData = new FormData();
-            formData.append("file", file);
-
-            const uploadRes = await fetch("/api/upload", {
+            // 1. Get Presigned URL
+            const presignedRes = await fetch("/api/upload-presigned", {
                 method: "POST",
-                body: formData,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    filename: file.name,
+                    contentType: file.type,
+                }),
             });
 
-            if (!uploadRes.ok) throw new Error("Dosya AWS S3'e yüklenemedi");
-            const uploadData = await uploadRes.json();
-            fileUrl = uploadData.url;
+            if (!presignedRes.ok) throw new Error("AWS S3 yükleme bağlantısı alınamadı");
+            const { presignedUrl, fileUrl: newFileUrl } = await presignedRes.json();
+            fileUrl = newFileUrl;
 
-            // 2. Save Document Record
+            // 2. Upload Document directly to S3
+            const uploadRes = await fetch(presignedUrl, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": file.type,
+                },
+                body: file,
+            });
+
+            if (!uploadRes.ok) throw new Error("Dosya AWS S3'e yüklenemedi (CORS engeli veya bağlantı problemi olabilir)");
+
+            // 2. Upload cover image if exists
+            let imageUrl = "";
+            if (coverFile) {
+                const coverFormData = new FormData();
+                coverFormData.append("file", coverFile);
+                const coverRes = await fetch("/api/upload", {
+                    method: "POST",
+                    body: coverFormData,
+                });
+                if (coverRes.ok) {
+                    const coverData = await coverRes.json();
+                    imageUrl = coverData.url;
+                }
+            }
+
+            // 3. Save Document Record
             const res = await fetch("/api/documents", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -89,6 +124,7 @@ export default function DocumentsPage() {
                     title,
                     type,
                     url: fileUrl,
+                    imageUrl: imageUrl || null,
                     isPublic,
                     productId: productId || null
                 }),
@@ -102,6 +138,7 @@ export default function DocumentsPage() {
             setTitle("");
             setProductId("");
             setFile(null);
+            setCoverFile(null);
 
             fetchDocuments();
 
@@ -135,6 +172,53 @@ export default function DocumentsPage() {
             });
             if (res.ok) fetchDocuments();
         } catch (error) { console.error("Error toggling document visibility:", error); }
+    };
+
+    const openEditModal = (doc: any) => {
+        setEditingDoc(doc);
+        setEditTitle(doc.title);
+        setEditCoverFile(null);
+        setRemoveCover(false);
+    };
+
+    const closeEditModal = () => {
+        setEditingDoc(null);
+        setEditTitle("");
+        setEditCoverFile(null);
+        setRemoveCover(false);
+    };
+
+    const handleUpdateDoc = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setEditLoading(true);
+        try {
+            let newImageUrl = removeCover ? "" : editingDoc.imageUrl;
+
+            if (editCoverFile) {
+                const coverFormData = new FormData();
+                coverFormData.append("file", editCoverFile);
+                const coverRes = await fetch("/api/upload", { method: "POST", body: coverFormData });
+                if (coverRes.ok) {
+                    const json = await coverRes.json();
+                    newImageUrl = json.url;
+                }
+            }
+
+            const res = await fetch(`/api/documents/${editingDoc.id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ title: editTitle, imageUrl: newImageUrl }),
+            });
+
+            if (!res.ok) throw new Error("Belge güncellenemedi");
+            
+            fetchDocuments();
+            closeEditModal();
+        } catch(error: any) {
+            alert(error.message || "Hata oluştu");
+        } finally {
+            setEditLoading(false);
+        }
     };
 
     const filteredDocs = documents.filter(doc => 
@@ -219,15 +303,30 @@ export default function DocumentsPage() {
                         </div>
                     </div>
 
-                    <div>
-                        <label style={{ display: "block", marginBottom: "0.5rem" }}>Dosya Seç (PDF, Excel, vb.) *</label>
-                        <input
-                            type="file"
-                            accept=".pdf,.xlsx,.xls,.doc,.docx"
-                            onChange={handleFileChange}
-                            required
-                            style={{ width: "100%", padding: "0.5rem", borderRadius: "0.25rem", border: "1px solid var(--gray-300)" }}
-                        />
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                        <div>
+                            <label style={{ display: "block", marginBottom: "0.5rem" }}>Dosya Seç (PDF, Excel, vb.) *</label>
+                            <input
+                                type="file"
+                                accept=".pdf,.xlsx,.xls,.doc,.docx"
+                                onChange={handleFileChange}
+                                required
+                                style={{ width: "100%", padding: "0.5rem", borderRadius: "0.25rem", border: "1px solid var(--gray-300)" }}
+                            />
+                        </div>
+                        <div>
+                            <label style={{ display: "block", marginBottom: "0.5rem" }}>İsteğe Bağlı Kapak Ekle (JPG, PNG)</label>
+                            <input
+                                type="file"
+                                accept="image/jpeg, image/png, image/webp"
+                                onChange={(e) => {
+                                    if (e.target.files && e.target.files.length > 0) {
+                                        setCoverFile(e.target.files[0]);
+                                    }
+                                }}
+                                style={{ width: "100%", padding: "0.5rem", borderRadius: "0.25rem", border: "1px solid var(--gray-300)" }}
+                            />
+                        </div>
                     </div>
 
                     <button
@@ -322,9 +421,16 @@ export default function DocumentsPage() {
                                                 Görüntüle
                                             </a>
                                             <button 
+                                                onClick={() => openEditModal(doc)} 
+                                                className="btn" 
+                                                style={{ padding: '0.3rem 0.6rem', fontSize: '0.85rem', backgroundColor: '#eab308', color: 'white', border: 'none' }}
+                                            >
+                                                Düzenle
+                                            </button>
+                                            <button 
                                                 onClick={() => handleDelete(doc.id)} 
                                                 className="btn" 
-                                                style={{ padding: '0.3rem 0.6rem', fontSize: '0.85rem', backgroundColor: '#dc2626', color: 'white' }}
+                                                style={{ padding: '0.3rem 0.6rem', fontSize: '0.85rem', backgroundColor: '#dc2626', color: 'white', border: 'none' }}
                                             >
                                                 Sil
                                             </button>
@@ -343,6 +449,65 @@ export default function DocumentsPage() {
                     </table>
                 </div>
             </div>
+
+            {/* Edit Modal */}
+            {editingDoc && (
+                <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 }}>
+                    <div style={{ backgroundColor: "white", padding: "2rem", borderRadius: "8px", width: "100%", maxWidth: "500px" }}>
+                        <h3 style={{ marginBottom: "1rem" }}>Belge Düzenle</h3>
+                        <form onSubmit={handleUpdateDoc} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                            <div>
+                                <label style={{ display: "block", marginBottom: "0.5rem" }}>Belge Başlığı</label>
+                                <input
+                                    type="text"
+                                    value={editTitle}
+                                    onChange={(e) => setEditTitle(e.target.value)}
+                                    required
+                                    style={{ width: "100%", padding: "0.5rem", borderRadius: "0.25rem", border: "1px solid var(--gray-300)" }}
+                                />
+                            </div>
+                            <div>
+                                <label style={{ display: "block", marginBottom: "0.5rem" }}>Yeni Kapak Görseli (İsteğe Bağlı)</label>
+                                {editingDoc.imageUrl && !removeCover && !editCoverFile && (
+                                    <div style={{ marginBottom: "0.5rem", display: "flex", alignItems: "center", gap: "1rem" }}>
+                                        <img src={editingDoc.imageUrl} alt="Mevcut kapak" style={{ height: "60px", width: "auto", borderRadius: "4px" }} />
+                                        <span style={{ fontSize: "0.8rem", color: "var(--gray-500)" }}>Mevcut görsel</span>
+                                        <button 
+                                            type="button" 
+                                            onClick={() => setRemoveCover(true)}
+                                            style={{ backgroundColor: "transparent", color: "#dc2626", border: "1px solid #dc2626", padding: "0.2rem 0.6rem", borderRadius: "4px", fontSize: "0.8rem", cursor: "pointer", marginLeft: "auto" }}
+                                        >
+                                            Kaldır
+                                        </button>
+                                    </div>
+                                )}
+                                {removeCover && (
+                                    <div style={{ marginBottom: "0.5rem", fontSize: "0.8rem", color: "#dc2626", padding: "0.5rem", backgroundColor: "#fee2e2", borderRadius: "4px" }}>
+                                        Görsel silinecek şekilde işaretlendi. İptal etmek için dosyayı kapatıp tekrar açın veya yeni görsel yükleyin.
+                                    </div>
+                                )}
+                                <input
+                                    type="file"
+                                    accept="image/jpeg, image/png, image/webp"
+                                    onChange={(e) => {
+                                        if (e.target.files && e.target.files.length > 0) {
+                                            setEditCoverFile(e.target.files[0]);
+                                            setRemoveCover(false); // Cancel remove if they pick a new file
+                                        }
+                                    }}
+                                    style={{ width: "100%", padding: "0.5rem", borderRadius: "0.25rem", border: "1px solid var(--gray-300)" }}
+                                />
+                            </div>
+                            <div style={{ display: "flex", gap: "1rem", justifyContent: "flex-end", marginTop: "1rem" }}>
+                                <button type="button" onClick={closeEditModal} className="btn" style={{ backgroundColor: "var(--gray-300)", color: "var(--gray-800)", border: "none" }}>İptal</button>
+                                <button type="submit" disabled={editLoading} className="btn btn-primary" style={{ border: "none" }}>
+                                    {editLoading ? "Kaydediliyor..." : "Kaydet"}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

@@ -14,11 +14,11 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(uuid())
-  email        String   @unique
-  passwordHash String
-  role         Role     @default(DEALER)
-  isApproved   Boolean  @default(false)
+  id                String    @id @default(uuid())
+  email             String    @unique
+  passwordHash      String
+  role              Role      @default(DEALER)
+  isApproved        Boolean   @default(false)
   emailVerified     Boolean   @default(false)
   resetToken        String?   @unique
   resetTokenExpires DateTime?
@@ -33,101 +33,100 @@ enum Role {
 }
 
 model Brand {
-  id             String   @id @default(uuid())
+  id             String    @id @default(uuid())
   name           String
   logoUrl        String
   description_tr String?
   description_en String?
   url            String?
   products       Product[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 }
 
 model Category {
-  id             String     @id @default(uuid())
+  id             String  @id @default(uuid())
   name_en        String
   name_tr        String?
   description_en String?
   description_tr String?
   imageUrl       String?
-  
-  // Self-relation for sub-categories
-  parentId    String?
-  parent      Category?  @relation("SubCategories", fields: [parentId], references: [id])
-  children    Category[] @relation("SubCategories")
 
-  products    Product[]
-  
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  // Self-relation for sub-categories
+  parentId String?
+  parent   Category?  @relation("SubCategories", fields: [parentId], references: [id])
+  children Category[] @relation("SubCategories")
+
+  products Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Product {
-  id             String         @id @default(uuid())
+  id             String  @id @default(uuid())
   name_en        String
   name_tr        String?
-  description_en String         @db.Text
-  description_tr String?        @db.Text
+  description_en String  @db.Text
+  description_tr String? @db.Text
   technicalSpecs Json?
-  
-  brandId        String
-  brand          Brand          @relation(fields: [brandId], references: [id])
-  
-  categoryId     String
-  category       Category       @relation(fields: [categoryId], references: [id])
-  
-  isFeatured     Boolean        @default(false)
-  isPublic       Boolean        @default(true)
-  
-  images         ProductImage[]
-  documents      Document[]
-  
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
+
+  brandId String
+  brand   Brand  @relation(fields: [brandId], references: [id])
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  isFeatured Boolean @default(false)
+  isPublic   Boolean @default(true)
+
+  images    ProductImage[]
+  documents Document[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model ProductImage {
-  id        String   @id @default(uuid())
+  id        String  @id @default(uuid())
   url       String
-  isPrimary Boolean  @default(false)
-  order     Int      @default(0)
-  
+  isPrimary Boolean @default(false)
+  order     Int     @default(0)
+
   productId String
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Document {
-  id        String   @id @default(uuid())
-  title     String
-  type      String   // e.g., "PDF", "EXCEL", "WORD"
-  url       String
-  isPublic  Boolean  @default(true)
-  
+  id       String  @id @default(uuid())
+  title    String
+  type     String // e.g., "PDF", "EXCEL", "WORD"
+  url      String
+  imageUrl String? // Optional cover image for the document
+  isPublic Boolean @default(true)
+
   productId String?
   product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
-  
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Setting {
-  id             String   @id @default(uuid())
-  aboutText_en   String   @db.Text
-  aboutText_tr   String?  @db.Text
-  phone          String?
-  email          String?
-  address        String?
-  
+  id           String  @id @default(uuid())
+  aboutText_en String  @db.Text
+  aboutText_tr String? @db.Text
+  phone        String?
+  email        String?
+  address      String?
+
   // Deprecated Hero Fields Removed
 
-
-
-  refNotice_tr   String?  @db.Text
-  refNotice_en   String?  @db.Text
+  refNotice_tr String? @db.Text
+  refNotice_en String? @db.Text
 
   trustFeatures_tr Json?
   trustFeatures_en Json?
@@ -135,15 +134,15 @@ model Setting {
   trustStats_en    Json?
 
   // Extended Footer Fields
-  footerDesc_tr   String?  @db.Text
-  footerDesc_en   String?  @db.Text
-  footerQuickLinks Json?   // Deprecated
-  footerColumns    Json?   // [{ title_tr: string, title_en: string, links: [{ label_tr: string, label_en: string, href: string }] }]
-  
-  instagramUrl    String?
-  linkedinUrl     String?
-  twitterUrl      String?
-  youtubeUrl      String?
+  footerDesc_tr    String? @db.Text
+  footerDesc_en    String? @db.Text
+  footerQuickLinks Json? // Deprecated
+  footerColumns    Json? // [{ title_tr: string, title_en: string, links: [{ label_tr: string, label_en: string, href: string }] }]
+
+  instagramUrl String?
+  linkedinUrl  String?
+  twitterUrl   String?
+  youtubeUrl   String?
 
   // Content Management (About Page & General Site Translations)
   expertise_tr    Json?
@@ -151,15 +150,15 @@ model Setting {
   translations_tr Json?
   translations_en Json?
 
-  updatedAt      DateTime @updatedAt
+  updatedAt DateTime @updatedAt
 }
 
 model HeroSlide {
-  id          String   @id @default(uuid())
-  title_tr    String?  @db.Text
-  title_en    String?  @db.Text
-  desc_tr     String?  @db.Text
-  desc_en     String?  @db.Text
+  id            String   @id @default(uuid())
+  title_tr      String?  @db.Text
+  title_en      String?  @db.Text
+  desc_tr       String?  @db.Text
+  desc_en       String?  @db.Text
   buttonText_tr String?
   buttonText_en String?
   buttonUrl     String?
@@ -174,16 +173,16 @@ model HeroSlide {
 }
 
 model Reference {
-  id          String   @id @default(uuid())
-  name_tr     String
-  name_en     String?
-  sector_tr   String?
-  sector_en   String?
-  logoUrl     String?
-  isActive    Boolean  @default(true)
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(uuid())
+  name_tr   String
+  name_en   String?
+  sector_tr String?
+  sector_en String?
+  logoUrl   String?
+  isActive  Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Event {
@@ -203,7 +202,7 @@ model Event {
 model Dealer {
   id        String   @id @default(uuid())
   name      String
-  city      String   // E.g. "Ankara", "İstanbul"
+  city      String // E.g. "Ankara", "İstanbul"
   address   String?  @db.Text
   phone     String?
   email     String?
@@ -212,16 +211,17 @@ model Dealer {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
 model Service {
   id             String   @id @default(uuid())
-  name           String   // e.g., "WeCARE"
+  name           String // e.g., "WeCARE"
   name_tr        String?
   name_en        String?
-  suffix         String   // e.g., "Care"
+  suffix         String // e.g., "Care"
   description_tr String?  @db.Text
   description_en String?  @db.Text
-  icon           String?  // e.g., "🛠️" or "custom-icon"
-  color          String?  // e.g., "#0e9c6a"
+  icon           String? // e.g., "🛠️" or "custom-icon"
+  color          String? // e.g., "#0e9c6a"
   order          Int      @default(0)
   isActive       Boolean  @default(true)
   createdAt      DateTime @default(now())
@@ -229,16 +229,16 @@ model Service {
 }
 
 model Inquiry {
-  id          String   @id @default(uuid())
-  serviceName String?  // Which service they clicked
+  id          String        @id @default(uuid())
+  serviceName String? // Which service they clicked
   name        String
   company     String?
   email       String
   phone       String
-  message     String   @db.Text
+  message     String        @db.Text
   status      InquiryStatus @default(NEW)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
 }
 
 enum InquiryStatus {

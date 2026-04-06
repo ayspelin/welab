@@ -55,8 +55,8 @@
 }
 
 .card {
-    background-color: white;
-    border: 1px solid var(--gray-200);
+    background-color: var(--background-card);
+    border: 1px solid var(--border);
     border-radius: var(--radius-md);
     overflow: hidden;
     transition: all 0.3s ease;

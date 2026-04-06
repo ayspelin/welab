@@ -34,10 +34,14 @@ export default async function Downloads() {
                     <div className={styles.grid}>
                         {documents.length > 0 ? documents.map(doc => (
                             <a href={doc.url} target="_blank" rel="noopener noreferrer" key={doc.id} className={styles.card}>
-                                <div className={styles.cardVisual} style={{ padding: "2rem", backgroundColor: doc.type === "PDF" ? "#fee2e2" : doc.type === "EXCEL" ? "#dcfce7" : "#f3f4f6" }}>
-                                    <div className={styles.iconOverlay} style={{ color: doc.type === "PDF" ? "#dc2626" : doc.type === "EXCEL" ? "#16a34a" : "#6b7280" }}>
-                                        {getIcon(doc.type)}
-                                    </div>
+                                <div className={styles.cardVisual} style={{ padding: doc.imageUrl ? "0" : "2rem", backgroundColor: doc.type === "PDF" ? "#fee2e2" : doc.type === "EXCEL" ? "#dcfce7" : "#f3f4f6" }}>
+                                    {doc.imageUrl ? (
+                                        <img src={doc.imageUrl} alt={doc.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                                    ) : (
+                                        <div className={styles.iconOverlay} style={{ color: doc.type === "PDF" ? "#dc2626" : doc.type === "EXCEL" ? "#16a34a" : "#6b7280" }}>
+                                            {getIcon(doc.type)}
+                                        </div>
+                                    )}
                                 </div>
                                 <div className={styles.cardBody} style={{ flexDirection: "column", alignItems: "center", textAlign: "center", gap: "0.5rem" }}>
                                     <h2 className={styles.cardTitle} style={{ fontSize: "1.1rem" }}>{doc.title}</h2>
