@@ -16,13 +16,14 @@ export async function PATCH(
 
         const { id } = await params;
         const body = await request.json();
-        const { isPublic, title, imageUrl, type, productId } = body;
+        const { isPublic, title, imageUrl, type, productId, category } = body;
 
-        const updateData: { isPublic?: boolean; title?: string; imageUrl?: string | null; type?: string; productId?: string | null } = {};
+        const updateData: { isPublic?: boolean; title?: string; imageUrl?: string | null; type?: string; productId?: string | null; category?: string } = {};
         if (typeof isPublic === "boolean") updateData.isPublic = isPublic;
         if (typeof title === "string" && title.trim()) updateData.title = title.trim();
         if (imageUrl !== undefined) updateData.imageUrl = imageUrl === "" ? null : imageUrl;
         if (typeof type === "string" && type.trim()) updateData.type = type;
+        if (typeof category === "string" && category.trim()) updateData.category = category.trim();
         if (productId === null || productId === "") updateData.productId = null;
         else if (typeof productId === "string") updateData.productId = productId;
 

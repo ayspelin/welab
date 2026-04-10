@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
         }
 
         const data = await req.json();
-        const { title, type, url, imageUrl, isPublic, productId } = data;
+        const { title, type, url, imageUrl, isPublic, productId, category } = data;
 
         if (!title || !type || !url) {
             return NextResponse.json({ error: "Title, type, and url are required" }, { status: 400 });
@@ -52,7 +52,8 @@ export async function POST(req: NextRequest) {
                 url,
                 imageUrl: imageUrl || null,
                 isPublic: isPublic !== undefined ? isPublic : true,
-                productId: productId || null
+                productId: productId || null,
+                category: category || "Genel"
             }
         });
 
