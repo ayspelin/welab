@@ -47,6 +47,12 @@ export default function DownloadsClient({ documents, locale }: { documents: DocT
     const folderNames = Object.keys(grouped);
     const activeDocs = activeFolder ? (grouped[activeFolder] || []) : [];
 
+    const getFolderCover = (folderName: string) => {
+        const docs = grouped[folderName] || [];
+        const docWithImage = docs.find(d => d.imageUrl);
+        return docWithImage ? docWithImage.imageUrl : null;
+    };
+
     return (
         <section className={styles.downloadsContent}>
             <div className="container">
@@ -56,20 +62,29 @@ export default function DownloadsClient({ documents, locale }: { documents: DocT
                             <div className={styles.emptyState}>Şu an sistemde listelenecek açık doküman bulunmamaktadır.</div>
                         ) : (
                             <div className={styles.foldersGrid}>
-                                {folderNames.map((folderName, idx) => (
-                                    <div
-                                        key={folderName}
-                                        className={styles.folderCard}
-                                        onClick={() => setActiveFolder(folderName)}
-                                    >
-                                        <div className={styles.folderIconWrap}>
-                                            <span className={styles.folderIcon}>{getFolderIcon(folderName, idx)}</span>
+                                {folderNames.map((folderName, idx) => {
+                                    const coverUrl = getFolderCover(folderName);
+                                    return (
+                                        <div
+                                            key={folderName}
+                                            className={styles.folderCard}
+                                            onClick={() => setActiveFolder(folderName)}
+                                        >
+                                            {coverUrl ? (
+                                                <div style={{ position: "relative", width: "100%", height: "140px", marginBottom: "1rem", borderRadius: "12px", overflow: "hidden" }}>
+                                                    <img src={coverUrl} alt={folderName} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                                                </div>
+                                            ) : (
+                                                <div className={styles.folderIconWrap}>
+                                                    <span className={styles.folderIcon}>{getFolderIcon(folderName, idx)}</span>
+                                                </div>
+                                            )}
+                                            <h3 className={styles.folderName}>{folderName}</h3>
+                                            <span className={styles.folderCount}>{grouped[folderName].length} dosya</span>
+                                            <span className={styles.folderArrow}>→</span>
                                         </div>
-                                        <h3 className={styles.folderName}>{folderName}</h3>
-                                        <span className={styles.folderCount}>{grouped[folderName].length} dosya</span>
-                                        <span className={styles.folderArrow}>→</span>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         )}
                     </>
