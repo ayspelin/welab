@@ -131,6 +131,8 @@ model Setting {
   phone        String?
   email        String?
   address      String?
+  aboutImageMain      String?
+  aboutImageSecondary String?
 
   // Deprecated Hero Fields Removed
 

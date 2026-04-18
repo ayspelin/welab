@@ -164,24 +164,26 @@
 .categoryGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.5px;
-  background: var(--gradient-line);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: var(--radius-md);
-  overflow: hidden;
+  gap: 2rem;
 }
 
 .categoryCard {
   background-color: var(--background-card);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-md);
   padding: 0;
   position: relative;
   overflow: hidden;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
 .categoryCard:hover {
   background-color: var(--background-card-hover);
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+  border-color: rgba(45, 158, 255, 0.2);
 }
 
 .catImageContainer {
@@ -434,6 +436,8 @@
 
   .categoryGrid {
     grid-template-columns: 1fr;
+    gap: 2rem;
+    padding-inline: 1rem;
   }
 }
 
@@ -441,6 +445,14 @@
   .heroActions {
     flex-direction: column;
     align-items: center;
+  }
+
+  .categoriesSection {
+    padding-block: 4rem;
+  }
+  
+  .sectionHeader h2 {
+    font-size: 2.2rem;
   }
 
   .statsWrapper {

@@ -10,6 +10,10 @@ export default function SettingsPage() {
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
     const [address, setAddress] = useState("");
+    
+    // About Us Images
+    const [aboutImageMain, setAboutImageMain] = useState("");
+    const [aboutImageSecondary, setAboutImageSecondary] = useState("");
 
     // New Expertise Fields
     const [expertise_tr, setExpertiseTr] = useState<{ icon: string, title: string, desc: string }[]>([]);
@@ -53,6 +57,8 @@ export default function SettingsPage() {
                         setPhone(data.phone || "");
                         setEmail(data.email || "");
                         setAddress(data.address || "");
+                        setAboutImageMain(data.aboutImageMain || "");
+                        setAboutImageSecondary(data.aboutImageSecondary || "");
 
                         if (data.expertise_tr && Array.isArray(data.expertise_tr)) {
                             setExpertiseTr(data.expertise_tr);
@@ -109,6 +115,33 @@ export default function SettingsPage() {
         fetchSettings();
     }, []);
 
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, setter: (url: string) => void) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setLoading(true);
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            const res = await fetch("/api/upload", {
+                method: "POST",
+                body: formData
+            });
+            const data = await res.json();
+            if (data.url) {
+                setter(data.url);
+                alert("Görsel başarıyla yüklendi.");
+            } else {
+                throw new Error("URL bulunamadı.");
+            }
+        } catch (error) {
+            alert("Görsel yükleme başarısız.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -126,6 +159,8 @@ export default function SettingsPage() {
                     phone,
                     email,
                     address,
+                    aboutImageMain,
+                    aboutImageSecondary,
                     expertise_tr,
                     expertise_en,
                     refNotice_tr,
@@ -259,6 +294,39 @@ export default function SettingsPage() {
                                 value={aboutText_en}
                                 onChange={setAboutTextEn}
                             />
+                        </div>
+                    </div>
+
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
+                        <div>
+                            <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600", color: "var(--gray-700)" }}>Hakkımızda Görseli (Merkez Ofis)</label>
+                            <input 
+                                type="file" 
+                                accept="image/*" 
+                                onChange={(e) => handleFileUpload(e, setAboutImageMain)}
+                                style={{ width: "100%", padding: "0.5rem", border: "1px solid var(--gray-300)", borderRadius: "4px" }} 
+                            />
+                            {aboutImageMain && (
+                                <div style={{ marginTop: "0.5rem" }}>
+                                    <img src={aboutImageMain} alt="Merkez Ofis" style={{ width: "100px", height: "auto", borderRadius: "4px" }} />
+                                </div>
+                            )}
+                            <p style={{ fontSize: "0.8rem", color: "var(--gray-500)", marginTop: "0.25rem" }}>Ana görsel (Büyük kutu)</p>
+                        </div>
+                        <div>
+                            <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600", color: "var(--gray-700)" }}>Hakkımızda Görseli (Laboratuvar Uygulama)</label>
+                            <input 
+                                type="file" 
+                                accept="image/*" 
+                                onChange={(e) => handleFileUpload(e, setAboutImageSecondary)}
+                                style={{ width: "100%", padding: "0.5rem", border: "1px solid var(--gray-300)", borderRadius: "4px" }} 
+                            />
+                            {aboutImageSecondary && (
+                                <div style={{ marginTop: "0.5rem" }}>
+                                    <img src={aboutImageSecondary} alt="Laboratuvar Uygulama" style={{ width: "100px", height: "auto", borderRadius: "4px" }} />
+                                </div>
+                            )}
+                            <p style={{ fontSize: "0.8rem", color: "var(--gray-500)", marginTop: "0.25rem" }}>İkincil görsel (Küçük kutu)</p>
                         </div>
                     </div>
 

@@ -32,6 +32,8 @@ export async function POST(req: NextRequest) {
             phone: data.phone,
             email: data.email,
             address: data.address,
+            aboutImageMain: data.aboutImageMain ?? null,
+            aboutImageSecondary: data.aboutImageSecondary ?? null,
             // Content Management
             expertise_tr: data.expertise_tr ?? null,
             expertise_en: data.expertise_en ?? null,

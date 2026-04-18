@@ -35,13 +35,17 @@ export default async function AboutUs() {
     return (
         <>
             <section className={styles.pageHeader}>
-                <div className="container">
+                <div className={`container ${styles.headerContainer}`}>
                     <h1 className={styles.pageTitle}>{t('aboutUs')}</h1>
-                    <p className={styles.pageDesc}>The Address of Trust and Expertise in Industrial Laboratory Solutions.</p>
+                    <p className={styles.pageDesc}>
+                        {locale === 'tr' 
+                            ? 'Laboratuvar Çözümlerinde Güven ve Uzmanlığın Adresi.' 
+                            : 'The Address of Trust and Expertise in Laboratory Solutions.'}
+                    </p>
                 </div>
             </section>
 
-            <section className={`section ${styles.contentSection}`}>
+            <section className={styles.contentSection}>
                 <div className={`container ${styles.contentGrid}`}>
                     <div
                         className={styles.textContent}
@@ -50,10 +54,34 @@ export default async function AboutUs() {
 
                     <div className={styles.imageGallery}>
                         <div className={styles.imageMain}>
-                            <span className={styles.placeholderLabel}>Corporate Office Image</span>
+                            {settingsAny?.aboutImageMain ? (
+                                <Image 
+                                    src={settingsAny.aboutImageMain} 
+                                    alt="About Us Image Main" 
+                                    fill 
+                                    style={{ objectFit: 'cover' }} 
+                                    sizes="(max-width: 768px) 100vw, 50vw"
+                                />
+                            ) : (
+                                <span className={styles.placeholderLabel}>
+                                    {locale === 'tr' ? 'Merkez Ofis Görseli' : 'Corporate Office Image'}
+                                </span>
+                            )}
                         </div>
                         <div className={styles.imageSecondary}>
-                            <span className={styles.placeholderLabel}>Laboratory Application Image</span>
+                            {settingsAny?.aboutImageSecondary ? (
+                                <Image 
+                                    src={settingsAny.aboutImageSecondary} 
+                                    alt="About Us Image Secondary" 
+                                    fill 
+                                    style={{ objectFit: 'cover' }} 
+                                    sizes="(max-width: 768px) 100vw, 50vw"
+                                />
+                            ) : (
+                                <span className={styles.placeholderLabel}>
+                                    {locale === 'tr' ? 'Laboratuvar Uygulama Görseli' : 'Laboratory Application Image'}
+                                </span>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -83,7 +111,11 @@ export default async function AboutUs() {
                 <div className="container">
                     <div className={styles.sectionHeader}>
                         <h2>{t('references')}</h2>
-                        <p>Trusted by leading institutions across various sectors.</p>
+                        <p>
+                            {locale === 'tr' 
+                                ? 'Farklı sektörlerden öncü kurumların tercihi.' 
+                                : 'Trusted by leading institutions across various sectors.'}
+                        </p>
                     </div>
 
                     <div className={styles.referencesGrid}>
@@ -120,4 +152,3 @@ export default async function AboutUs() {
         </>
     );
 }
-
