@@ -34,7 +34,7 @@ function getFileIcon(type: string) {
     return "📁";
 }
 
-export default function DownloadsClient({ documents, locale }: { documents: DocType[]; locale: string }) {
+export default function DownloadsClient({ documents, folders, locale }: { documents: DocType[]; folders?: any[]; locale: string }) {
     const [activeFolder, setActiveFolder] = useState<string | null>(null);
 
     const grouped = documents.reduce((acc, doc) => {
@@ -48,6 +48,13 @@ export default function DownloadsClient({ documents, locale }: { documents: DocT
     const activeDocs = activeFolder ? (grouped[activeFolder] || []) : [];
 
     const getFolderCover = (folderName: string) => {
+        // First check if the folder itself has an image
+        const actualFolder = folders?.find(f => f.name === folderName);
+        if (actualFolder && actualFolder.imageUrl) {
+            return actualFolder.imageUrl;
+        }
+
+        // Fallback to the first document with an image
         const docs = grouped[folderName] || [];
         const docWithImage = docs.find(d => d.imageUrl);
         return docWithImage ? docWithImage.imageUrl : null;

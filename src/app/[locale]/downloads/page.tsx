@@ -12,6 +12,8 @@ export default async function Downloads() {
         orderBy: { createdAt: "desc" },
     });
 
+    const folders = await prisma.documentFolder.findMany();
+
     return (
         <div className={styles.downloadsPage}>
             <section className={styles.pageHeader}>
@@ -20,7 +22,7 @@ export default async function Downloads() {
                     <p className={styles.pageDesc}>Ürün broşürleri, teknik dokümanlar ve kullanım kılavuzlarına buradan erişebilirsiniz.</p>
                 </div>
             </section>
-            <DownloadsClient documents={documents as any} locale={locale} />
+            <DownloadsClient documents={documents as any} folders={folders as any} locale={locale} />
         </div>
     );
 }

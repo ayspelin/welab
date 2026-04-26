@@ -45,3 +45,32 @@ export async function DELETE(
         return NextResponse.json({ error: "Klasör silinemedi" }, { status: 500 });
     }
 }
+
+// PATCH — update a folder (e.g. its image)
+export async function PATCH(
+    req: NextRequest,
+    { params }: { params: Promise<{ name: string }> }
+) {
+    try {
+        const session = await getServerSession(authOptions);
+        if (!session || (session.user.role !== "ADMIN" && session.user.role !== "SUPER_ADMIN")) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
+        const { name } = await params;
+        const folderName = decodeURIComponent(name);
+
+        const body = await req.json();
+        const { imageUrl } = body;
+
+        const updatedFolder = await (prisma as any).documentFolder.update({
+            where: { name: folderName },
+            data: { imageUrl: imageUrl !== undefined ? imageUrl : null },
+        });
+
+        return NextResponse.json(updatedFolder);
+    } catch (error) {
+        console.error("Folder update error:", error);
+        return NextResponse.json({ error: "Klasör güncellenemedi" }, { status: 500 });
+    }
+}

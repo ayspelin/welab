@@ -17,7 +17,7 @@ function autoIcon(name: string, idx: number) {
     return iconPalette[idx % iconPalette.length];
 }
 
-type FolderType = { id: string; name: string; createdAt: string };
+type FolderType = { id: string; name: string; imageUrl?: string; createdAt: string };
 
 export default function DocumentsPage() {
     const [documents, setDocuments] = useState<any[]>([]);
@@ -40,6 +40,10 @@ export default function DocumentsPage() {
     const [activeFolder, setActiveFolder] = useState<string | null>(null);
     const [folderLoading, setFolderLoading] = useState(false);
     const [showFolderManager, setShowFolderManager] = useState(false);
+    const [editingFolder, setEditingFolder] = useState<FolderType | null>(null);
+    const [editFolderCoverFile, setEditFolderCoverFile] = useState<File | null>(null);
+    const [removeFolderCover, setRemoveFolderCover] = useState(false);
+    const [folderEditLoading, setFolderEditLoading] = useState(false);
 
     // ---- Table / search ----
     const [docSearchTerm, setDocSearchTerm] = useState("");
@@ -128,6 +132,46 @@ export default function DocumentsPage() {
             await Promise.all([fetchDocuments(), fetchFolders()]);
         } catch (err: any) {
             alert(err.message || "Bir hata oluştu");
+        }
+    };
+
+    // ---- Edit folder ----
+    const openFolderEditModal = (folder: FolderType) => {
+        setEditingFolder(folder);
+        setEditFolderCoverFile(null);
+        setRemoveFolderCover(false);
+    };
+
+    const closeFolderEditModal = () => {
+        setEditingFolder(null);
+        setEditFolderCoverFile(null);
+        setRemoveFolderCover(false);
+    };
+
+    const handleUpdateFolder = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!editingFolder) return;
+        setFolderEditLoading(true);
+        try {
+            let newImageUrl = removeFolderCover ? "" : editingFolder.imageUrl;
+            if (editFolderCoverFile) {
+                const fd = new FormData();
+                fd.append("file", editFolderCoverFile);
+                const coverRes = await fetch("/api/upload", { method: "POST", body: fd });
+                if (coverRes.ok) newImageUrl = (await coverRes.json()).url;
+            }
+            const res = await fetch(`/api/folders/${encodeURIComponent(editingFolder.name)}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ imageUrl: newImageUrl }),
+            });
+            if (!res.ok) throw new Error("Klasör güncellenemedi");
+            await fetchFolders();
+            closeFolderEditModal();
+        } catch (err: any) {
+            alert(err.message || "Hata oluştu");
+        } finally {
+            setFolderEditLoading(false);
         }
     };
 
@@ -376,23 +420,39 @@ export default function DocumentsPage() {
                                                 {documents.filter(d => (d.category || "Genel") === folder.name).length} belge
                                             </span>
                                         </div>
-                                        {folder.name !== "Genel" && (
+                                        <div>
                                             <button
-                                                onClick={() => handleDeleteFolder(folder.name)}
+                                                onClick={() => openFolderEditModal(folder)}
                                                 style={{
                                                     padding: "0.35rem 0.75rem", fontSize: "0.8rem",
-                                                    borderRadius: "6px", border: "1px solid #fca5a5",
-                                                    backgroundColor: "transparent", color: "#dc2626",
+                                                    borderRadius: "6px", border: "1px solid var(--gray-300)",
+                                                    backgroundColor: "transparent", color: "var(--gray-600)",
                                                     cursor: "pointer", fontWeight: 500, transition: "all 0.2s ease",
+                                                    marginRight: "0.5rem"
                                                 }}
-                                                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#fee2e2"; }}
+                                                onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "var(--gray-100)"; }}
                                                 onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "transparent"; }}
                                             >
-                                                🗑️ Klasörü Sil
+                                                ✏️ Kapak
                                             </button>
-                                        )}
+                                            {folder.name !== "Genel" && (
+                                                <button
+                                                    onClick={() => handleDeleteFolder(folder.name)}
+                                                    style={{
+                                                        padding: "0.35rem 0.75rem", fontSize: "0.8rem",
+                                                        borderRadius: "6px", border: "1px solid #fca5a5",
+                                                        backgroundColor: "transparent", color: "#dc2626",
+                                                        cursor: "pointer", fontWeight: 500, transition: "all 0.2s ease",
+                                                    }}
+                                                    onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#fee2e2"; }}
+                                                    onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "transparent"; }}
+                                                >
+                                                    🗑️ Sil
+                                                </button>
+                                            )}
+                                        </div>
                                         {folder.name === "Genel" && (
-                                            <span style={{ fontSize: "0.75rem", color: "var(--gray-400)", fontStyle: "italic" }}>Varsayılan</span>
+                                            <span style={{ fontSize: "0.75rem", color: "var(--gray-400)", fontStyle: "italic", alignSelf: "center", marginLeft: "0.5rem" }}>Varsayılan</span>
                                         )}
                                     </div>
                                 ))}
@@ -674,6 +734,50 @@ export default function DocumentsPage() {
                                 <button type="button" onClick={closeEditModal} className="btn" style={{ backgroundColor: "var(--gray-200)", color: "var(--gray-800)", border: "none" }}>İptal</button>
                                 <button type="submit" disabled={editLoading} className="btn btn-primary" style={{ border: "none" }}>
                                     {editLoading ? "Kaydediliyor..." : "Kaydet"}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* ====== FOLDER EDIT MODAL ====== */}
+            {editingFolder && (
+                <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 }}>
+                    <div style={{ backgroundColor: "white", padding: "2rem", borderRadius: "12px", width: "100%", maxWidth: "420px", boxShadow: "0 20px 60px rgba(0,0,0,0.3)" }}>
+                        <h3 style={{ marginBottom: "1.25rem" }}>✏️ Klasör Kapağı Düzenle: {editingFolder.name}</h3>
+                        <form onSubmit={handleUpdateFolder} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                            <div>
+                                <label style={{ display: "block", marginBottom: "0.4rem", fontWeight: 500, fontSize: "0.875rem" }}>Kapak Görseli</label>
+                                {editingFolder.imageUrl && !removeFolderCover && !editFolderCoverFile && (
+                                    <div style={{ marginBottom: "0.6rem", display: "flex", alignItems: "center", gap: "1rem" }}>
+                                        <img src={editingFolder.imageUrl} alt="Mevcut kapak" style={{ height: "56px", width: "auto", borderRadius: "4px" }} />
+                                        <span style={{ fontSize: "0.8rem", color: "var(--gray-500)" }}>Mevcut görsel</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => setRemoveFolderCover(true)}
+                                            style={{ marginLeft: "auto", backgroundColor: "transparent", color: "#dc2626", border: "1px solid #dc2626", padding: "0.2rem 0.6rem", borderRadius: "4px", fontSize: "0.8rem", cursor: "pointer" }}
+                                        >
+                                            Kaldır
+                                        </button>
+                                    </div>
+                                )}
+                                {removeFolderCover && (
+                                    <div style={{ marginBottom: "0.5rem", fontSize: "0.8rem", color: "#dc2626", padding: "0.5rem", backgroundColor: "#fee2e2", borderRadius: "4px" }}>
+                                        Görsel silinmek üzere işaretlendi.
+                                    </div>
+                                )}
+                                <input
+                                    type="file"
+                                    accept="image/jpeg,image/png,image/webp"
+                                    onChange={e => { if (e.target.files?.length) { setEditFolderCoverFile(e.target.files[0]); setRemoveFolderCover(false); } }}
+                                    style={{ width: "100%", padding: "0.5rem", borderRadius: "6px", border: "1px solid var(--gray-300)" }}
+                                />
+                            </div>
+                            <div style={{ display: "flex", gap: "1rem", justifyContent: "flex-end", marginTop: "0.5rem" }}>
+                                <button type="button" onClick={closeFolderEditModal} className="btn" style={{ backgroundColor: "var(--gray-200)", color: "var(--gray-800)", border: "none" }}>İptal</button>
+                                <button type="submit" disabled={folderEditLoading} className="btn btn-primary" style={{ border: "none" }}>
+                                    {folderEditLoading ? "Kaydediliyor..." : "Kaydet"}
                                 </button>
                             </div>
                         </form>
