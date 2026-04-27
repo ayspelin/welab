@@ -80,6 +80,11 @@ model Product {
   isFeatured Boolean @default(false)
   isPublic   Boolean @default(true)
 
+  seoKeywords_tr    String? @db.Text
+  seoKeywords_en    String? @db.Text
+  seoDescription_tr String? @db.Text
+  seoDescription_en String? @db.Text
+
   images    ProductImage[]
   documents Document[]
 

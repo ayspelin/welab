@@ -51,6 +51,10 @@ export async function POST(req: NextRequest) {
             categoryId,
             isFeatured,
             isPublic,
+            seoKeywords_tr,
+            seoKeywords_en,
+            seoDescription_tr,
+            seoDescription_en,
             images,
             documents
         } = data;
@@ -71,6 +75,10 @@ export async function POST(req: NextRequest) {
                 categoryId,
                 isFeatured: isFeatured || false,
                 isPublic: isPublic !== undefined ? isPublic : true,
+                seoKeywords_tr,
+                seoKeywords_en,
+                seoDescription_tr,
+                seoDescription_en,
                 images: {
                     create: images && Array.isArray(images) ? images.map((img: any, index: number) => ({
                         url: img.url,

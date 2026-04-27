@@ -4,6 +4,34 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getTranslations, getLocale } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
+import { Metadata, ResolvingMetadata } from 'next';
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }, parent: ResolvingMetadata): Promise<Metadata> {
+    const resolvedParams = await params;
+    const locale = await getLocale();
+    
+    const product = await prisma.product.findUnique({
+        where: { id: resolvedParams.id },
+    });
+
+    if (!product) return {};
+
+    const title = locale === 'tr' ? (product.name_tr || product.name_en) : product.name_en;
+    
+    const rawDescTr = product.seoDescription_tr || product.description_tr;
+    const rawDescEn = product.seoDescription_en || product.description_en;
+    const description = locale === 'tr' ? (rawDescTr || rawDescEn) : (rawDescEn || rawDescTr);
+    
+    const rawKeyTr = product.seoKeywords_tr;
+    const rawKeyEn = product.seoKeywords_en;
+    const keywords = locale === 'tr' ? (rawKeyTr || rawKeyEn) : (rawKeyEn || rawKeyTr);
+
+    return {
+        title: `${title} | Welab`,
+        description: description ? description.substring(0, 160) : undefined,
+        keywords: keywords,
+    };
+}
 
 export default async function ProductDetail({ params }: { params: Promise<{ id: string }> }) {
     const resolvedParams = await params;

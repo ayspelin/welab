@@ -18,6 +18,10 @@ export default function ProductsPage() {
     const [brandInput, setBrandInput] = useState("");
     const [categoryInput, setCategoryInput] = useState("");
     const [isFeatured, setIsFeatured] = useState(false);
+    const [seoKeywords_tr, setSeoKeywordsTr] = useState("");
+    const [seoKeywords_en, setSeoKeywordsEn] = useState("");
+    const [seoDescription_tr, setSeoDescriptionTr] = useState("");
+    const [seoDescription_en, setSeoDescriptionEn] = useState("");
     const [specs, setSpecs] = useState<{ key_tr: string, val_tr: string, key_en: string, val_en: string }[]>([]);
     const [file, setFile] = useState<File | null>(null);
     const [pdfFile, setPdfFile] = useState<File | null>(null);
@@ -196,6 +200,10 @@ export default function ProductsPage() {
                     name_en,
                     description_tr,
                     description_en,
+                    seoKeywords_tr,
+                    seoKeywords_en,
+                    seoDescription_tr,
+                    seoDescription_en,
                     technicalSpecs: specsParsed,
                     ...(finalBrandId && { brandId: finalBrandId }),
                     categoryId: finalCategoryId,
@@ -227,6 +235,10 @@ export default function ProductsPage() {
         setNameEn("");
         setDescriptionTr("");
         setDescriptionEn("");
+        setSeoKeywordsTr("");
+        setSeoKeywordsEn("");
+        setSeoDescriptionTr("");
+        setSeoDescriptionEn("");
         setSpecs([]);
         setIsFeatured(false);
         setIsPublic(true);
@@ -242,6 +254,10 @@ export default function ProductsPage() {
         setNameEn(prod.name_en || "");
         setDescriptionTr(prod.description_tr || "");
         setDescriptionEn(prod.description_en || "");
+        setSeoKeywordsTr(prod.seoKeywords_tr || "");
+        setSeoKeywordsEn(prod.seoKeywords_en || "");
+        setSeoDescriptionTr(prod.seoDescription_tr || "");
+        setSeoDescriptionEn(prod.seoDescription_en || "");
         setBrandInput(prod.brand?.name || "");
         setCategoryInput(prod.category?.name_tr || prod.category?.name_en || "");
         setIsFeatured(prod.isFeatured || false);
@@ -456,6 +472,48 @@ export default function ProductsPage() {
                                 required
                                 style={{ width: "100%", padding: "0.5rem", borderRadius: "0.25rem", border: "1px solid var(--gray-300)" }}
                             />
+                        </div>
+                    </div>
+
+                    <div style={{ padding: "1.5rem", border: "1px solid var(--gray-200)", borderRadius: "var(--radius-md)", backgroundColor: "var(--gray-50)", marginTop: "1rem", marginBottom: "1rem" }}>
+                        <h3 style={{ margin: 0, marginBottom: "1rem", color: "var(--primary)" }}>SEO Ayarları (Arama Motoru Optimizasyonu)</h3>
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                            <div>
+                                <label style={{ display: "block", marginBottom: "0.5rem" }}>Anahtar Kelimeler (TR)</label>
+                                <input
+                                    type="text"
+                                    placeholder="Örn: güvenlik kamerası, cctv, ip kamera"
+                                    value={seoKeywords_tr}
+                                    onChange={(e) => setSeoKeywordsTr(e.target.value)}
+                                    style={{ width: "100%", padding: "0.5rem", borderRadius: "0.25rem", border: "1px solid var(--gray-300)", marginBottom: "1rem" }}
+                                />
+                                <label style={{ display: "block", marginBottom: "0.5rem" }}>Meta Açıklama (TR)</label>
+                                <textarea
+                                    placeholder="Arama sonuçlarında görünecek kısa açıklama..."
+                                    value={seoDescription_tr}
+                                    onChange={(e) => setSeoDescriptionTr(e.target.value)}
+                                    rows={3}
+                                    style={{ width: "100%", padding: "0.5rem", borderRadius: "0.25rem", border: "1px solid var(--gray-300)" }}
+                                />
+                            </div>
+                            <div>
+                                <label style={{ display: "block", marginBottom: "0.5rem" }}>Anahtar Kelimeler (EN)</label>
+                                <input
+                                    type="text"
+                                    placeholder="e.g: security camera, cctv, ip camera"
+                                    value={seoKeywords_en}
+                                    onChange={(e) => setSeoKeywordsEn(e.target.value)}
+                                    style={{ width: "100%", padding: "0.5rem", borderRadius: "0.25rem", border: "1px solid var(--gray-300)", marginBottom: "1rem" }}
+                                />
+                                <label style={{ display: "block", marginBottom: "0.5rem" }}>Meta Açıklama (EN)</label>
+                                <textarea
+                                    placeholder="Short description for search results..."
+                                    value={seoDescription_en}
+                                    onChange={(e) => setSeoDescriptionEn(e.target.value)}
+                                    rows={3}
+                                    style={{ width: "100%", padding: "0.5rem", borderRadius: "0.25rem", border: "1px solid var(--gray-300)" }}
+                                />
+                            </div>
                         </div>
                     </div>
 

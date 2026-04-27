@@ -24,6 +24,10 @@ export async function PATCH(req: NextRequest, context: any) {
             categoryId, 
             isFeatured, 
             isPublic,
+            seoKeywords_tr,
+            seoKeywords_en,
+            seoDescription_tr,
+            seoDescription_en,
             images, 
             documents 
         } = data;
@@ -43,6 +47,10 @@ export async function PATCH(req: NextRequest, context: any) {
                     ...(categoryId && { categoryId }),
                     ...(isFeatured !== undefined && { isFeatured }),
                     ...(isPublic !== undefined && { isPublic }),
+                    ...(seoKeywords_tr !== undefined && { seoKeywords_tr }),
+                    ...(seoKeywords_en !== undefined && { seoKeywords_en }),
+                    ...(seoDescription_tr !== undefined && { seoDescription_tr }),
+                    ...(seoDescription_en !== undefined && { seoDescription_en }),
                 },
             });
 
