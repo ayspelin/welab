@@ -97,7 +97,7 @@ export default async function ProductDetail({ params }: { params: Promise<{ id: 
                             </div>
                             <div className={styles.manufacturerInfo}>
                                 <span className={styles.mfgTitle}>{t('manufacturer')}</span>
-                                <Link href={`/brands`} className={styles.mfgLink}>
+                                <Link href={`/brands/${brand?.id}`} className={styles.mfgLink}>
                                     🔗 {t('viewManufacturer')}
                                 </Link>
                             </div>

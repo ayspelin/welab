@@ -21,7 +21,8 @@ export async function GET(req: NextRequest) {
             include: {
                 brand: true,
                 category: true,
-                images: true
+                images: true,
+                documents: true
             },
             orderBy: { name_tr: 'asc' }
         });

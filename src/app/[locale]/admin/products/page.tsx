@@ -24,7 +24,11 @@ export default function ProductsPage() {
     const [seoDescription_en, setSeoDescriptionEn] = useState("");
     const [specs, setSpecs] = useState<{ key_tr: string, val_tr: string, key_en: string, val_en: string }[]>([]);
     const [file, setFile] = useState<File | null>(null);
+    const [existingImageUrl, setExistingImageUrl] = useState("");
+    const [removeImage, setRemoveImage] = useState(false);
     const [pdfFile, setPdfFile] = useState<File | null>(null);
+    const [existingCatalogDoc, setExistingCatalogDoc] = useState<any>(null);
+    const [removeCatalog, setRemoveCatalog] = useState(false);
     const [isPublic, setIsPublic] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
  
@@ -133,7 +137,28 @@ export default function ProductsPage() {
 
                 if (!uploadRes.ok) throw new Error("Katalog dosyası yüklenemedi");
                 const uploadData = await uploadRes.json();
-                documentsToSave.push({ title: `${name_en} Catalog`, type: "PDF", url: uploadData.url });
+                
+                if (editingProductId) {
+                    await fetch("/api/documents", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            title: `${name_en} Catalog`,
+                            type: "PDF",
+                            url: uploadData.url,
+                            isPublic: true,
+                            productId: editingProductId
+                        })
+                    });
+                } else {
+                    documentsToSave.push({ title: `${name_en} Catalog`, type: "PDF", url: uploadData.url });
+                }
+            }
+
+            if (editingProductId && existingCatalogDoc) {
+                if (removeCatalog || pdfFile) {
+                    await fetch(`/api/documents/${existingCatalogDoc.id}`, { method: "DELETE" });
+                }
             }
 
             // Parse specs safely
@@ -209,8 +234,8 @@ export default function ProductsPage() {
                     categoryId: finalCategoryId,
                     isFeatured,
                     isPublic,
-                    ...(imagesToSave.length > 0 && { images: imagesToSave }),
-                    ...(documentsToSave.length > 0 && { documents: documentsToSave })
+                    ...(imagesToSave.length > 0 ? { images: imagesToSave } : (removeImage ? { images: [] } : {})),
+                    ...(documentsToSave.length > 0 && !editingProductId ? { documents: documentsToSave } : {})
                 }),
             });
 
@@ -243,7 +268,11 @@ export default function ProductsPage() {
         setIsFeatured(false);
         setIsPublic(true);
         setFile(null);
+        setExistingImageUrl("");
+        setRemoveImage(false);
         setPdfFile(null);
+        setExistingCatalogDoc(null);
+        setRemoveCatalog(false);
         setBrandInput("");
         setCategoryInput("");
     };
@@ -264,7 +293,12 @@ export default function ProductsPage() {
         setIsPublic(prod.isPublic !== undefined ? prod.isPublic : true);
         setSpecs(Array.isArray(prod.technicalSpecs) ? prod.technicalSpecs : []);
         setFile(null);
+        setExistingImageUrl(prod.images?.[0]?.url || "");
+        setRemoveImage(false);
         setPdfFile(null);
+        const catalogDoc = prod.documents?.find((d: any) => d.title.includes("Catalog") || d.title.includes("Katalog") || d.type === "PDF");
+        setExistingCatalogDoc(catalogDoc || null);
+        setRemoveCatalog(false);
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
@@ -602,6 +636,16 @@ export default function ProductsPage() {
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
                         <div>
                             <label style={{ display: "block", marginBottom: "0.5rem" }}>Ana Görsel (Opsiyonel)</label>
+                            {existingImageUrl && !removeImage && !file && (
+                                <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "0.5rem", padding: "0.5rem", border: "1px solid var(--gray-200)", borderRadius: "4px" }}>
+                                    <div style={{ position: "relative", width: "50px", height: "50px" }}>
+                                        <Image src={existingImageUrl} alt="Mevcut Görsel" fill style={{ objectFit: 'contain' }} />
+                                    </div>
+                                    <button type="button" onClick={() => setRemoveImage(true)} className="btn" style={{ backgroundColor: "#fee2e2", color: "#b91c1c", padding: "0.25rem 0.5rem", fontSize: "0.8rem", height: "fit-content" }}>
+                                        Görseli Kaldır
+                                    </button>
+                                </div>
+                            )}
                             <input
                                 type="file"
                                 accept="image/*"
@@ -611,6 +655,14 @@ export default function ProductsPage() {
                         </div>
                         <div>
                             <label style={{ display: "block", marginBottom: "0.5rem" }}>Ürün Kataloğu (Opsiyonel PDF)</label>
+                            {existingCatalogDoc && !removeCatalog && !pdfFile && (
+                                <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "0.5rem", padding: "0.5rem", border: "1px solid var(--gray-200)", borderRadius: "4px" }}>
+                                    <span style={{ fontSize: "0.85rem", color: "var(--gray-600)", fontWeight: "500" }}>📄 Mevcut Katalog</span>
+                                    <button type="button" onClick={() => setRemoveCatalog(true)} className="btn" style={{ backgroundColor: "#fee2e2", color: "#b91c1c", padding: "0.25rem 0.5rem", fontSize: "0.8rem", height: "fit-content" }}>
+                                        Kataloğu Kaldır
+                                    </button>
+                                </div>
+                            )}
                             <input
                                 type="file"
                                 accept="application/pdf"

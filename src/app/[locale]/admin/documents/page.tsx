@@ -17,7 +17,7 @@ function autoIcon(name: string, idx: number) {
     return iconPalette[idx % iconPalette.length];
 }
 
-type FolderType = { id: string; name: string; imageUrl?: string; createdAt: string };
+type FolderType = { id: string; name: string; imageUrl?: string; isActive?: boolean; createdAt: string };
 
 export default function DocumentsPage() {
     const [documents, setDocuments] = useState<any[]>([]);
@@ -146,6 +146,20 @@ export default function DocumentsPage() {
         setEditingFolder(null);
         setEditFolderCoverFile(null);
         setRemoveFolderCover(false);
+    };
+
+    const handleToggleFolderVisibility = async (folderName: string, currentIsActive: boolean) => {
+        try {
+            const res = await fetch(`/api/folders/${encodeURIComponent(folderName)}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ isActive: !currentIsActive })
+            });
+            if (!res.ok) throw new Error("Görünürlük değiştirilemedi");
+            await fetchFolders();
+        } catch (e: any) {
+            alert(e.message || "Bir hata oluştu");
+        }
     };
 
     const handleUpdateFolder = async (e: React.FormEvent) => {
@@ -434,6 +448,19 @@ export default function DocumentsPage() {
                                                 onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "transparent"; }}
                                             >
                                                 ✏️ Kapak
+                                            </button>
+                                            <button
+                                                onClick={() => handleToggleFolderVisibility(folder.name, folder.isActive !== false)}
+                                                style={{
+                                                    padding: "0.35rem 0.75rem", fontSize: "0.8rem",
+                                                    borderRadius: "6px", border: "none",
+                                                    backgroundColor: folder.isActive !== false ? "#dcfce7" : "#fee2e2",
+                                                    color: folder.isActive !== false ? "#166534" : "#991b1b",
+                                                    cursor: "pointer", fontWeight: 600, transition: "all 0.2s ease",
+                                                    marginRight: "0.5rem"
+                                                }}
+                                            >
+                                                {folder.isActive !== false ? "👁️ Açık" : "👁️‍🗨️ Gizli"}
                                             </button>
                                             {folder.name !== "Genel" && (
                                                 <button

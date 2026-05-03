@@ -14,6 +14,7 @@ export default function CategoriesAdminPage() {
     const [description_tr, setDescriptionTr] = useState("");
     const [description_en, setDescriptionEn] = useState("");
     const [parentId, setParentId] = useState("");
+    const [showOnHome, setShowOnHome] = useState(false);
     const [file, setFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState("");
 
@@ -49,6 +50,7 @@ export default function CategoriesAdminPage() {
         setDescriptionTr("");
         setDescriptionEn("");
         setParentId("");
+        setShowOnHome(false);
         setFile(null);
         setPreviewUrl("");
         setMessage("");
@@ -61,6 +63,7 @@ export default function CategoriesAdminPage() {
         setDescriptionTr(category.description_tr || "");
         setDescriptionEn(category.description_en || "");
         setParentId(category.parentId || "");
+        setShowOnHome(category.showOnHome || false);
         setPreviewUrl(category.imageUrl || "");
         setFile(null);
         // Ensure message is cleared when editing
@@ -126,7 +129,8 @@ export default function CategoriesAdminPage() {
                     description_tr,
                     description_en,
                     imageUrl: finalImageUrl || null,
-                    parentId: parentId || null
+                    parentId: parentId || null,
+                    showOnHome
                 }),
             });
 
@@ -243,6 +247,17 @@ export default function CategoriesAdminPage() {
                             </label>
                         </div>
 
+                        <div className={styles.formGroup} style={{ flexDirection: 'row', alignItems: 'center', gap: '0.5rem' }}>
+                            <input
+                                type="checkbox"
+                                id="showOnHome"
+                                checked={showOnHome}
+                                onChange={(e) => setShowOnHome(e.target.checked)}
+                                style={{ width: '1.2rem', height: '1.2rem', cursor: 'pointer' }}
+                            />
+                            <label htmlFor="showOnHome" style={{ margin: 0, cursor: 'pointer' }}>Anasayfada Göster (Çözümlerimiz)</label>
+                        </div>
+
                         <div className={styles.formActions}>
                             {editingId && (
                                 <button type="button" className={styles.cancelBtn} onClick={resetForm}>
@@ -290,6 +305,11 @@ export default function CategoriesAdminPage() {
                                             {category.parent && (
                                                 <div style={{ fontSize: "0.8rem", color: "var(--gray-500)", marginTop: "0.25rem" }}>
                                                     ↳ {category.parent.name_tr} altında
+                                                </div>
+                                            )}
+                                            {category.showOnHome && (
+                                                <div style={{ fontSize: "0.75rem", color: "#d97706", marginTop: "0.25rem", fontWeight: 600 }}>
+                                                    ★ Anasayfada
                                                 </div>
                                             )}
                                         </td>

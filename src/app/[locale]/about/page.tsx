@@ -11,6 +11,8 @@ export default async function AboutUs() {
         ? (settings?.aboutText_tr || "<p>Hakkımızda yazısı henüz eklenmedi. Lütfen admin panelinden güncelleyiniz.</p>")
         : (settings?.aboutText_en || settings?.aboutText_tr || "<p>About Us text not added yet. Please update from admin panel.</p>");
 
+    const cleanAboutHtml = aboutHtml.replace(/&nbsp;/g, ' ');
+
     const defaultExpertiseTr = [
         { icon: '⚙️', title: 'Anahtar Teslim Kurulum', desc: 'Cihazların doğru konumlandırılması ve devreye alınması.' },
         { icon: '✅', title: 'Kalibrasyon & Validasyon', desc: 'Uluslararası standartlara uygun IQ/OQ/PQ validasyonları.' },
@@ -49,7 +51,7 @@ export default async function AboutUs() {
                 <div className={`container ${styles.contentGrid}`}>
                     <div
                         className={styles.textContent}
-                        dangerouslySetInnerHTML={{ __html: aboutHtml }}
+                        dangerouslySetInnerHTML={{ __html: cleanAboutHtml }}
                     />
 
                     <div className={styles.imageGallery}>

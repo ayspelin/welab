@@ -12,7 +12,7 @@ export default async function Home(props: { params: Promise<{ locale: string }> 
   const t = await getTranslations("Home");
 
   const [dbCategories, slides, settings] = await Promise.all([
-    prisma.category.findMany({ take: 3, orderBy: { createdAt: 'desc' } }),
+    prisma.category.findMany({ where: { showOnHome: true }, take: 3, orderBy: { createdAt: 'desc' } }),
     prisma.heroSlide.findMany({ where: { isActive: true }, orderBy: { order: 'asc' } }),
     prisma.setting.findFirst()
   ]);

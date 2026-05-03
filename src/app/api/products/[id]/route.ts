@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 
-export async function PATCH(req: NextRequest, context: any) {
+export async function PUT(req: NextRequest, context: any) {
     try {
         const session = await getServerSession(authOptions);
         if (!session || (session.user.role !== "ADMIN" && session.user.role !== "SUPER_ADMIN")) {

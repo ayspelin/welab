@@ -44,7 +44,11 @@ export default function DownloadsClient({ documents, folders, locale }: { docume
         return acc;
     }, {} as Record<string, DocType[]>);
 
-    const folderNames = Object.keys(grouped);
+    const folderNames = Object.keys(grouped).filter(folderName => {
+        const actualFolder = folders?.find(f => f.name === folderName);
+        if (actualFolder && actualFolder.isActive === false) return false;
+        return true;
+    });
     const activeDocs = activeFolder ? (grouped[activeFolder] || []) : [];
 
     const getFolderCover = (folderName: string) => {
@@ -54,10 +58,7 @@ export default function DownloadsClient({ documents, folders, locale }: { docume
             return actualFolder.imageUrl;
         }
 
-        // Fallback to the first document with an image
-        const docs = grouped[folderName] || [];
-        const docWithImage = docs.find(d => d.imageUrl);
-        return docWithImage ? docWithImage.imageUrl : null;
+        return null;
     };
 
     return (
@@ -79,7 +80,7 @@ export default function DownloadsClient({ documents, folders, locale }: { docume
                                         >
                                             {coverUrl ? (
                                                 <div style={{ position: "relative", width: "100%", height: "140px", marginBottom: "1rem", borderRadius: "12px", overflow: "hidden" }}>
-                                                    <img src={coverUrl} alt={folderName} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                                                    <img src={coverUrl} alt={folderName} style={{ width: "100%", height: "100%", objectFit: "contain", backgroundColor: "white" }} />
                                                 </div>
                                             ) : (
                                                 <div className={styles.folderIconWrap}>
@@ -117,12 +118,12 @@ export default function DownloadsClient({ documents, folders, locale }: { docume
                                     <div
                                         className={styles.cardVisual}
                                         style={{
-                                            padding: doc.imageUrl ? "0" : "2rem",
-                                            backgroundColor: doc.type === "PDF" ? "#fee2e2" : doc.type === "EXCEL" ? "#dcfce7" : "#f3f4f6"
+                                            padding: doc.imageUrl ? "1rem" : "2rem",
+                                            backgroundColor: doc.imageUrl ? "#ffffff" : doc.type === "PDF" ? "#fee2e2" : doc.type === "EXCEL" ? "#dcfce7" : "#f3f4f6"
                                         }}
                                     >
                                         {doc.imageUrl ? (
-                                            <img src={doc.imageUrl} alt={doc.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                                            <img src={doc.imageUrl} alt={doc.title} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
                                         ) : (
                                             <div
                                                 className={styles.iconOverlay}

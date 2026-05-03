@@ -58,6 +58,7 @@ model Category {
   children Category[] @relation("SubCategories")
 
   products Product[]
+  showOnHome Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -125,6 +126,7 @@ model DocumentFolder {
   id        String   @id @default(uuid())
   name      String   @unique
   imageUrl  String?
+  isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

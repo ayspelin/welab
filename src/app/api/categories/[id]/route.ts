@@ -13,7 +13,7 @@ export async function PUT(req: NextRequest, context: any) {
         }
 
         const data = await req.json();
-        const { name_tr, name_en, description_tr, description_en, imageUrl, parentId } = data;
+        const { name_tr, name_en, description_tr, description_en, imageUrl, parentId, showOnHome } = data;
 
         if (!name_tr) {
             return NextResponse.json({ error: "Turkish Name is required" }, { status: 400 });
@@ -27,7 +27,8 @@ export async function PUT(req: NextRequest, context: any) {
                 description_tr,
                 description_en,
                 imageUrl,
-                parentId: parentId || null
+                parentId: parentId || null,
+                ...(showOnHome !== undefined && { showOnHome: Boolean(showOnHome) })
             }
         });
 

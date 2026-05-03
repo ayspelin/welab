@@ -61,11 +61,19 @@ export async function PATCH(
         const folderName = decodeURIComponent(name);
 
         const body = await req.json();
-        const { imageUrl } = body;
+        const { imageUrl, isActive } = body;
 
-        const updatedFolder = await (prisma as any).documentFolder.update({
+        const updatedFolder = await (prisma as any).documentFolder.upsert({
             where: { name: folderName },
-            data: { imageUrl: imageUrl !== undefined ? imageUrl : null },
+            update: { 
+                ...(imageUrl !== undefined && { imageUrl: imageUrl === null ? null : imageUrl }),
+                ...(isActive !== undefined && { isActive })
+            },
+            create: {
+                name: folderName,
+                ...(imageUrl !== undefined && { imageUrl: imageUrl === null ? null : imageUrl }),
+                ...(isActive !== undefined && { isActive })
+            }
         });
 
         return NextResponse.json(updatedFolder);
