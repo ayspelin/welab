@@ -22,15 +22,25 @@ export default async function Home(props: { params: Promise<{ locale: string }> 
   const currentHeroImageUrl = "/images/quality_control.png";
   const currentHeroBgImageUrl = "/images/hero_bg.png";
 
-  const defaultFeatures = [
+  const defaultFeatures = locale === 'tr' ? [
+    'Yetkili Türkiye Distribütörlüğü',
+    '7/24 Teknik Servis Desteği',
+    'ISO 9001 Sertifikalı Kalite Süreçleri',
+    'Anahtar Teslim Laboratuvar Kurulumu'
+  ] : [
     'Authorized Global Representations',
     '24/7 Technical Service Support',
     'ISO 9001 Certified Quality Processes',
     'Turnkey Laboratory Setup'
   ];
 
-  const defaultStats = [
-    { number: '15+', label: 'Years of Experience' },
+  const defaultStats = locale === 'tr' ? [
+    { number: '25+', label: 'Yıllık Tecrübe' },
+    { number: '500+', label: 'Tamamlanan Proje' },
+    { number: '25', label: 'Küresel Marka' },
+    { number: '24/7', label: 'Teknik Destek' }
+  ] : [
+    { number: '25+', label: 'Years of Experience' },
     { number: '500+', label: 'Completed Projects' },
     { number: '25', label: 'Global Brands' },
     { number: '24/7', label: 'Technical Support' }

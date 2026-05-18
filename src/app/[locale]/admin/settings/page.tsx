@@ -42,6 +42,9 @@ export default function SettingsPage() {
     const [footerQuickLinks, setFooterQuickLinks] = useState("");
     const [footerColumns, setFooterColumns] = useState<any[]>([]);
 
+    // Certificates
+    const [certificates, setCertificates] = useState<{ title_tr: string, title_en: string, imageUrl: string, isVisible: boolean }[]>([]);
+
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
 
@@ -97,6 +100,13 @@ export default function SettingsPage() {
                         setTwitterUrl(data.twitterUrl || "");
                         setYoutubeUrl(data.youtubeUrl || "");
                         setFooterQuickLinks(data.footerQuickLinks || "");
+
+                        if (data.certificates) {
+                            setCertificates(typeof data.certificates === 'string' ? JSON.parse(data.certificates) : data.certificates);
+                        } else {
+                            setCertificates([]);
+                        }
+
                         if (data.footerColumns) {
                             setFooterColumns(typeof data.footerColumns === 'string' ? JSON.parse(data.footerColumns) : data.footerColumns);
                         } else {
@@ -177,6 +187,7 @@ export default function SettingsPage() {
                     youtubeUrl,
                     footerQuickLinks,
                     footerColumns,
+                    certificates,
                 })
             });
 
@@ -504,6 +515,125 @@ export default function SettingsPage() {
                         </div>
                     </div>
 
+                    {/* Certificates Section */}
+                    <div style={{ padding: "1.5rem", border: "1px solid var(--gray-200)", borderRadius: "var(--radius-md)", backgroundColor: "var(--gray-50)" }}>
+                        <h3 style={{ marginBottom: "0.5rem", color: "var(--primary)", borderBottom: "1px solid var(--gray-200)", paddingBottom: "0.5rem" }}>Kalite Belgeleri (Hakkımızda)</h3>
+                        <p style={{ fontSize: "0.85rem", color: "var(--gray-500)", marginBottom: "1.25rem" }}>
+                            Hakkımızda sayfasında gösterilecek kalite belgelerini buradan yönetebilirsiniz. İstenildiğinde gösterilsin seçeneği işaretliyse tıklandığında belge (resim/pdf) açılır.
+                        </p>
+
+                        <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                            {certificates.map((cert, index) => (
+                                <div key={index} style={{ padding: "1rem", border: "1px solid var(--gray-300)", borderRadius: "8px", backgroundColor: "white" }}>
+                                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "1rem", alignItems: "center" }}>
+                                        <h4 style={{ margin: 0, color: "var(--gray-700)" }}>Belge {index + 1}</h4>
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                const newCerts = certificates.filter((_, i) => i !== index);
+                                                setCertificates(newCerts);
+                                            }}
+                                            style={{ color: "red", background: "none", border: "none", cursor: "pointer" }}
+                                        >Sil</button>
+                                    </div>
+
+                                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1rem" }}>
+                                        <div>
+                                            <label style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.85rem", color: "var(--gray-700)" }}>Belge Başlığı (TR)</label>
+                                            <input
+                                                type="text"
+                                                value={cert.title_tr}
+                                                onChange={(e) => {
+                                                    const newCerts = [...certificates];
+                                                    newCerts[index].title_tr = e.target.value;
+                                                    setCertificates(newCerts);
+                                                }}
+                                                placeholder="Örn: ISO 9001 Kalite Belgesi"
+                                                style={{ width: "100%", padding: "0.5rem", border: "1px solid var(--gray-300)", borderRadius: "4px" }}
+                                            />
+                                        </div>
+                                        <div>
+                                            <label style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.85rem", color: "var(--gray-700)" }}>Belge Başlığı (EN)</label>
+                                            <input
+                                                type="text"
+                                                value={cert.title_en}
+                                                onChange={(e) => {
+                                                    const newCerts = [...certificates];
+                                                    newCerts[index].title_en = e.target.value;
+                                                    setCertificates(newCerts);
+                                                }}
+                                                placeholder="e.g: ISO 9001 Quality Certificate"
+                                                style={{ width: "100%", padding: "0.5rem", border: "1px solid var(--gray-300)", borderRadius: "4px" }}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "1rem", marginBottom: "1rem" }}>
+                                        <div>
+                                            <label style={{ display: "block", marginBottom: "0.5rem", fontSize: "0.85rem", color: "var(--gray-700)" }}>Belge Dosyası (Görsel veya PDF)</label>
+                                            <input
+                                                type="file"
+                                                accept="image/*,application/pdf"
+                                                onChange={async (e) => {
+                                                    const file = e.target.files?.[0];
+                                                    if (!file) return;
+                                                    setLoading(true);
+                                                    const formData = new FormData();
+                                                    formData.append("file", file);
+                                                    try {
+                                                        const res = await fetch("/api/upload", { method: "POST", body: formData });
+                                                        const data = await res.json();
+                                                        if (data.url) {
+                                                            const newCerts = [...certificates];
+                                                            newCerts[index].imageUrl = data.url;
+                                                            setCertificates(newCerts);
+                                                            alert("Dosya başarıyla yüklendi.");
+                                                        }
+                                                    } catch (error) {
+                                                        alert("Dosya yükleme başarısız.");
+                                                    } finally {
+                                                        setLoading(false);
+                                                    }
+                                                }}
+                                                style={{ width: "100%", padding: "0.5rem", border: "1px solid var(--gray-300)", borderRadius: "4px" }}
+                                            />
+                                            {cert.imageUrl && (
+                                                <div style={{ marginTop: "0.5rem" }}>
+                                                    {cert.imageUrl.toLowerCase().endsWith('.pdf') ? (
+                                                        <a href={cert.imageUrl} target="_blank" rel="noopener noreferrer" style={{ color: "var(--primary)", fontSize: "0.85rem", textDecoration: "underline" }}>Yüklenen Dosyayı Görüntüle (PDF)</a>
+                                                    ) : (
+                                                        <img src={cert.imageUrl} alt={cert.title_tr} style={{ width: "100px", height: "auto", borderRadius: "4px" }} />
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                                        <input
+                                            type="checkbox"
+                                            id={`cert-visible-${index}`}
+                                            checked={cert.isVisible}
+                                            onChange={(e) => {
+                                                const newCerts = [...certificates];
+                                                newCerts[index].isVisible = e.target.checked;
+                                                setCertificates(newCerts);
+                                            }}
+                                        />
+                                        <label htmlFor={`cert-visible-${index}`} style={{ fontSize: "0.85rem", color: "var(--gray-700)", cursor: "pointer", userSelect: "none" }}>Sitede görünür olsun (Kullanıcı tıkladığında belgeyi açabilir)</label>
+                                    </div>
+                                </div>
+                            ))}
+
+                            <button
+                                type="button"
+                                onClick={() => setCertificates([...certificates, { title_tr: "", title_en: "", imageUrl: "", isVisible: true }])}
+                                className="btn btn-primary"
+                                style={{ alignSelf: "flex-start" }}
+                            >+ Yeni Belge Ekle</button>
+                        </div>
+                    </div>
+
                     {/* Footer Links Management */}
                     <div style={{ padding: "1.5rem", border: "1px solid var(--gray-200)", borderRadius: "var(--radius-md)", backgroundColor: "var(--gray-50)" }}>
                         <h3 style={{ marginBottom: "0.5rem", color: "var(--primary)", borderBottom: "1px solid var(--gray-200)", paddingBottom: "0.5rem" }}>Alt Bilgi (Footer) Linkleri</h3>
@@ -611,7 +741,7 @@ export default function SettingsPage() {
                             <button 
                                 type="button" 
                                 onClick={() => setFooterColumns([...footerColumns, { title_tr: "", title_en: "", links: [] }])}
-                                className="btn btn-secondary" 
+                                className="btn btn-primary" 
                                 style={{ alignSelf: "flex-start" }}
                             >+ Yeni Sütun Ekle</button>
                         </div>

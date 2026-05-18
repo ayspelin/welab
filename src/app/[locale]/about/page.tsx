@@ -34,6 +34,18 @@ export default async function AboutUs() {
         expertiseData = locale === 'tr' ? defaultExpertiseTr : defaultExpertiseEn;
     }
 
+    let certificatesData = [];
+    if (settingsAny?.certificates) {
+        try {
+            certificatesData = typeof settingsAny.certificates === 'string' 
+                ? JSON.parse(settingsAny.certificates) 
+                : settingsAny.certificates;
+            certificatesData = certificatesData.filter((c: any) => c.isVisible);
+        } catch (e) {
+            console.error("Failed to parse certificates", e);
+        }
+    }
+
     return (
         <>
             <section className={styles.pageHeader}>
@@ -107,6 +119,33 @@ export default async function AboutUs() {
                     </div>
                 </div>
             </section>
+
+            {/* Certificates Section */}
+            {certificatesData && certificatesData.length > 0 && (
+                <section className={styles.certificatesSection}>
+                    <div className="container">
+                        <div className={styles.sectionHeader}>
+                            <h2>{locale === 'tr' ? 'Kalite Belgelerimiz' : 'Our Quality Certificates'}</h2>
+                            <p>{locale === 'tr' ? 'Uluslararası standartlara uygunluk ve kalite güvencemiz.' : 'Our compliance with international standards and quality assurance.'}</p>
+                        </div>
+                        <div className={styles.certificatesGrid}>
+                            {certificatesData.map((cert: any, idx: number) => (
+                                <a 
+                                    key={`cert-${idx}`} 
+                                    href={cert.imageUrl} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className={styles.certificateCard}
+                                >
+                                    <div className={styles.certIcon}>📄</div>
+                                    <h3 className={styles.certTitle}>{locale === 'tr' ? cert.title_tr : (cert.title_en || cert.title_tr)}</h3>
+                                    <span className={styles.certView}>{locale === 'tr' ? 'Görüntüle' : 'View'}</span>
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
 
             {/* References Section */}
             <section className={styles.referencesSection}>

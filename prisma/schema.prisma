@@ -168,6 +168,8 @@ model Setting {
   translations_tr Json?
   translations_en Json?
 
+  certificates    Json? // [{ title_tr: string, title_en: string, imageUrl: string, isVisible: boolean }]
+
   updatedAt DateTime @updatedAt
 }
 

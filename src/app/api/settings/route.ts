@@ -54,6 +54,7 @@ export async function POST(req: NextRequest) {
             linkedinUrl: data.linkedinUrl ?? null,
             twitterUrl: data.twitterUrl ?? null,
             youtubeUrl: data.youtubeUrl ?? null,
+            certificates: data.certificates ?? null,
         } as any;
 
         let updatedSettings;
