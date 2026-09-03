@@ -28,6 +28,7 @@ export default function AdminLayout({
                             <li><Link href="/admin/brands" className={styles.navLink}>🤝 markalar</Link></li>
                             <li><Link href="/admin/categories" className={styles.navLink}>📁 kategoriler</Link></li>
                             <li><Link href="/admin/hero-slides" className={styles.navLink}>🖼️ banner yönetimi</Link></li>
+                            <li><Link href="/admin/blog" className={styles.navLink}>📝 blog yönetimi</Link></li>
                             <li><Link href="/admin/references" className={styles.navLink}>🏢 referanslar</Link></li>
                             <li><Link href="/admin/events" className={styles.navLink}>📅 etkinlikler</Link></li>
                             <li><Link href="/admin/inquiries" className={styles.navLink}>📩 gelen talepler</Link></li>

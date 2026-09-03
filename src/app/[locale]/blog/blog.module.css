@@ -1,0 +1,349 @@
+.pageHeader {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+    color: white;
+    padding: 4rem 0;
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
+.pageTitle {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.breadcrumb {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.breadcrumb a {
+    color: white;
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.blogSection {
+    padding-bottom: 5rem;
+}
+
+.blogGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+}
+
+.blogCard {
+    display: flex;
+    flex-direction: column;
+    background: var(--background-card);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+    color: var(--foreground);
+    border: 1px solid var(--border);
+}
+
+.blogCard:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--border-hover);
+}
+
+.blogImageWrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: var(--background-2);
+    overflow: hidden;
+}
+
+.blogImage {
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.blogCard:hover .blogImage {
+    transform: scale(1.05);
+}
+
+.imagePlaceholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-600);
+    font-weight: 600;
+    font-size: 1.2rem;
+    background: var(--background-2);
+}
+
+.blogInfo {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.blogDate {
+    font-size: 0.85rem;
+    color: var(--primary);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.blogTitle {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--foreground);
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.blogExcerpt {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex: 1;
+}
+
+.readMore {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--primary);
+    display: inline-flex;
+    align-items: center;
+    transition: color 0.3s ease;
+}
+
+.blogCard:hover .readMore {
+    color: var(--primary-light);
+}
+
+.emptyState {
+    text-align: center;
+    padding: 4rem 0;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+}
+
+/* Single Post Styles */
+.singleHeader {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 3rem 1rem 2rem;
+}
+
+.singleTitle {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--foreground);
+    margin: 1rem 0;
+    line-height: 1.2;
+}
+
+.singleMeta {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.singleCover {
+    position: relative;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto 3rem;
+    aspect-ratio: 21/9;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+}
+
+.singleVideo {
+    margin: 0 auto 3rem;
+    max-width: 900px;
+}
+
+.singleVideo iframe {
+    aspect-ratio: 16 / 9;
+    border: 0;
+    border-radius: 8px;
+    box-shadow: var(--shadow-lg);
+    display: block;
+    height: auto;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .singleCover {
+        border-radius: 0;
+        aspect-ratio: 16/9;
+    }
+
+    .singleVideo iframe {
+        border-radius: 0;
+    }
+}
+
+.singleContent {
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--gray-800);
+    padding: 0 1rem;
+}
+
+.singleContent h2, .singleContent h3, .singleContent h4 {
+    color: var(--foreground);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.singleContent h1 {
+    color: var(--foreground);
+    font-size: 2rem;
+    line-height: 1.25;
+    margin: 2.75rem 0 1rem;
+}
+
+.singleContent h2 {
+    font-size: 1.65rem;
+}
+
+.singleContent h3 {
+    font-size: 1.35rem;
+}
+
+.singleContent blockquote {
+    border-left: 4px solid var(--primary);
+    color: var(--gray-700);
+    font-size: 1.2rem;
+    margin: 2rem 0;
+    padding: 0.5rem 0 0.5rem 1.25rem;
+}
+
+.singleContent pre {
+    background: var(--gray-900);
+    border-radius: 8px;
+    color: white;
+    overflow-x: auto;
+    padding: 1rem;
+}
+
+.singleContent img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 2rem 0;
+}
+
+.singleContent a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.singleContent a:hover {
+    text-decoration: underline;
+}
+
+.singleContent iframe,
+.singleContent .ql-video {
+    aspect-ratio: 16 / 9;
+    border: 0;
+    border-radius: 8px;
+    display: block;
+    height: auto;
+    margin: 2rem 0;
+    max-width: 100%;
+    width: 100%;
+}
+
+.singleContent ul, .singleContent ol {
+    margin: 1.5rem 0;
+    padding-left: 1.5rem;
+}
+
+.singleContent li {
+    margin-bottom: 0.5rem;
+}
+
+.singleContent .ql-align-center {
+    text-align: center;
+}
+
+.singleContent .ql-align-right {
+    text-align: right;
+}
+
+.singleContent .ql-align-justify {
+    text-align: justify;
+}
+
+.singleContent .ql-size-small {
+    font-size: 0.85em;
+}
+
+.singleContent .ql-size-large {
+    font-size: 1.35em;
+}
+
+.singleContent .ql-size-huge {
+    font-size: 1.8em;
+}
+
+.singleContent .blog-file-card {
+    align-items: center;
+    background: color-mix(in srgb, var(--primary) 6%, transparent);
+    border: 1px solid color-mix(in srgb, var(--primary) 32%, var(--border));
+    border-radius: 8px;
+    color: var(--foreground);
+    display: flex;
+    gap: 1rem;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    text-decoration: none;
+}
+
+.singleContent .blog-file-card:hover {
+    border-color: var(--primary);
+    text-decoration: none;
+}
+
+.singleContent .blog-file-type {
+    background: var(--primary);
+    border-radius: 6px;
+    color: white;
+    flex: 0 0 auto;
+    font-size: 0.75rem;
+    font-weight: 800;
+    min-width: 3.25rem;
+    padding: 0.45rem 0.5rem;
+    text-align: center;
+}
+
+.singleContent .blog-file-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.singleContent .blog-file-info small {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}

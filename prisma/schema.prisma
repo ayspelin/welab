@@ -267,3 +267,26 @@ enum InquiryStatus {
   COMPLETED
   CANCELLED
 }
+
+model Blog {
+  id                String    @id @default(uuid())
+  slug              String    @unique
+  title_tr          String
+  title_en          String?
+  content_tr        String    @db.Text
+  content_en        String?   @db.Text
+  excerpt_tr        String?   @db.Text
+  excerpt_en        String?   @db.Text
+  coverImage        String?
+  
+  seoTitle_tr       String?
+  seoTitle_en       String?
+  seoDescription_tr String?   @db.Text
+  seoDescription_en String?   @db.Text
+
+  publishedAt       DateTime?
+  isActive          Boolean   @default(true)
+
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+}

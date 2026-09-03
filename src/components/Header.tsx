@@ -43,6 +43,7 @@ export default function Header() {
                         <li><Link href="/brands" className={styles.navLink}>{t('brands')}</Link></li>
                         <li><Link href="/events" className={styles.navLink}>{t('events')}</Link></li>
                         <li><Link href="/dealers" className={styles.navLink}>{t('dealers')}</Link></li>
+                        <li><Link href="/blog" className={styles.navLink}>{t('blog')}</Link></li>
                         <li><Link href="/contact" className={styles.navLink}>{t('contact')}</Link></li>
                         <li><Link href="/downloads" className={styles.navLink}>{t('downloads')}</Link></li>
                     </ul>
@@ -80,6 +81,7 @@ export default function Header() {
                     <li><Link href="/brands" onClick={toggleMobileMenu} className={styles.mobileNavLink}>{t('brands')}</Link></li>
                     <li><Link href="/events" onClick={toggleMobileMenu} className={styles.mobileNavLink}>{t('events')}</Link></li>
                     <li><Link href="/dealers" onClick={toggleMobileMenu} className={styles.mobileNavLink}>{t('dealers')}</Link></li>
+                    <li><Link href="/blog" onClick={toggleMobileMenu} className={styles.mobileNavLink}>{t('blog')}</Link></li>
                     <li><Link href="/contact" onClick={toggleMobileMenu} className={styles.mobileNavLink}>{t('contact')}</Link></li>
                     <li><Link href="/downloads" onClick={toggleMobileMenu} className={styles.mobileNavLink}>{t('downloads')}</Link></li>
                 </ul>

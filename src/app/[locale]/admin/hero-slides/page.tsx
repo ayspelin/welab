@@ -183,8 +183,11 @@ export default function AdminHeroSlides() {
                             {!slide.isActive && <span className={styles.inactiveBadge}>Pasif</span>}
                         </div>
                         <div className={styles.cardContent}>
-                            <h3>{slide.title_tr || "Başlıksız"}</h3>
-                            <p>{slide.desc_tr?.substring(0, 100)}...</p>
+                            <h3>{slide.title_tr ? slide.title_tr.replace(/<[^>]+>/g, '') : "Başlıksız"}</h3>
+                            <div 
+                                style={{ fontSize: '0.9rem', color: '#555', marginBottom: '1rem', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}
+                                dangerouslySetInnerHTML={{ __html: slide.desc_tr || "" }} 
+                            />
                             <div className={styles.cardActions}>
                                 <button onClick={() => setEditingSlide(slide)}>Düzenle</button>
                                 <button onClick={() => handleDelete(slide.id)} className={styles.deleteBtn}>Sil</button>

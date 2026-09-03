@@ -11,7 +11,8 @@
         "login": "Çalışma Ortağı Girişi",
         "admin": "Admin",
         "portal": "Çalışma Ortağı Portalı",
-        "logout": "Çıkış"
+        "logout": "Çıkış",
+        "blog": "Blog"
     },
     "Footer": {
         "rights": "Tüm hakları saklıdır.",
@@ -136,5 +137,12 @@
         "email": "E-posta:",
         "website": "Websitesi",
         "notSpecified": "Belirtilmemiş"
+    },
+    "Blog": {
+        "title": "Blog",
+        "home": "Ana Sayfa",
+        "readMore": "Devamını Oku",
+        "empty": "Henüz blog yazısı bulunmamaktadır.",
+        "publishedAt": "Yayınlanma Tarihi"
     }
 }

@@ -10,8 +10,9 @@
         "dealers": "Our Business Partners",
         "login": "Partner Login",
         "admin": "Admin",
-        "portal": "Portal",
-        "logout": "Logout"
+        "portal": "Partner Portal",
+        "logout": "Logout",
+        "blog": "Blog"
     },
     "Footer": {
         "rights": "All rights reserved.",
@@ -135,6 +136,13 @@
         "phone": "Phone:",
         "email": "Email:",
         "website": "Website",
-        "notSpecified": "Not specified"
+        "notSpecified": "Not Specified"
+    },
+    "Blog": {
+        "title": "Blog",
+        "home": "Home",
+        "readMore": "Read More",
+        "empty": "No blog posts available yet.",
+        "publishedAt": "Published At"
     }
 }
