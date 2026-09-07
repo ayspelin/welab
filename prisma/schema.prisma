@@ -273,11 +273,14 @@ model Blog {
   slug              String    @unique
   title_tr          String
   title_en          String?
+  titleHtml_tr      String?   @db.Text
+  titleHtml_en      String?   @db.Text
   content_tr        String    @db.Text
   content_en        String?   @db.Text
   excerpt_tr        String?   @db.Text
   excerpt_en        String?   @db.Text
   coverImage        String?
+  youtubeUrl        String?   @db.Text
   
   seoTitle_tr       String?
   seoTitle_en       String?

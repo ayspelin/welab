@@ -4,6 +4,10 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { normalizeBlogSlug } from "@/lib/blogLinks";
 
+function nullableText(value: unknown) {
+    return typeof value === "string" && value.trim() ? value.trim() : null;
+}
+
 async function getAvailableSlug(input: string | null | undefined, title: string | null | undefined) {
     const baseSlug = normalizeBlogSlug(input, title);
     let slug = baseSlug;
@@ -44,11 +48,14 @@ export async function POST(req: NextRequest) {
                 slug,
                 title_tr: data.title_tr,
                 title_en: data.title_en,
+                titleHtml_tr: nullableText(data.titleHtml_tr),
+                titleHtml_en: nullableText(data.titleHtml_en),
                 content_tr: data.content_tr,
                 content_en: data.content_en,
                 excerpt_tr: data.excerpt_tr,
                 excerpt_en: data.excerpt_en,
-                coverImage: data.coverImage,
+                coverImage: nullableText(data.coverImage),
+                youtubeUrl: nullableText(data.youtubeUrl),
                 seoTitle_tr: data.seoTitle_tr,
                 seoTitle_en: data.seoTitle_en,
                 seoDescription_tr: data.seoDescription_tr,

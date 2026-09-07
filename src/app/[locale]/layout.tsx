@@ -9,7 +9,15 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 
+function getMetadataBase() {
+  const configuredUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXTAUTH_URL || "https://welab.com";
+  const normalizedUrl = configuredUrl.includes("localhost") ? "https://welab.com" : configuredUrl;
+
+  return new URL(normalizedUrl);
+}
+
 export const metadata: Metadata = {
+  metadataBase: getMetadataBase(),
   title: "Premium Lab & Industrial Analytics",
   description: "Endüstriyel laboratuvar makinesi ve analiz cihazları uzmanı.",
 };

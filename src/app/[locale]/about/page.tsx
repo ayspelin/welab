@@ -3,6 +3,36 @@ import Image from "next/image";
 import { getTranslations, getLocale } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 
+function getCertificateSeal(title?: string | null) {
+    const normalizedTitle = title || "";
+    const isoMatch = normalizedTitle.match(/\bISO\s*([0-9]{4,5})(?::?\s*([0-9]{4}))?/i);
+
+    if (isoMatch) {
+        return {
+            label: "ISO",
+            detail: isoMatch[2] ? `${isoMatch[1]}:${isoMatch[2]}` : isoMatch[1],
+            type: "iso",
+            ariaLabel: `${isoMatch[0]} certificate`
+        };
+    }
+
+    if (/\bCE\b/i.test(normalizedTitle)) {
+        return {
+            label: "CE",
+            detail: "DECLARATION",
+            type: "ce",
+            ariaLabel: "CE conformity declaration"
+        };
+    }
+
+    return {
+        label: "DOC",
+        detail: "CERT",
+        type: "default",
+        ariaLabel: "Certificate document"
+    };
+}
+
 export default async function AboutUs() {
     const t = await getTranslations("Common");
     const locale = await getLocale();
@@ -129,19 +159,30 @@ export default async function AboutUs() {
                             <p>{locale === 'tr' ? 'Uluslararası standartlara uygunluk ve kalite güvencemiz.' : 'Our compliance with international standards and quality assurance.'}</p>
                         </div>
                         <div className={styles.certificatesGrid}>
-                            {certificatesData.map((cert: any, idx: number) => (
-                                <a 
-                                    key={`cert-${idx}`} 
-                                    href={cert.imageUrl} 
-                                    target="_blank" 
-                                    rel="noopener noreferrer"
-                                    className={styles.certificateCard}
-                                >
-                                    <div className={styles.certIcon}>📄</div>
-                                    <h3 className={styles.certTitle}>{locale === 'tr' ? cert.title_tr : (cert.title_en || cert.title_tr)}</h3>
-                                    <span className={styles.certView}>{locale === 'tr' ? 'Görüntüle' : 'View'}</span>
-                                </a>
-                            ))}
+                            {certificatesData.map((cert: any, idx: number) => {
+                                const certTitle = locale === 'tr' ? cert.title_tr : (cert.title_en || cert.title_tr);
+                                const seal = getCertificateSeal(certTitle);
+
+                                return (
+                                    <a
+                                        key={`cert-${idx}`}
+                                        href={cert.imageUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className={styles.certificateCard}
+                                    >
+                                        <div
+                                            className={`${styles.certSeal} ${styles[`certSeal${seal.type.charAt(0).toUpperCase()}${seal.type.slice(1)}`]}`}
+                                            aria-label={seal.ariaLabel}
+                                        >
+                                            <span>{seal.label}</span>
+                                            <small>{seal.detail}</small>
+                                        </div>
+                                        <h3 className={styles.certTitle}>{certTitle}</h3>
+                                        <span className={styles.certView}>{locale === 'tr' ? 'Görüntüle' : 'View'}</span>
+                                    </a>
+                                );
+                            })}
                         </div>
                     </div>
                 </section>

@@ -152,6 +152,11 @@
         "home": "Home",
         "readMore": "Read More",
         "empty": "No blog posts available yet.",
-        "publishedAt": "Published At"
+        "publishedAt": "Published At",
+        "relatedPosts": "Related Posts",
+        "askQuestion": "Ask Us",
+        "askQuestionDesc": "Contact us to get detailed information about this topic.",
+        "contactCta": "Contact",
+        "contactInfo": "Contact Us"
     }
 }

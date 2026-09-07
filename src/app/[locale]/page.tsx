@@ -11,11 +11,25 @@ export default async function Home(props: { params: Promise<{ locale: string }> 
   const { locale } = await props.params;
   const t = await getTranslations("Home");
 
-  const [dbCategories, slides, settings] = await Promise.all([
-    prisma.category.findMany({ where: { showOnHome: true }, take: 3, orderBy: { createdAt: 'desc' } }),
-    prisma.heroSlide.findMany({ where: { isActive: true }, orderBy: { order: 'asc' } }),
-    prisma.setting.findFirst()
-  ]);
+  let dbCategories: any[] = [];
+  let slides: any[] = [];
+  let settings: any = null;
+
+  try {
+    const [categoriesResult, slideResult, settingsResult] = await Promise.all([
+      prisma.category.findMany({ where: { showOnHome: true }, take: 3, orderBy: { createdAt: 'desc' } }),
+      prisma.heroSlide.findMany({ where: { isActive: true }, orderBy: { order: 'asc' } }),
+      prisma.setting.findFirst()
+    ]);
+
+    dbCategories = categoriesResult;
+    slides = slideResult;
+    settings = settingsResult;
+  } catch {
+    dbCategories = [];
+    slides = [];
+    settings = null;
+  }
 
   const currentHeroTitle = t.raw('heroTitle');
   const currentHeroDesc = t('heroDesc');

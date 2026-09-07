@@ -5,17 +5,21 @@ import Image from "next/image";
 import styles from "../admin.module.css";
 import RichTextEditor from "@/components/RichTextEditor";
 import { createBlogSlug, getPublicBlogSlug } from "@/lib/blogLinks";
+import { getYouTubeEmbedUrl } from "@/lib/mediaLinks";
 
 interface Blog {
     id: string;
     slug: string;
     title_tr: string;
     title_en?: string | null;
+    titleHtml_tr?: string | null;
+    titleHtml_en?: string | null;
     content_tr: string;
     content_en?: string | null;
     excerpt_tr?: string | null;
     excerpt_en?: string | null;
     coverImage?: string | null;
+    youtubeUrl?: string | null;
     seoTitle_tr?: string | null;
     seoTitle_en?: string | null;
     seoDescription_tr?: string | null;
@@ -23,6 +27,26 @@ interface Blog {
     publishedAt?: string | null;
     isActive: boolean;
     createdAt: string;
+}
+
+function escapeHtml(value: string) {
+    return value
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
+function titleToHtml(value?: string | null) {
+    return value ? `<p>${escapeHtml(value)}</p>` : "";
+}
+
+function htmlToText(value?: string | null) {
+    if (!value) return "";
+    const wrapper = document.createElement("div");
+    wrapper.innerHTML = value;
+    return (wrapper.textContent || wrapper.innerText || "").replace(/\s+/g, " ").trim();
 }
 
 export default function AdminBlog() {
@@ -34,21 +58,6 @@ export default function AdminBlog() {
     useEffect(() => {
         fetchBlogs();
     }, []);
-
-    const updateTitle = (title_tr: string) => {
-        setEditingBlog((current) => {
-            if (!current) return current;
-
-            const oldTitleSlug = createBlogSlug(current.title_tr);
-            const shouldUpdateSlug = !current.id || !current.slug || current.slug === oldTitleSlug;
-
-            return {
-                ...current,
-                title_tr,
-                slug: shouldUpdateSlug ? createBlogSlug(title_tr) : current.slug,
-            };
-        });
-    };
 
     const fetchBlogs = async () => {
         try {
@@ -62,18 +71,96 @@ export default function AdminBlog() {
         }
     };
 
+    const updateTitleHtml = (language: "tr" | "en", value: string) => {
+        const plainTitle = htmlToText(value);
+
+        setEditingBlog((current) => {
+            if (!current) return current;
+
+            if (language === "en") {
+                return {
+                    ...current,
+                    titleHtml_en: value,
+                    title_en: plainTitle,
+                };
+            }
+
+            const oldTitleSlug = createBlogSlug(current.title_tr);
+            const shouldUpdateSlug = !current.id || !current.slug || current.slug === oldTitleSlug;
+
+            return {
+                ...current,
+                titleHtml_tr: value,
+                title_tr: plainTitle,
+                slug: shouldUpdateSlug ? createBlogSlug(plainTitle) : current.slug,
+            };
+        });
+    };
+
+    const updateSlug = (value: string) => {
+        const videoEmbedUrl = getYouTubeEmbedUrl(value);
+
+        setEditingBlog((current) => {
+            if (!current) return current;
+
+            if (videoEmbedUrl) {
+                return {
+                    ...current,
+                    youtubeUrl: current.youtubeUrl || value,
+                    slug: createBlogSlug(current.title_tr),
+                };
+            }
+
+            return {
+                ...current,
+                slug: createBlogSlug(value),
+            };
+        });
+    };
+
+    const prepareBlogForEdit = (blog: Blog) => ({
+        ...blog,
+        slug: getPublicBlogSlug(blog),
+        titleHtml_tr: blog.titleHtml_tr || titleToHtml(blog.title_tr),
+        titleHtml_en: blog.titleHtml_en || titleToHtml(blog.title_en || ""),
+        youtubeUrl: blog.youtubeUrl || getYouTubeEmbedUrl(blog.slug) || "",
+        publishedAt: blog.publishedAt ? new Date(blog.publishedAt).toISOString().split('T')[0] : ""
+    });
+
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!editingBlog) return;
+
+        const payload = {
+            ...editingBlog,
+            title_tr: htmlToText(editingBlog.titleHtml_tr) || editingBlog.title_tr || "",
+            title_en: htmlToText(editingBlog.titleHtml_en) || editingBlog.title_en || null,
+            titleHtml_tr: editingBlog.titleHtml_tr || titleToHtml(editingBlog.title_tr),
+            titleHtml_en: editingBlog.titleHtml_en || null,
+            coverImage: editingBlog.coverImage || null,
+            youtubeUrl: editingBlog.youtubeUrl?.trim() || null,
+        };
+
+        if (!payload.title_tr) {
+            alert("Başlık (TR) boş bırakılamaz.");
+            return;
+        }
+
+        if (!payload.content_tr) {
+            alert("İçerik (TR) boş bırakılamaz.");
+            return;
+        }
+
         setIsSaving(true);
 
-        const method = editingBlog?.id ? "PUT" : "POST";
-        const url = editingBlog?.id ? `/api/admin/blog/${editingBlog.id}` : "/api/admin/blog";
+        const method = payload.id ? "PUT" : "POST";
+        const url = payload.id ? `/api/admin/blog/${payload.id}` : "/api/admin/blog";
 
         try {
             const res = await fetch(url, {
                 method,
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(editingBlog)
+                body: JSON.stringify(payload)
             });
 
             if (res.ok) {
@@ -140,7 +227,10 @@ export default function AdminBlog() {
                         isActive: true, 
                         slug: "", 
                         title_tr: "", 
+                        titleHtml_tr: "",
+                        titleHtml_en: "",
                         content_tr: "",
+                        youtubeUrl: "",
                         publishedAt: new Date().toISOString().split('T')[0]
                     })}
                 >
@@ -165,11 +255,7 @@ export default function AdminBlog() {
                             <p style={{fontSize: '0.8rem', color: '#666'}}>{new Date(blog.createdAt).toLocaleDateString()}</p>
                             <div className={styles.cardActions}>
                                 <button onClick={() => {
-                                    setEditingBlog({
-                                        ...blog,
-                                        slug: getPublicBlogSlug(blog),
-                                        publishedAt: blog.publishedAt ? new Date(blog.publishedAt).toISOString().split('T')[0] : ""
-                                    });
+                                    setEditingBlog(prepareBlogForEdit(blog));
                                 }}>Düzenle</button>
                                 <button onClick={() => handleDelete(blog.id)} className={styles.deleteBtn}>Sil</button>
                             </div>
@@ -187,19 +273,20 @@ export default function AdminBlog() {
                             <div className={styles.formRow}>
                                 <div className={styles.formGroup}>
                                     <label>Başlık (TR) *</label>
-                                    <input 
-                                        type="text" 
-                                        required
-                                        value={editingBlog.title_tr || ""} 
-                                        onChange={e => updateTitle(e.target.value)} 
+                                    <RichTextEditor
+                                        value={editingBlog.titleHtml_tr ?? titleToHtml(editingBlog.title_tr)}
+                                        onChange={val => updateTitleHtml("tr", val)}
+                                        minHeight="80px"
+                                        toolbarPreset="title"
                                     />
                                 </div>
                                 <div className={styles.formGroup}>
                                     <label>Başlık (EN)</label>
-                                    <input 
-                                        type="text" 
-                                        value={editingBlog.title_en || ""} 
-                                        onChange={e => setEditingBlog({ ...editingBlog, title_en: e.target.value })} 
+                                    <RichTextEditor
+                                        value={editingBlog.titleHtml_en ?? titleToHtml(editingBlog.title_en || "")}
+                                        onChange={val => updateTitleHtml("en", val)}
+                                        minHeight="80px"
+                                        toolbarPreset="title"
                                     />
                                 </div>
                             </div>
@@ -211,7 +298,17 @@ export default function AdminBlog() {
                                     required
                                     value={editingBlog.slug || ""} 
                                     placeholder="benim-yeni-yazim"
-                                    onChange={e => setEditingBlog({ ...editingBlog, slug: createBlogSlug(e.target.value) })} 
+                                    onChange={e => updateSlug(e.target.value)}
+                                />
+                            </div>
+
+                            <div className={styles.formGroup}>
+                                <label>YouTube Linki</label>
+                                <input
+                                    type="url"
+                                    value={editingBlog.youtubeUrl || ""}
+                                    placeholder="https://www.youtube.com/watch?v=..."
+                                    onChange={e => setEditingBlog({ ...editingBlog, youtubeUrl: e.target.value })}
                                 />
                             </div>
 
@@ -219,8 +316,15 @@ export default function AdminBlog() {
                                 <label>Kapak Resmi</label>
                                 <input type="file" onChange={handleImageUpload} accept="image/*" />
                                 {editingBlog.coverImage && (
-                                    <div className={styles.preview} style={{ marginTop: "10px" }}>
+                                    <div className={styles.preview} style={{ marginTop: "10px", display: "flex", flexDirection: "column", gap: "0.75rem", padding: "0.75rem" }}>
                                         <Image src={editingBlog.coverImage} alt="Önizleme" width={200} height={100} style={{ objectFit: 'cover' }} />
+                                        <button
+                                            type="button"
+                                            className={styles.smallBtn}
+                                            onClick={() => setEditingBlog({ ...editingBlog, coverImage: null })}
+                                        >
+                                            Kapak Resmini Kaldır
+                                        </button>
                                     </div>
                                 )}
                             </div>

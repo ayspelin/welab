@@ -16,6 +16,7 @@ interface RichTextEditorProps {
     onChange: (value: string) => void;
     placeholder?: string;
     minHeight?: string;
+    toolbarPreset?: "full" | "title";
 }
 
 interface QuillRange {
@@ -60,7 +61,7 @@ function formatFileSize(size: number) {
     return `${(size / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-export default function RichTextEditor({ value, onChange, placeholder, minHeight = "260px" }: RichTextEditorProps) {
+export default function RichTextEditor({ value, onChange, placeholder, minHeight = "260px", toolbarPreset = "full" }: RichTextEditorProps) {
     const quillRef = React.useRef<QuillRef | null>(null);
 
     const uploadFile = React.useCallback(async (file: File) => {
@@ -165,27 +166,37 @@ export default function RichTextEditor({ value, onChange, placeholder, minHeight
 
     const modules = React.useMemo(() => ({
         toolbar: {
-            container: [
-                [{ 'header': [1, 2, 3, false] }],
-                [{ 'size': ['small', false, 'large', 'huge'] }],
-                ['bold', 'italic', 'underline', 'strike'],
-                ['blockquote', 'code-block'],
-                [{ 'color': [] }, { 'background': [] }],
-                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                [{ 'align': [] }],
-                ['link', 'image', 'video', 'file'],
-                ['clean']
-            ],
-            handlers: {
-                image: imageHandler,
-                video: videoHandler,
-                file: fileHandler
-            }
+            container: toolbarPreset === "title"
+                ? [
+                    [{ 'size': ['small', false, 'large', 'huge'] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'color': [] }, { 'background': [] }],
+                    [{ 'align': [] }],
+                    ['clean']
+                ]
+                : [
+                    [{ 'header': [1, 2, 3, false] }],
+                    [{ 'size': ['small', false, 'large', 'huge'] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    ['blockquote', 'code-block'],
+                    [{ 'color': [] }, { 'background': [] }],
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                    [{ 'align': [] }],
+                    ['link', 'image', 'video', 'file'],
+                    ['clean']
+                ],
+            ...(toolbarPreset === "full" ? {
+                handlers: {
+                    image: imageHandler,
+                    video: videoHandler,
+                    file: fileHandler
+                }
+            } : {})
         },
         clipboard: {
             matchVisual: false
         }
-    }), [fileHandler, imageHandler, videoHandler]);
+    }), [fileHandler, imageHandler, toolbarPreset, videoHandler]);
 
     const editorStyle: React.CSSProperties & { "--rte-min-height": string } = {
         "--rte-min-height": minHeight,

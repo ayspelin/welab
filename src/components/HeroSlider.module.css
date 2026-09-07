@@ -118,6 +118,27 @@
     margin: 0;
 }
 
+.specialDayBadge {
+    position: absolute;
+    top: 7rem;
+    left: max(2rem, calc((100vw - 1200px) / 2));
+    z-index: 12;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 0.45rem 0.9rem;
+    border: 1px solid rgba(245, 184, 65, 0.45);
+    border-radius: 999px;
+    background: rgba(245, 184, 65, 0.12);
+    color: #ffe4a1;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.24);
+}
+
 .dots {
     position: absolute;
     bottom: 2rem;
@@ -245,5 +266,11 @@
 
     .slideDesc, .heroDesc {
         font-size: 1rem;
+    }
+
+    .specialDayBadge {
+        top: 1.25rem;
+        left: 50%;
+        transform: translateX(-50%);
     }
 }

@@ -6,10 +6,15 @@ import { getTranslations } from 'next-intl/server';
 
 export default async function BrandsSection() {
     const t = await getTranslations("Home");
-    // Fetch brands from db ordered by name
-    const brands = await prisma.brand.findMany({
-        orderBy: { name: 'asc' }
-    });
+    let brands: any[] = [];
+
+    try {
+        brands = await prisma.brand.findMany({
+            orderBy: { name: 'asc' }
+        });
+    } catch {
+        brands = [];
+    }
 
     const BrandCard = ({ brand }: { brand: any }) => (
         <div className={styles.card} title={brand.name}>

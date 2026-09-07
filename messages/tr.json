@@ -152,6 +152,11 @@
         "home": "Ana Sayfa",
         "readMore": "Devamını Oku",
         "empty": "Henüz blog yazısı bulunmamaktadır.",
-        "publishedAt": "Yayınlanma Tarihi"
+        "publishedAt": "Yayınlanma Tarihi",
+        "relatedPosts": "İlgili Gönderiler",
+        "askQuestion": "Bize Soru Sorun",
+        "askQuestionDesc": "Bu konu hakkında detaylı bilgi almak için bizimle iletişime geçebilirsiniz.",
+        "contactCta": "İletişim",
+        "contactInfo": "Bize Ulaşın"
     }
 }

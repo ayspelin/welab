@@ -22,8 +22,8 @@ export default getRequestConfig(async ({ requestLocale }) => {
                 dbTranslations = translationsField;
             }
         }
-    } catch (err) {
-        console.error("Failed to load DB translations for i18n:", err);
+    } catch {
+        dbTranslations = null;
     }
 
     // 3. Deep Merge Function

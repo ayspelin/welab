@@ -139,10 +139,11 @@ export default function AdminHeroSlides() {
                         <button 
                             className={styles.smallBtn}
                             onClick={() => setEditingSlide({ 
-                                title_tr: "Cumhuriyet Bayramımız Kutlu Olsun!", 
-                                title_en: "Happy Republic Day!",
-                                desc_tr: "29 Ekim Cumhuriyet Bayramı'nı gururla kutluyoruz.",
-                                desc_en: "We proudly celebrate October 29th Republic Day.",
+                                title_tr: "<p>29 Ekim Cumhuriyet Bayramımız</p><p><strong>Kutlu Olsun</strong></p>",
+                                title_en: "<p>Happy October 29th</p><p><strong>Republic Day</strong></p>",
+                                desc_tr: "<p>Bilimin, üretimin ve çağdaş geleceğin ışığında Cumhuriyetimizin değerlerini gururla kutluyoruz.</p>",
+                                desc_en: "<p>We proudly celebrate the values of the Republic through science, production and a modern future.</p>",
+                                imageUrl: "/images/hero_bg.png",
                                 isActive: true,
                                 isSpecialDay: true,
                                 order: -1,
@@ -153,10 +154,26 @@ export default function AdminHeroSlides() {
                         <button 
                             className={styles.smallBtn}
                             onClick={() => setEditingSlide({ 
-                                title_tr: "Ramazan Bayramınız Mübarek Olsun", 
-                                title_en: "Eid Mubarak",
-                                desc_tr: "Tüm İslam aleminin bayramını kutlarız.",
-                                desc_en: "Happy Eid to all the Islamic world.",
+                                title_tr: "<p>Saygı, Özlem ve</p><p><strong>Minnetle</strong></p>",
+                                title_en: "<p>With Respect and</p><p><strong>Gratitude</strong></p>",
+                                desc_tr: "<p>Cumhuriyetimizin kurucusu Gazi Mustafa Kemal Atatürk'ü saygı, sevgi ve minnetle anıyoruz.</p>",
+                                desc_en: "<p>We commemorate Mustafa Kemal Atatürk, founder of the Republic of Türkiye, with respect and gratitude.</p>",
+                                imageUrl: "/images/hero_bg.png",
+                                isActive: true,
+                                isSpecialDay: true,
+                                order: -1,
+                                titleSize: "4rem",
+                                descSize: "1.25rem"
+                            })}
+                        >10 Kasım</button>
+                        <button 
+                            className={styles.smallBtn}
+                            onClick={() => setEditingSlide({ 
+                                title_tr: "<p>Ramazan Bayramınız</p><p><strong>Mübarek Olsun</strong></p>",
+                                title_en: "<p>Eid</p><p><strong>Mubarak</strong></p>",
+                                desc_tr: "<p>Sağlık, huzur ve mutluluk dolu bir bayram dileriz.</p>",
+                                desc_en: "<p>Wishing you a peaceful holiday filled with health and happiness.</p>",
+                                imageUrl: "/images/hero_bg.png",
                                 isActive: true,
                                 isSpecialDay: true,
                                 order: -1,
@@ -262,6 +279,14 @@ export default function AdminHeroSlides() {
                                         type="text" 
                                         value={editingSlide.buttonText_tr || ""} 
                                         onChange={e => setEditingSlide({ ...editingSlide, buttonText_tr: e.target.value })} 
+                                    />
+                                </div>
+                                <div className={styles.formGroup}>
+                                    <label>Buton Yazısı (EN)</label>
+                                    <input 
+                                        type="text" 
+                                        value={editingSlide.buttonText_en || ""} 
+                                        onChange={e => setEditingSlide({ ...editingSlide, buttonText_en: e.target.value })} 
                                     />
                                 </div>
                                 <div className={styles.formGroup}>

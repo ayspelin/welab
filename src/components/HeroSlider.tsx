@@ -119,7 +119,7 @@ export default function HeroSlider({ slides, locale, fallback }: Props) {
                         </div>
                         {slide.isSpecialDay && (
                             <div className={styles.specialDayBadge}>
-                                ✨ Authorized Global Representations ✨
+                                {locale === 'tr' ? 'Özel Gün' : 'Special Day'}
                             </div>
                         )}
                     </div>
