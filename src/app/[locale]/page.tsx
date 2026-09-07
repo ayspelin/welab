@@ -83,6 +83,7 @@ export default async function Home(props: { params: Promise<{ locale: string }> 
         wecareDesc={t('wecareDesc')}
         weapplyDesc={t('weapplyDesc')}
         weconsultDesc={t('weconsultDesc')}
+        contactCta={t('subBrandCta')}
       />
 
       <div className={styles.gradientDivider} />
@@ -101,8 +102,8 @@ export default async function Home(props: { params: Promise<{ locale: string }> 
               <p>{t('solutionsDesc')}</p>
             </div>
             <div className={styles.categoryGrid}>
-              {displayCategories.map((cat: any, index: number) => (
-                <div key={cat.id} className={styles.categoryCard}>
+              {displayCategories.map((cat: any) => (
+                <Link href={`/products/category/${cat.id}`} key={cat.id} className={styles.categoryCard}>
                   <div className={styles.catImageContainer}>
                     <Image
                       src={cat.imageUrl || "/images/placeholder.png"}
@@ -114,10 +115,10 @@ export default async function Home(props: { params: Promise<{ locale: string }> 
                   </div>
                   <h3 className={styles.catTitle}>{locale === 'tr' ? (cat.name_tr || cat.name_en) : cat.name_en}</h3>
                   <p className={styles.catDesc}>{locale === 'tr' ? (cat.description_tr || cat.description_en) : cat.description_en}</p>
-                  <Link href={`/products?category=${cat.id}`} className={styles.catLink}>
+                  <span className={styles.catLink}>
                     {t('viewDetails') || 'View Details'} →
-                  </Link>
-                </div>
+                  </span>
+                </Link>
               ))}
             </div>
           </div>

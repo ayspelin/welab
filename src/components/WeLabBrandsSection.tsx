@@ -27,6 +27,7 @@ interface WeLabBrandsSectionProps {
     wecareDesc: string;
     weapplyDesc: string;
     weconsultDesc: string;
+    contactCta: string;
 }
 
 export default function WeLabBrandsSection({
@@ -37,6 +38,7 @@ export default function WeLabBrandsSection({
     wecareDesc,
     weapplyDesc,
     weconsultDesc,
+    contactCta,
 }: WeLabBrandsSectionProps) {
     const [selectedService, setSelectedService] = useState<string | null>(null);
 
@@ -76,7 +78,7 @@ export default function WeLabBrandsSection({
                             <p className={styles.cardDesc}>{descriptions[brand.descKey]}</p>
                             
                             <div className={styles.cardFooter}>
-                                <span className={styles.contactLink}>Göz At & Başvur &rarr;</span>
+                                <span className={styles.contactLink}>{contactCta} &rarr;</span>
                             </div>
                             
                             <div className={styles.accent} style={{ backgroundColor: brand.color }} />

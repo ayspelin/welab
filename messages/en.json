@@ -62,6 +62,7 @@
         "wecareDesc": "Service, maintenance and technical support.",
         "weapplyDesc": "Application development and method support.",
         "weconsultDesc": "Consulting and laboratory setup services.",
+        "subBrandCta": "Explore & Apply",
         "viewDetails": "View Details"
     },
     "Common": {
@@ -109,6 +110,14 @@
         "pageTitle": "Events",
         "pageDesc": "Industry events we attend and our announcements.",
         "noEvents": "No events added yet."
+    },
+    "DownloadsPage": {
+        "title": "Downloads & Documents",
+        "desc": "Access product brochures, technical documents, and user manuals here.",
+        "empty": "There are currently no public documents to list.",
+        "fileCount": "files",
+        "allFolders": "All Folders",
+        "fileSuffix": "File"
     },
     "References": {
         "pageTitle": "References & Events",

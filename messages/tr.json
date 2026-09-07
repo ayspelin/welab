@@ -62,6 +62,7 @@
         "wecareDesc": "Servis, bakım ve teknik destek hizmetleri.",
         "weapplyDesc": "Aplikasyon geliştirme ve metot desteği.",
         "weconsultDesc": "Danışmanlık ve laboratuvar kurulum hizmetleri.",
+        "subBrandCta": "Göz At & Başvur",
         "viewDetails": "Detayları İncele"
     },
     "Common": {
@@ -109,6 +110,14 @@
         "pageTitle": "Etkinlikler",
         "pageDesc": "Katıldığımız sektörel etkinlikler ve duyurularımız.",
         "noEvents": "Henüz etkinlik eklenmemiş."
+    },
+    "DownloadsPage": {
+        "title": "İndirmeler & Dokümanlar",
+        "desc": "Ürün broşürleri, teknik dokümanlar ve kullanım kılavuzlarına buradan erişebilirsiniz.",
+        "empty": "Şu an sistemde listelenecek açık doküman bulunmamaktadır.",
+        "fileCount": "dosya",
+        "allFolders": "Tüm Klasörler",
+        "fileSuffix": "Dosyası"
     },
     "References": {
         "pageTitle": "Referanslar & Etkinlikler",

@@ -1,10 +1,11 @@
 import styles from "./downloads.module.css";
 import { prisma } from "@/lib/prisma";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import DownloadsClient from "./DownloadsClient";
 
 export default async function Downloads() {
     const locale = await getLocale();
+    const t = await getTranslations("DownloadsPage");
 
     const documents = await prisma.document.findMany({
         where: { isPublic: true },
@@ -18,11 +19,21 @@ export default async function Downloads() {
         <div className={styles.downloadsPage}>
             <section className={styles.pageHeader}>
                 <div className="container">
-                    <h1 className={styles.pageTitle}>İndirmeler & Dokümanlar</h1>
-                    <p className={styles.pageDesc}>Ürün broşürleri, teknik dokümanlar ve kullanım kılavuzlarına buradan erişebilirsiniz.</p>
+                    <h1 className={styles.pageTitle}>{t("title")}</h1>
+                    <p className={styles.pageDesc}>{t("desc")}</p>
                 </div>
             </section>
-            <DownloadsClient documents={documents as any} folders={folders as any} locale={locale} />
+            <DownloadsClient
+                documents={documents as any}
+                folders={folders as any}
+                locale={locale}
+                labels={{
+                    empty: t("empty"),
+                    fileCount: t("fileCount"),
+                    allFolders: t("allFolders"),
+                    fileSuffix: t("fileSuffix"),
+                }}
+            />
         </div>
     );
 }

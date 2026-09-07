@@ -13,6 +13,13 @@ type DocType = {
     product?: { name_tr?: string | null; name_en?: string; } | null;
 };
 
+type DownloadsLabels = {
+    empty: string;
+    fileCount: string;
+    allFolders: string;
+    fileSuffix: string;
+};
+
 const palette = [
     "📘", "📗", "📙", "📕", "📒", "📓", "🗂️", "📂",
 ];
@@ -34,7 +41,7 @@ function getFileIcon(type: string) {
     return "📁";
 }
 
-export default function DownloadsClient({ documents, folders, locale }: { documents: DocType[]; folders?: any[]; locale: string }) {
+export default function DownloadsClient({ documents, folders, locale, labels }: { documents: DocType[]; folders?: any[]; locale: string; labels: DownloadsLabels }) {
     const [activeFolder, setActiveFolder] = useState<string | null>(null);
 
     const grouped = documents.reduce((acc, doc) => {
@@ -67,7 +74,7 @@ export default function DownloadsClient({ documents, folders, locale }: { docume
                 {!activeFolder ? (
                     <>
                         {folderNames.length === 0 ? (
-                            <div className={styles.emptyState}>Şu an sistemde listelenecek açık doküman bulunmamaktadır.</div>
+                            <div className={styles.emptyState}>{labels.empty}</div>
                         ) : (
                             <div className={styles.foldersGrid}>
                                 {folderNames.map((folderName, idx) => {
@@ -88,7 +95,7 @@ export default function DownloadsClient({ documents, folders, locale }: { docume
                                                 </div>
                                             )}
                                             <h3 className={styles.folderName}>{folderName}</h3>
-                                            <span className={styles.folderCount}>{grouped[folderName].length} dosya</span>
+                                            <span className={styles.folderCount}>{grouped[folderName].length} {labels.fileCount}</span>
                                             <span className={styles.folderArrow}>→</span>
                                         </div>
                                     );
@@ -99,12 +106,12 @@ export default function DownloadsClient({ documents, folders, locale }: { docume
                 ) : (
                     <div className={styles.folderView}>
                         <button className={styles.backButton} onClick={() => setActiveFolder(null)}>
-                            ← Tüm Klasörler
+                            ← {labels.allFolders}
                         </button>
                         <div className={styles.folderHeading}>
                             <span style={{ fontSize: "2rem" }}>{getFolderIcon(activeFolder, folderNames.indexOf(activeFolder))}</span>
                             <h2>{activeFolder}</h2>
-                            <span className={styles.folderCount}>{activeDocs.length} dosya</span>
+                            <span className={styles.folderCount}>{activeDocs.length} {labels.fileCount}</span>
                         </div>
                         <div className={styles.grid}>
                             {activeDocs.map((doc) => (
@@ -141,7 +148,7 @@ export default function DownloadsClient({ documents, folders, locale }: { docume
                                             </span>
                                         )}
                                         <span style={{ fontSize: "0.75rem", padding: "0.2rem 0.5rem", borderRadius: "100px", backgroundColor: "rgba(255,255,255,0.08)", color: "var(--gray-500)", marginTop: "0.25rem" }}>
-                                            {doc.type} Dosyası
+                                            {doc.type} {labels.fileSuffix}
                                         </span>
                                     </div>
                                 </a>
