@@ -16,11 +16,33 @@ function getMetadataBase() {
   return new URL(normalizedUrl);
 }
 
-export const metadata: Metadata = {
-  metadataBase: getMetadataBase(),
-  title: "Premium Lab & Industrial Analytics",
-  description: "Endüstriyel laboratuvar makinesi ve analiz cihazları uzmanı.",
-};
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  
+  const defaultTitle = locale === 'tr' 
+    ? "WeLab | Güvenilir Laboratuvar Çözüm Ortağınız"
+    : "WeLab | Your Trusted Partner in Laboratory Solutions";
+
+  const description = locale === 'tr'
+    ? "Endüstriyel laboratuvar cihazları, kalite kontrol sistemleri ve anahtar teslim laboratuvar çözümleri. Yetkili distribütörlük ve 7/24 teknik servis."
+    : "Industrial laboratory equipment, quality control systems, and turnkey lab solutions. Authorized distributor with 24/7 technical service.";
+
+  return {
+    metadataBase: getMetadataBase(),
+    title: {
+      template: "%s | WeLab",
+      default: defaultTitle,
+    },
+    description,
+    openGraph: {
+      title: defaultTitle,
+      description,
+      siteName: "WeLab",
+      locale: locale === 'tr' ? 'tr_TR' : 'en_US',
+      type: "website",
+    }
+  };
+}
 
 export default async function RootLayout({
   children,
