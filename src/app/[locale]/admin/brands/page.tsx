@@ -4,8 +4,24 @@ import { useState, useEffect } from "react";
 import styles from "./brands.module.css";
 import Image from "next/image";
 
+type Brand = {
+    id: string;
+    name: string;
+    logoUrl?: string | null;
+    description_tr?: string | null;
+    description_en?: string | null;
+    url?: string | null;
+    _count?: {
+        products?: number;
+    };
+};
+
+const getErrorMessage = (error: unknown, fallback: string) => {
+    return error instanceof Error ? error.message : fallback;
+};
+
 export default function BrandsAdminPage() {
-    const [brands, setBrands] = useState<any[]>([]);
+    const [brands, setBrands] = useState<Brand[]>([]);
 
     // Form State
     const [editingId, setEditingId] = useState<string | null>(null);
@@ -18,6 +34,7 @@ export default function BrandsAdminPage() {
 
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
+    const [messageType, setMessageType] = useState<"success" | "error" | "">("");
 
     useEffect(() => {
         fetchBrands();
@@ -50,9 +67,10 @@ export default function BrandsAdminPage() {
         setFile(null);
         setPreviewUrl("");
         setMessage("");
+        setMessageType("");
     };
 
-    const handleEditClick = (brand: any) => {
+    const handleEditClick = (brand: Brand) => {
         setEditingId(brand.id);
         setName(brand.name);
         setDescriptionTr(brand.description_tr || "");
@@ -61,11 +79,35 @@ export default function BrandsAdminPage() {
         setPreviewUrl(brand.logoUrl || "");
         setFile(null);
         setMessage("");
+        setMessageType("");
         // Scroll to top to see form
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    const handleDeleteClick = async (id: string, name: string) => {
+    const getApiErrorMessage = async (res: Response, fallback: string) => {
+        try {
+            const data = await res.json();
+            return data.error || data.message || fallback;
+        } catch {
+            return fallback;
+        }
+    };
+
+    const handleDeleteClick = async (brand: Brand) => {
+        const productsCount = brand._count?.products || 0;
+
+        if (productsCount > 0) {
+            setMessage(`"${brand.name}" markasına bağlı ${productsCount} ürün var. Markayı silmeden önce bu ürünleri başka bir markaya taşıyın veya ürünleri silin.`);
+            setMessageType("error");
+            return;
+        }
+
+        setMessage("");
+        setMessageType("");
+
+        const id = brand.id;
+        const name = brand.name;
+
         if (!window.confirm(`"${name}" markasını silmek istediğinize emin misiniz? Bu işlem geri alınamaz.`)) {
             return;
         }
@@ -75,12 +117,16 @@ export default function BrandsAdminPage() {
                 method: "DELETE"
             });
 
-            if (!res.ok) throw new Error("Marka silinemedi");
+            if (!res.ok) {
+                throw new Error(await getApiErrorMessage(res, "Marka silinemedi"));
+            }
 
             setMessage("Marka başarıyla silindi!");
+            setMessageType("success");
             fetchBrands();
-        } catch (error: any) {
-            alert(error.message);
+        } catch (error: unknown) {
+            setMessage(getErrorMessage(error, "Marka silinemedi"));
+            setMessageType("error");
         }
     };
 
@@ -88,6 +134,7 @@ export default function BrandsAdminPage() {
         e.preventDefault();
         setLoading(true);
         setMessage("");
+        setMessageType("");
 
         try {
             let finalLogoUrl = previewUrl;
@@ -132,13 +179,16 @@ export default function BrandsAdminPage() {
                 throw new Error(`Marka ${editingId ? 'güncellenemedi' : 'oluşturulamadı'}. Yanıt: ${errStr}`);
             }
 
-            setMessage(`Marka başarıyla ${editingId ? 'güncellendi' : 'eklendi'}!`);
+            const successMessage = `Marka başarıyla ${editingId ? 'güncellendi' : 'eklendi'}!`;
             resetForm();
+            setMessage(successMessage);
+            setMessageType("success");
             fetchBrands();
 
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error(error);
-            setMessage(error.message || "Bir hata oluştu");
+            setMessage(getErrorMessage(error, "Bir hata oluştu"));
+            setMessageType("error");
         } finally {
             setLoading(false);
         }
@@ -157,7 +207,7 @@ export default function BrandsAdminPage() {
                     <h2>{editingId ? "Markayı Düzenle" : "Yeni Marka Ekle"}</h2>
 
                     {message && (
-                        <div className={`${styles.alert} ${message.includes("hata") || message.includes("edi") ? styles.alertError : styles.alertSuccess}`}>
+                        <div className={`${styles.alert} ${messageType === "error" ? styles.alertError : styles.alertSuccess}`}>
                             {message}
                         </div>
                     )}
@@ -252,6 +302,7 @@ export default function BrandsAdminPage() {
                                 <tr>
                                     <th>Logo</th>
                                     <th>Marka Adı</th>
+                                    <th>Bağlı Ürünler</th>
                                     <th>İşlemler</th>
                                 </tr>
                             </thead>
@@ -269,16 +320,21 @@ export default function BrandsAdminPage() {
                                         </td>
                                         <td><strong>{brand.name}</strong></td>
                                         <td>
+                                            <span style={{ padding: "0.2rem 0.6rem", backgroundColor: "var(--gray-100)", borderRadius: "100px", fontSize: "0.8rem" }}>
+                                                {brand._count?.products || 0} Ürün
+                                            </span>
+                                        </td>
+                                        <td>
                                             <div className={styles.actionButtons}>
                                                 <button className={styles.editBtn} onClick={() => handleEditClick(brand)}>Düzenle</button>
-                                                <button className={styles.deleteBtn} onClick={() => handleDeleteClick(brand.id, brand.name)}>Sil</button>
+                                                <button className={styles.deleteBtn} onClick={() => handleDeleteClick(brand)}>Sil</button>
                                             </div>
                                         </td>
                                     </tr>
                                 ))}
                                 {brands.length === 0 && (
                                     <tr>
-                                        <td colSpan={3} style={{ textAlign: "center", padding: "2rem" }}>
+                                        <td colSpan={4} style={{ textAlign: "center", padding: "2rem" }}>
                                             Henüz marka eklenmemiş.
                                         </td>
                                     </tr>

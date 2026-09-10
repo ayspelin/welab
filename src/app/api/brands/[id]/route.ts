@@ -3,9 +3,13 @@ import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 
+type RouteContext = {
+    params: Promise<{ id: string }>;
+};
+
 export async function PUT(
     req: NextRequest,
-    context: any // Fix for build context type error 
+    context: RouteContext
 ) {
     try {
         const session = await getServerSession(authOptions);
@@ -43,7 +47,7 @@ export async function PUT(
 
 export async function DELETE(
     req: NextRequest,
-    context: any
+    context: RouteContext
 ) {
     try {
         const session = await getServerSession(authOptions);
@@ -55,22 +59,32 @@ export async function DELETE(
         const params = await context.params;
         const id = params.id;
 
-        // Check if brand is attached to products
-        const productsCount = await prisma.product.count({
-            where: { brandId: id }
+        const brand = await prisma.brand.findUnique({
+            where: { id },
+            include: {
+                _count: {
+                    select: { products: true }
+                }
+            }
         });
 
-        if (productsCount > 0) {
-            return NextResponse.json({ error: "Cannot delete brand because it is attached to existing products." }, { status: 400 });
+        if (!brand) {
+            return NextResponse.json({ error: "Marka bulunamadı." }, { status: 404 });
+        }
+
+        if (brand._count.products > 0) {
+            return NextResponse.json({
+                error: `Bu markaya bağlı ${brand._count.products} ürün var. Markayı silmeden önce bu ürünleri başka bir markaya taşıyın veya ürünleri silin.`
+            }, { status: 400 });
         }
 
         await prisma.brand.delete({
             where: { id }
         });
 
-        return NextResponse.json({ message: "Brand deleted successfully" }, { status: 200 });
+        return NextResponse.json({ message: "Marka başarıyla silindi" }, { status: 200 });
     } catch (error) {
         console.error("Error deleting brand:", error);
-        return NextResponse.json({ error: "Failed to delete brand" }, { status: 500 });
+        return NextResponse.json({ error: "Marka silinemedi" }, { status: 500 });
     }
 }

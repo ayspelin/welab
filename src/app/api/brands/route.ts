@@ -3,9 +3,14 @@ import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
     try {
         const brands = await prisma.brand.findMany({
+            include: {
+                _count: {
+                    select: { products: true }
+                }
+            },
             orderBy: { name: 'asc' }
         });
         return NextResponse.json(brands);
