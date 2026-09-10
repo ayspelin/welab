@@ -33,6 +33,10 @@
     overflow: hidden;
 }
 
+.imageOnlySlide .imageBlock {
+    width: 100%;
+}
+
 /* Fade left edge of image into blue */
 .imageBlock::before {
     content: '';
@@ -43,6 +47,11 @@
     height: 100%;
     background: linear-gradient(90deg, #0F203C 0%, transparent 100%);
     z-index: 5;
+}
+
+.imageOnlySlide .imageBlock::before {
+    width: 100%;
+    background: linear-gradient(180deg, rgba(15, 32, 60, 0.18) 0%, rgba(15, 32, 60, 0.1) 45%, rgba(15, 32, 60, 0.35) 100%);
 }
 
 .blurredBackground {
@@ -62,6 +71,11 @@
     object-position: center; /* Takes full inner 55% block, nicely centered */
     z-index: 2;
     filter: drop-shadow(0 10px 30px rgba(0,0,0,0.3));
+}
+
+.imageOnlySlide .mainImage {
+    object-fit: cover;
+    filter: none;
 }
 
 /* Text limits strictly to the left */
@@ -89,6 +103,10 @@
     color: white;
     transform: translateY(40px);
     transition: transform 1s ease 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
 }
 
 .active .slideContent {
@@ -99,22 +117,30 @@
     font-size: clamp(2.5rem, 4vw, 4rem);
     font-weight: 800;
     line-height: 1.15;
-    margin-bottom: 1.5rem;
+    margin: 0;
+    overflow-wrap: anywhere;
 }
 
-.slideTitle p {
+.slideTitle p,
+.slideTitle h1,
+.slideTitle h2,
+.slideTitle h3 {
     margin: 0;
 }
 
 .slideDesc {
     font-size: 1.25rem;
     color: var(--gray-300);
-    margin-bottom: 2.5rem;
+    margin: 0 0 1rem;
     line-height: 1.6;
     max-width: 600px;
+    overflow-wrap: anywhere;
 }
 
-.slideDesc p {
+.slideDesc p,
+.slideDesc h1,
+.slideDesc h2,
+.slideDesc h3 {
     margin: 0;
 }
 
@@ -231,6 +257,12 @@
         order: 1; /* Top */
     }
 
+    .imageOnlySlide .imageBlock {
+        position: absolute;
+        inset: 0;
+        height: 100%;
+    }
+
     /* Fade bottom edge of image into blue text block */
     .imageBlock::before {
         width: 100%;
@@ -258,6 +290,7 @@
         max-width: 100%;
         padding-right: 0;
         text-align: center;
+        align-items: center;
     }
 
     .slideTitle, .heroTitle {

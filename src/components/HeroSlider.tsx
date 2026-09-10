@@ -32,6 +32,13 @@ interface Props {
     }
 }
 
+const getPlainText = (html?: string | null) => {
+    return (html || "")
+        .replace(/<[^>]*>/g, "")
+        .replace(/&nbsp;/g, " ")
+        .trim();
+};
+
 export default function HeroSlider({ slides, locale, fallback }: Props) {
     const [current, setCurrent] = useState(0);
     const activeSlides = slides.filter(s => s.isActive);
@@ -70,61 +77,82 @@ export default function HeroSlider({ slides, locale, fallback }: Props) {
 
     return (
         <section className={styles.sliderSection}>
-            {displaySlides.map((slide, index) => (
-                <div 
-                    key={slide.id} 
-                    className={`${styles.slide} ${index === current ? styles.active : ''}`}
-                >
-                    {/* Right Side Image Block (or Top on Mobile) */}
-                    <div className={styles.imageBlock}>
-                        <div className={styles.blurredBackground}>
-                            <Image 
-                                src={slide.imageUrl} 
-                                alt="Background Blur" 
-                                fill 
-                                style={{ objectFit: 'cover' }} 
-                                priority={index === 0} 
+            {displaySlides.map((slide, index) => {
+                const titleHtml = (locale === 'tr' ? slide.title_tr : (slide.title_en || slide.title_tr)) || "";
+                const descHtml = (locale === 'tr' ? slide.desc_tr : (slide.desc_en || slide.desc_tr)) || "";
+                const buttonText = (locale === 'tr' ? slide.buttonText_tr : (slide.buttonText_en || slide.buttonText_tr)) || "";
+                const hasTitle = getPlainText(titleHtml).length > 0;
+                const hasDesc = getPlainText(descHtml).length > 0;
+                const hasButton = buttonText.trim().length > 0;
+                const hasTextContent = hasTitle || hasDesc || hasButton;
+
+                return (
+                    <div
+                        key={slide.id}
+                        className={`${styles.slide} ${index === current ? styles.active : ''} ${!hasTextContent ? styles.imageOnlySlide : ''}`}
+                    >
+                        {/* Right Side Image Block (or Top on Mobile) */}
+                        <div className={styles.imageBlock}>
+                            <div className={styles.blurredBackground}>
+                                <Image
+                                    src={slide.imageUrl}
+                                    alt="Background Blur"
+                                    fill
+                                    style={{ objectFit: 'cover' }}
+                                    priority={index === 0}
+                                />
+                            </div>
+                            <Image
+                                src={slide.imageUrl}
+                                alt="Hero Slide"
+                                fill
+                                priority={index === 0}
+                                className={styles.mainImage}
                             />
                         </div>
-                        <Image 
-                            src={slide.imageUrl} 
-                            alt="Hero Slide" 
-                            fill 
-                            priority={index === 0} 
-                            className={styles.mainImage}
-                        />
-                    </div>
-                    
-                    {/* Left Side Text Block (or Bottom on Mobile) */}
-                    <div className={styles.textContainerWrapper}>
-                        <div className={`container ${styles.slideContainer}`}>
-                            <div className={styles.slideContent}>
-                                <div
-                                    className={styles.slideTitle}
-                                    dangerouslySetInnerHTML={{ __html: (locale === 'tr' ? slide.title_tr : (slide.title_en || slide.title_tr)) || "" }}
-                                />
-                                <div
-                                    className={styles.slideDesc}
-                                    dangerouslySetInnerHTML={{ __html: (locale === 'tr' ? slide.desc_tr : (slide.desc_en || slide.desc_tr)) || "" }}
-                                />
-                                {(slide.buttonText_tr || slide.buttonText_en) && (
-                                    <Link 
-                                        href={slide.buttonUrl || "/products"} 
-                                        className="btn btn-primary"
-                                    >
-                                        {locale === 'tr' ? slide.buttonText_tr : (slide.buttonText_en || slide.buttonText_tr)}
-                                    </Link>
+
+                        {hasTextContent && (
+                            <div className={styles.textContainerWrapper}>
+                                <div className={`container ${styles.slideContainer}`}>
+                                    <div className={styles.slideContent}>
+                                        {hasTitle && (
+                                            <div
+                                                className={styles.slideTitle}
+                                                dangerouslySetInnerHTML={{ __html: titleHtml }}
+                                            />
+                                        )}
+                                        {hasDesc && (
+                                            <div
+                                                className={styles.slideDesc}
+                                                dangerouslySetInnerHTML={{ __html: descHtml }}
+                                            />
+                                        )}
+                                        {hasButton && (
+                                            <Link
+                                                href={slide.buttonUrl || "/products"}
+                                                className="btn btn-primary"
+                                            >
+                                                {buttonText}
+                                            </Link>
+                                        )}
+                                    </div>
+                                </div>
+                                {slide.isSpecialDay && (
+                                    <div className={styles.specialDayBadge}>
+                                        {locale === 'tr' ? 'Özel Gün' : 'Special Day'}
+                                    </div>
                                 )}
                             </div>
-                        </div>
-                        {slide.isSpecialDay && (
+                        )}
+
+                        {!hasTextContent && slide.isSpecialDay && (
                             <div className={styles.specialDayBadge}>
                                 {locale === 'tr' ? 'Özel Gün' : 'Special Day'}
                             </div>
                         )}
                     </div>
-                </div>
-            ))}
+                );
+            })}
 
             {displaySlides.length > 1 && (
                 <div className={styles.dots}>

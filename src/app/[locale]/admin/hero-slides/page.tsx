@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import dynamic from 'next/dynamic';
 import 'react-quill-new/dist/quill.snow.css';
@@ -38,12 +37,30 @@ const quillModules = {
     ],
 };
 
+const bannerPresets = [
+    {
+        label: "Analitik Laboratuvar",
+        src: "/images/banners/welab-banner-analytical-lab.png",
+    },
+    {
+        label: "Kalite Kontrol",
+        src: "/images/banners/welab-banner-quality-control.png",
+    },
+    {
+        label: "Laboratuvar Kurulumu",
+        src: "/images/banners/welab-banner-lab-installation.png",
+    },
+    {
+        label: "Ürün Portföyü",
+        src: "/images/banners/welab-banner-product-portfolio.png",
+    },
+];
+
 export default function AdminHeroSlides() {
     const [slides, setSlides] = useState<HeroSlide[]>([]);
     const [loading, setLoading] = useState(true);
     const [editingSlide, setEditingSlide] = useState<Partial<HeroSlide> | null>(null);
     const [isSaving, setIsSaving] = useState(false);
-    const router = useRouter();
 
     useEffect(() => {
         fetchSlides();
@@ -54,7 +71,7 @@ export default function AdminHeroSlides() {
             const res = await fetch("/api/admin/hero-slides");
             const data = await res.json();
             setSlides(data);
-        } catch (error) {
+        } catch {
             alert("An error occurred while fetching slides");
         } finally {
             setLoading(false);
@@ -82,7 +99,7 @@ export default function AdminHeroSlides() {
             } else {
                 alert("Slayt kaydedilemedi");
             }
-        } catch (error) {
+        } catch {
             alert("Bir hata oluştu");
         } finally {
             setIsSaving(false);
@@ -100,7 +117,7 @@ export default function AdminHeroSlides() {
             } else {
                 alert("Slayt silinemedi");
             }
-        } catch (error) {
+        } catch {
             alert("Bir hata oluştu");
         }
     };
@@ -122,7 +139,7 @@ export default function AdminHeroSlides() {
                 setEditingSlide({ ...editingSlide, imageUrl: data.url });
                 alert("Görsel yüklendi");
             }
-        } catch (error) {
+        } catch {
             alert("Yükleme başarısız");
         }
     };
@@ -227,6 +244,34 @@ export default function AdminHeroSlides() {
                                         <Image src={editingSlide.imageUrl} alt="Önizleme" width={200} height={100} />
                                     </div>
                                 )}
+                                <div style={{ marginTop: "1rem" }}>
+                                    <label>Hazır Banner Görselleri</label>
+                                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.75rem", marginTop: "0.5rem" }}>
+                                        {bannerPresets.map((preset) => (
+                                            <button
+                                                key={preset.src}
+                                                type="button"
+                                                onClick={() => setEditingSlide({ ...editingSlide, imageUrl: preset.src })}
+                                                style={{
+                                                    border: editingSlide.imageUrl === preset.src ? "2px solid var(--primary)" : "1px solid var(--gray-300)",
+                                                    borderRadius: "8px",
+                                                    overflow: "hidden",
+                                                    padding: 0,
+                                                    background: "white",
+                                                    cursor: "pointer",
+                                                    textAlign: "left",
+                                                }}
+                                            >
+                                                <span style={{ display: "block", position: "relative", aspectRatio: "16 / 9" }}>
+                                                    <Image src={preset.src} alt={preset.label} fill style={{ objectFit: "cover" }} />
+                                                </span>
+                                                <span style={{ display: "block", padding: "0.5rem", fontSize: "0.85rem", fontWeight: 600 }}>
+                                                    {preset.label}
+                                                </span>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
                             </div>
  
                             <div className={styles.formGroup}>
