@@ -36,7 +36,14 @@ const getPlainText = (html?: string | null) => {
     return (html || "")
         .replace(/<[^>]*>/g, "")
         .replace(/&nbsp;/g, " ")
+        .replace(/\u00a0/g, " ")
         .trim();
+};
+
+const normalizeRichTextHtml = (html?: string | null) => {
+    return (html || "")
+        .replace(/&nbsp;/g, " ")
+        .replace(/\u00a0/g, " ");
 };
 
 export default function HeroSlider({ slides, locale, fallback }: Props) {
@@ -78,8 +85,8 @@ export default function HeroSlider({ slides, locale, fallback }: Props) {
                             <span className={styles.eyebrow}>
                                 {isTr ? "Endüstriyel laboratuvarlar için güvenilir servis ortağı" : "Trusted service partner for industrial laboratories"}
                             </span>
-                            <div className={styles.slideTitle} dangerouslySetInnerHTML={{ __html: fallback.title }} />
-                            <div className={styles.slideDesc} dangerouslySetInnerHTML={{ __html: fallback.desc }} />
+                            <div className={styles.slideTitle} dangerouslySetInnerHTML={{ __html: normalizeRichTextHtml(fallback.title) }} />
+                            <div className={styles.slideDesc} dangerouslySetInnerHTML={{ __html: normalizeRichTextHtml(fallback.desc) }} />
                             <div className={styles.heroActions}>
                                 <Link href="/products" className="btn btn-primary">{isTr ? "Ürünleri İncele" : "View Products"}</Link>
                                 <Link href="/contact" className="btn btn-secondary">{isTr ? "Uzmanla Görüş" : "Talk to an Expert"}</Link>
@@ -99,8 +106,8 @@ export default function HeroSlider({ slides, locale, fallback }: Props) {
     return (
         <section className={styles.sliderSection}>
             {displaySlides.map((slide, index) => {
-                const titleHtml = (locale === 'tr' ? slide.title_tr : (slide.title_en || slide.title_tr)) || "";
-                const descHtml = (locale === 'tr' ? slide.desc_tr : (slide.desc_en || slide.desc_tr)) || "";
+                const titleHtml = normalizeRichTextHtml(locale === 'tr' ? slide.title_tr : (slide.title_en || slide.title_tr));
+                const descHtml = normalizeRichTextHtml(locale === 'tr' ? slide.desc_tr : (slide.desc_en || slide.desc_tr));
                 const buttonText = (locale === 'tr' ? slide.buttonText_tr : (slide.buttonText_en || slide.buttonText_tr)) || "";
                 const hasTitle = getPlainText(titleHtml).length > 0;
                 const hasDesc = getPlainText(descHtml).length > 0;

@@ -10,11 +10,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background:
-        radial-gradient(ellipse at 70% 50%, rgba(45, 158, 255, 0.05) 0%, transparent 60%),
-        linear-gradient(rgba(190, 231, 245, 0.09) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(190, 231, 245, 0.09) 1px, transparent 1px);
-    background-size: auto, 86px 86px, 86px 86px;
+    background: radial-gradient(ellipse at 70% 50%, rgba(45, 158, 255, 0.05) 0%, transparent 60%);
     opacity: 0.8;
     pointer-events: none;
 }
@@ -150,7 +146,4 @@
         font-size: 1.8rem;
     }
 
-    .section::before {
-        background-size: auto, 58px 58px, 58px 58px;
-    }
 }
