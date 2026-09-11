@@ -33,6 +33,24 @@ function getCertificateSeal(title?: string | null) {
     };
 }
 
+function parseAboutImageSetting(value?: string | null) {
+    if (!value) return { url: "", isActive: false };
+
+    try {
+        const parsed = JSON.parse(value);
+        if (parsed && typeof parsed.url === "string") {
+            return {
+                url: parsed.url,
+                isActive: parsed.isActive !== false,
+            };
+        }
+    } catch {
+        // Legacy records store a plain URL in this field.
+    }
+
+    return { url: value, isActive: true };
+}
+
 export default async function AboutUs() {
     const t = await getTranslations("Common");
     const locale = await getLocale();
@@ -58,6 +76,23 @@ export default async function AboutUs() {
     ];
 
     const settingsAny = settings as any;
+    const mainAboutImage = parseAboutImageSetting(settingsAny?.aboutImageMain);
+    const secondaryAboutImage = parseAboutImageSetting(settingsAny?.aboutImageSecondary);
+    const aboutImages = [
+        mainAboutImage.url && mainAboutImage.isActive
+            ? {
+                src: mainAboutImage.url,
+                alt: locale === 'tr' ? 'Merkez Ofis Görseli' : 'Corporate Office Image',
+            }
+            : null,
+        secondaryAboutImage.url && secondaryAboutImage.isActive
+            ? {
+                src: secondaryAboutImage.url,
+                alt: locale === 'tr' ? 'Laboratuvar Uygulama Görseli' : 'Laboratory Application Image',
+            }
+            : null,
+    ].filter(Boolean) as { src: string; alt: string }[];
+
     let expertiseData = locale === 'tr' ? settingsAny?.expertise_tr : settingsAny?.expertise_en;
     
     if (!expertiseData || !Array.isArray(expertiseData) || expertiseData.length === 0) {
@@ -90,44 +125,30 @@ export default async function AboutUs() {
             </section>
 
             <section className={styles.contentSection}>
-                <div className={`container ${styles.contentGrid}`}>
+                <div className={`container ${styles.contentGrid} ${aboutImages.length === 0 ? styles.contentGridNoImages : ''}`}>
                     <div
                         className={styles.textContent}
                         dangerouslySetInnerHTML={{ __html: cleanAboutHtml }}
                     />
 
-                    <div className={styles.imageGallery}>
-                        <div className={styles.imageMain}>
-                            {settingsAny?.aboutImageMain ? (
-                                <Image 
-                                    src={settingsAny.aboutImageMain} 
-                                    alt="About Us Image Main" 
-                                    fill 
-                                    style={{ objectFit: 'cover' }} 
-                                    sizes="(max-width: 768px) 100vw, 50vw"
-                                />
-                            ) : (
-                                <span className={styles.placeholderLabel}>
-                                    {locale === 'tr' ? 'Merkez Ofis Görseli' : 'Corporate Office Image'}
-                                </span>
-                            )}
+                    {aboutImages.length > 0 && (
+                        <div className={`${styles.imageGallery} ${aboutImages.length === 1 ? styles.imageGallerySingle : ''}`}>
+                            {aboutImages.map((image, index) => (
+                                <div
+                                    key={image.src}
+                                    className={aboutImages.length === 1 ? styles.imageSingle : (index === 0 ? styles.imageMain : styles.imageSecondary)}
+                                >
+                                    <Image
+                                        src={image.src}
+                                        alt={image.alt}
+                                        fill
+                                        style={{ objectFit: 'cover' }}
+                                        sizes="(max-width: 768px) 100vw, 50vw"
+                                    />
+                                </div>
+                            ))}
                         </div>
-                        <div className={styles.imageSecondary}>
-                            {settingsAny?.aboutImageSecondary ? (
-                                <Image 
-                                    src={settingsAny.aboutImageSecondary} 
-                                    alt="About Us Image Secondary" 
-                                    fill 
-                                    style={{ objectFit: 'cover' }} 
-                                    sizes="(max-width: 768px) 100vw, 50vw"
-                                />
-                            ) : (
-                                <span className={styles.placeholderLabel}>
-                                    {locale === 'tr' ? 'Laboratuvar Uygulama Görseli' : 'Laboratory Application Image'}
-                                </span>
-                            )}
-                        </div>
-                    </div>
+                    )}
                 </div>
             </section>
 

@@ -1,7 +1,22 @@
 .brandsSection {
+    position: relative;
     padding-block: 5rem 6rem;
     background-color: var(--background);
     overflow: hidden;
+    isolation: isolate;
+}
+
+.brandsSection::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(190, 231, 245, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(190, 231, 245, 0.08) 1px, transparent 1px);
+    background-size: 86px 86px;
+    opacity: 0.5;
+    mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.9) 52%, rgba(0, 0, 0, 0.22));
 }
 
 .header {
@@ -26,12 +41,13 @@
     font-size: clamp(2rem, 4vw, 3rem);
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: -0.01em;
+    letter-spacing: 0;
 }
 
 /* Marquee / Slider setup */
 .marqueeContainer {
     position: relative;
+    z-index: 2;
     display: flex;
     overflow: hidden;
     user-select: none;
@@ -128,6 +144,10 @@
     .marqueeContent {
         gap: 1rem;
         animation-duration: 25s; /* slightly faster on mobile */
+    }
+
+    .brandsSection::before {
+        background-size: 58px 58px;
     }
     
     @keyframes scroll {

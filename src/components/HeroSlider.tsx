@@ -43,6 +43,7 @@ export default function HeroSlider({ slides, locale, fallback }: Props) {
     const [current, setCurrent] = useState(0);
     const activeSlides = slides.filter(s => s.isActive);
     const displaySlides = activeSlides.length > 0 ? activeSlides : null;
+    const isTr = locale === 'tr';
 
     useEffect(() => {
         if (!displaySlides || displaySlides.length <= 1) return;
@@ -55,20 +56,40 @@ export default function HeroSlider({ slides, locale, fallback }: Props) {
     }, [displaySlides]);
 
     if (!displaySlides) {
-        // Render fallback static hero (current behavior)
+        const titleText = getPlainText(fallback.title);
+        const descText = getPlainText(fallback.desc);
+
         return (
-            <section className={styles.hero}>
-                <div className={styles.heroBackground}>
-                    <Image src={fallback.bgImage} alt="Laboratory Background" fill style={{ objectFit: 'cover' }} priority />
-                </div>
-                <div className={`container ${styles.heroContainer}`}>
-                    <div className={styles.heroContent}>
-                        <div className={styles.heroTitle} dangerouslySetInnerHTML={{ __html: fallback.title }} />
-                        <div className={styles.heroDesc} dangerouslySetInnerHTML={{ __html: fallback.desc }} />
-                        <div className={styles.heroActions}>
-                            <Link href="/products" className="btn btn-primary">Products</Link>
-                            <Link href="/contact" className="btn btn-secondary">Contact</Link>
+            <section className={styles.sliderSection}>
+                <div className={`${styles.slide} ${styles.active}`}>
+                    <div className={styles.fullImage}>
+                        <Image
+                            src={fallback.bgImage}
+                            alt={titleText || "Laboratory background"}
+                            fill
+                            style={{ objectFit: 'cover' }}
+                            priority
+                        />
+                    </div>
+                    <div className={styles.overlay} />
+                    <div className={styles.gridOverlay} />
+                    <div className={`container ${styles.heroContainer}`}>
+                        <div className={styles.heroContent}>
+                            <span className={styles.eyebrow}>
+                                {isTr ? "Endüstriyel laboratuvarlar için güvenilir servis ortağı" : "Trusted service partner for industrial laboratories"}
+                            </span>
+                            <div className={styles.slideTitle} dangerouslySetInnerHTML={{ __html: fallback.title }} />
+                            <div className={styles.slideDesc} dangerouslySetInnerHTML={{ __html: fallback.desc }} />
+                            <div className={styles.heroActions}>
+                                <Link href="/products" className="btn btn-primary">{isTr ? "Ürünleri İncele" : "View Products"}</Link>
+                                <Link href="/contact" className="btn btn-secondary">{isTr ? "Uzmanla Görüş" : "Talk to an Expert"}</Link>
+                            </div>
                         </div>
+                        <aside className={styles.featureCard} aria-label={isTr ? "Vitrin mesajı" : "Featured message"}>
+                            <span>{isTr ? "Vitrin" : "Showcase"}</span>
+                            <strong>{titleText || (isTr ? "Geleceğin Kimya Teknolojileri" : "Chemistry Technologies for Tomorrow")}</strong>
+                            {descText && <p>{descText}</p>}
+                        </aside>
                     </div>
                 </div>
             </section>
@@ -91,30 +112,27 @@ export default function HeroSlider({ slides, locale, fallback }: Props) {
                         key={slide.id}
                         className={`${styles.slide} ${index === current ? styles.active : ''} ${!hasTextContent ? styles.imageOnlySlide : ''}`}
                     >
-                        {/* Right Side Image Block (or Top on Mobile) */}
-                        <div className={styles.imageBlock}>
-                            <div className={styles.blurredBackground}>
-                                <Image
-                                    src={slide.imageUrl}
-                                    alt="Background Blur"
-                                    fill
-                                    style={{ objectFit: 'cover' }}
-                                    priority={index === 0}
-                                />
-                            </div>
+                        <div className={styles.fullImage}>
                             <Image
                                 src={slide.imageUrl}
-                                alt="Hero Slide"
+                                alt={getPlainText(titleHtml) || "Hero slide"}
                                 fill
                                 priority={index === 0}
                                 className={styles.mainImage}
                             />
                         </div>
+                        <div className={styles.overlay} />
+                        <div className={styles.gridOverlay} />
 
                         {hasTextContent && (
-                            <div className={styles.textContainerWrapper}>
-                                <div className={`container ${styles.slideContainer}`}>
-                                    <div className={styles.slideContent}>
+                            <div className={`container ${styles.heroContainer}`}>
+                                <div className={styles.slideContent}>
+                                    <span className={styles.eyebrow}>
+                                        {slide.isSpecialDay
+                                            ? (isTr ? 'Özel Gün' : 'Special Day')
+                                            : (isTr ? 'Endüstriyel laboratuvarlar için güvenilir servis ortağı' : 'Trusted service partner for industrial laboratories')}
+                                    </span>
+                                    <div>
                                         {hasTitle && (
                                             <div
                                                 className={styles.slideTitle}
@@ -127,27 +145,31 @@ export default function HeroSlider({ slides, locale, fallback }: Props) {
                                                 dangerouslySetInnerHTML={{ __html: descHtml }}
                                             />
                                         )}
-                                        {hasButton && (
-                                            <Link
-                                                href={slide.buttonUrl || "/products"}
-                                                className="btn btn-primary"
-                                            >
-                                                {buttonText}
-                                            </Link>
-                                        )}
+                                    </div>
+                                    <div className={styles.heroActions}>
+                                        <Link
+                                            href={slide.buttonUrl || "/products"}
+                                            className="btn btn-primary"
+                                        >
+                                            {hasButton ? buttonText : (isTr ? "Ürünleri İncele" : "View Products")}
+                                        </Link>
+                                        <Link href="/contact" className="btn btn-secondary">
+                                            {isTr ? "Uzmanla Görüş" : "Talk to an Expert"}
+                                        </Link>
                                     </div>
                                 </div>
-                                {slide.isSpecialDay && (
-                                    <div className={styles.specialDayBadge}>
-                                        {locale === 'tr' ? 'Özel Gün' : 'Special Day'}
-                                    </div>
-                                )}
+
+                                <aside className={styles.featureCard} aria-label={isTr ? "Vitrin mesajı" : "Featured message"}>
+                                    <span>{isTr ? "Vitrin" : "Showcase"}</span>
+                                    <strong>{getPlainText(titleHtml) || (isTr ? "Laboratuvar çözümleri" : "Laboratory solutions")}</strong>
+                                    {hasDesc && <p>{getPlainText(descHtml)}</p>}
+                                </aside>
                             </div>
                         )}
 
                         {!hasTextContent && slide.isSpecialDay && (
                             <div className={styles.specialDayBadge}>
-                                {locale === 'tr' ? 'Özel Gün' : 'Special Day'}
+                                {isTr ? 'Özel Gün' : 'Special Day'}
                             </div>
                         )}
                     </div>
@@ -161,6 +183,7 @@ export default function HeroSlider({ slides, locale, fallback }: Props) {
                             key={i} 
                             className={`${styles.dot} ${i === current ? styles.activeDot : ''}`}
                             onClick={() => setCurrent(i)}
+                            aria-label={`${isTr ? 'Slayta geç' : 'Go to slide'} ${i + 1}`}
                         />
                     ))}
                 </div>

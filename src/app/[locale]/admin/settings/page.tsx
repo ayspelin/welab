@@ -4,6 +4,34 @@ import { useState, useEffect } from "react";
 import styles from "../admin.module.css";
 import RichTextEditor from "@/components/RichTextEditor";
 
+const parseAboutImageSetting = (value?: string | null) => {
+    if (!value) return { url: "", isActive: false };
+
+    try {
+        const parsed = JSON.parse(value);
+        if (parsed && typeof parsed.url === "string") {
+            return {
+                url: parsed.url,
+                isActive: parsed.isActive !== false,
+            };
+        }
+    } catch {
+        // Legacy records store a plain URL in this field.
+    }
+
+    return { url: value, isActive: true };
+};
+
+const serializeAboutImageSetting = (url: string, isActive: boolean) => {
+    const cleanUrl = url.trim();
+    if (!cleanUrl) return null;
+
+    return JSON.stringify({
+        url: cleanUrl,
+        isActive,
+    });
+};
+
 export default function SettingsPage() {
     const [aboutText_tr, setAboutTextTr] = useState("");
     const [aboutText_en, setAboutTextEn] = useState("");
@@ -14,6 +42,8 @@ export default function SettingsPage() {
     // About Us Images
     const [aboutImageMain, setAboutImageMain] = useState("");
     const [aboutImageSecondary, setAboutImageSecondary] = useState("");
+    const [aboutImageMainActive, setAboutImageMainActive] = useState(true);
+    const [aboutImageSecondaryActive, setAboutImageSecondaryActive] = useState(true);
 
     // New Expertise Fields
     const [expertise_tr, setExpertiseTr] = useState<{ icon: string, title: string, desc: string }[]>([]);
@@ -60,8 +90,12 @@ export default function SettingsPage() {
                         setPhone(data.phone || "");
                         setEmail(data.email || "");
                         setAddress(data.address || "");
-                        setAboutImageMain(data.aboutImageMain || "");
-                        setAboutImageSecondary(data.aboutImageSecondary || "");
+                        const mainImage = parseAboutImageSetting(data.aboutImageMain);
+                        const secondaryImage = parseAboutImageSetting(data.aboutImageSecondary);
+                        setAboutImageMain(mainImage.url);
+                        setAboutImageSecondary(secondaryImage.url);
+                        setAboutImageMainActive(mainImage.isActive);
+                        setAboutImageSecondaryActive(secondaryImage.isActive);
 
                         if (data.expertise_tr && Array.isArray(data.expertise_tr)) {
                             setExpertiseTr(data.expertise_tr);
@@ -169,8 +203,8 @@ export default function SettingsPage() {
                     phone,
                     email,
                     address,
-                    aboutImageMain,
-                    aboutImageSecondary,
+                    aboutImageMain: serializeAboutImageSetting(aboutImageMain, aboutImageMainActive),
+                    aboutImageSecondary: serializeAboutImageSetting(aboutImageSecondary, aboutImageSecondaryActive),
                     expertise_tr,
                     expertise_en,
                     refNotice_tr,
@@ -308,36 +342,82 @@ export default function SettingsPage() {
                         </div>
                     </div>
 
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.5rem" }}>
                         <div>
                             <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600", color: "var(--gray-700)" }}>Hakkımızda Görseli (Merkez Ofis)</label>
                             <input 
                                 type="file" 
                                 accept="image/*" 
-                                onChange={(e) => handleFileUpload(e, setAboutImageMain)}
+                                onChange={(e) => handleFileUpload(e, (url) => {
+                                    setAboutImageMain(url);
+                                    setAboutImageMainActive(true);
+                                })}
                                 style={{ width: "100%", padding: "0.5rem", border: "1px solid var(--gray-300)", borderRadius: "4px" }} 
                             />
                             {aboutImageMain && (
-                                <div style={{ marginTop: "0.5rem" }}>
-                                    <img src={aboutImageMain} alt="Merkez Ofis" style={{ width: "100px", height: "auto", borderRadius: "4px" }} />
+                                <div style={{ marginTop: "0.75rem", display: "flex", alignItems: "center", gap: "0.85rem", flexWrap: "wrap" }}>
+                                    <img src={aboutImageMain} alt="Merkez Ofis" style={{ width: "112px", height: "74px", objectFit: "cover", borderRadius: "6px", border: "1px solid var(--gray-200)" }} />
+                                    <div style={{ display: "flex", flexDirection: "column", gap: "0.45rem" }}>
+                                        <label style={{ display: "flex", alignItems: "center", gap: "0.45rem", fontSize: "0.85rem", color: "var(--gray-700)", cursor: "pointer", userSelect: "none" }}>
+                                            <input
+                                                type="checkbox"
+                                                checked={aboutImageMainActive}
+                                                onChange={(e) => setAboutImageMainActive(e.target.checked)}
+                                            />
+                                            Sitede göster
+                                        </label>
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setAboutImageMain("");
+                                                setAboutImageMainActive(false);
+                                            }}
+                                            style={{ alignSelf: "flex-start", color: "#dc2626", background: "white", border: "1px solid #fecaca", borderRadius: "4px", padding: "0.35rem 0.6rem", cursor: "pointer", fontSize: "0.82rem", fontWeight: 600 }}
+                                        >
+                                            Görseli sil
+                                        </button>
+                                    </div>
                                 </div>
                             )}
-                            <p style={{ fontSize: "0.8rem", color: "var(--gray-500)", marginTop: "0.25rem" }}>Ana görsel (Büyük kutu)</p>
+                            <p style={{ fontSize: "0.8rem", color: "var(--gray-500)", marginTop: "0.35rem" }}>Ana görsel. Tek görsel kullanılacaksa yalnızca bu alanı aktif bırakabilirsiniz.</p>
                         </div>
                         <div>
                             <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600", color: "var(--gray-700)" }}>Hakkımızda Görseli (Laboratuvar Uygulama)</label>
                             <input 
                                 type="file" 
                                 accept="image/*" 
-                                onChange={(e) => handleFileUpload(e, setAboutImageSecondary)}
+                                onChange={(e) => handleFileUpload(e, (url) => {
+                                    setAboutImageSecondary(url);
+                                    setAboutImageSecondaryActive(true);
+                                })}
                                 style={{ width: "100%", padding: "0.5rem", border: "1px solid var(--gray-300)", borderRadius: "4px" }} 
                             />
                             {aboutImageSecondary && (
-                                <div style={{ marginTop: "0.5rem" }}>
-                                    <img src={aboutImageSecondary} alt="Laboratuvar Uygulama" style={{ width: "100px", height: "auto", borderRadius: "4px" }} />
+                                <div style={{ marginTop: "0.75rem", display: "flex", alignItems: "center", gap: "0.85rem", flexWrap: "wrap" }}>
+                                    <img src={aboutImageSecondary} alt="Laboratuvar Uygulama" style={{ width: "112px", height: "74px", objectFit: "cover", borderRadius: "6px", border: "1px solid var(--gray-200)" }} />
+                                    <div style={{ display: "flex", flexDirection: "column", gap: "0.45rem" }}>
+                                        <label style={{ display: "flex", alignItems: "center", gap: "0.45rem", fontSize: "0.85rem", color: "var(--gray-700)", cursor: "pointer", userSelect: "none" }}>
+                                            <input
+                                                type="checkbox"
+                                                checked={aboutImageSecondaryActive}
+                                                onChange={(e) => setAboutImageSecondaryActive(e.target.checked)}
+                                            />
+                                            Sitede göster
+                                        </label>
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setAboutImageSecondary("");
+                                                setAboutImageSecondaryActive(false);
+                                            }}
+                                            style={{ alignSelf: "flex-start", color: "#dc2626", background: "white", border: "1px solid #fecaca", borderRadius: "4px", padding: "0.35rem 0.6rem", cursor: "pointer", fontSize: "0.82rem", fontWeight: 600 }}
+                                        >
+                                            Görseli sil
+                                        </button>
+                                    </div>
                                 </div>
                             )}
-                            <p style={{ fontSize: "0.8rem", color: "var(--gray-500)", marginTop: "0.25rem" }}>İkincil görsel (Küçük kutu)</p>
+                            <p style={{ fontSize: "0.8rem", color: "var(--gray-500)", marginTop: "0.35rem" }}>İkincil görsel. Pasif bırakılırsa Hakkımızda sayfasında sadece ana görsel gösterilir.</p>
                         </div>
                     </div>
 

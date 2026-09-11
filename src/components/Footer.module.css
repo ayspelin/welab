@@ -31,7 +31,7 @@
     font-weight: 800;
     text-transform: uppercase;
     color: #ffffff;
-    letter-spacing: -0.01em;
+    letter-spacing: 0;
     margin-bottom: 1.5rem;
 }
 
@@ -40,7 +40,7 @@
     font-weight: 800;
     text-transform: uppercase;
     color: #ffffff;
-    letter-spacing: -0.01em;
+    letter-spacing: 0;
     margin-bottom: 1.5rem;
     line-height: 1.2;
 }
