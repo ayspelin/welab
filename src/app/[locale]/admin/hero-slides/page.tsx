@@ -46,6 +46,7 @@ interface HeroSlide {
 type SlideDraft = Partial<HeroSlide>;
 
 type PreviewVars = CSSProperties & {
+    "--preview-image-url"?: string;
     "--preview-title-size"?: string;
     "--preview-desc-size"?: string;
 };
@@ -380,10 +381,18 @@ export default function AdminHeroSlides() {
     const previewImage = draft?.imageUrl || "/images/hero_bg.png";
     const previewTitle = stripHtml(draft?.title_tr);
     const previewDesc = stripHtml(draft?.desc_tr);
-    const previewEyebrow = stripHtml(draft?.eyebrow_tr) || "Endüstriyel laboratuvarlar için güvenilir servis ortağı";
+    const previewCustomEyebrow = stripHtml(draft?.eyebrow_tr);
+    const previewPrimaryButton = stripHtml(draft?.buttonText_tr);
+    const previewSecondaryButton = stripHtml(draft?.secondaryButtonText_tr);
+    const previewEyebrow = previewCustomEyebrow || "Endüstriyel laboratuvarlar için güvenilir servis ortağı";
+    const previewShowEyebrow = draft?.showEyebrow !== false && Boolean(previewCustomEyebrow || previewTitle || previewDesc || previewPrimaryButton || previewSecondaryButton);
+    const previewHasText = Boolean(previewTitle || previewDesc || previewShowEyebrow || previewPrimaryButton || previewSecondaryButton);
+    const previewShowPrimaryButton = previewHasText && draft?.showPrimaryButton !== false;
+    const previewShowSecondaryButton = previewHasText && draft?.showSecondaryButton !== false;
     const previewTitleSize = Math.min(getSizeNumber(draft?.titleSize, 4) * 0.42, 2.35);
     const previewDescSize = Math.min(getSizeNumber(draft?.descSize, 1.25) * 0.7, 1);
     const previewVars: PreviewVars = {
+        "--preview-image-url": `url("${previewImage.replace(/\\/g, "\\\\").replace(/"/g, '\\"')}")`,
         "--preview-title-size": `${previewTitleSize}rem`,
         "--preview-desc-size": `${previewDescSize}rem`,
     };
@@ -645,9 +654,10 @@ export default function AdminHeroSlides() {
                                     <section className={styles.heroEditorSection}>
                                         <h3>Canlı Önizleme</h3>
                                         <div
-                                            className={styles.heroMiniPreview}
+                                            className={`${styles.heroMiniPreview} ${previewHasText ? "" : styles.heroMiniPreviewImageOnly}`}
                                             style={{
-                                                backgroundImage: `url("${previewImage}")`,
+                                                ...previewVars,
+                                                backgroundImage: `var(--preview-image-url)`,
                                                 backgroundPosition: `${getNumberValue(draft.imagePositionX, 50)}% ${getNumberValue(draft.imagePositionY, 50)}%`,
                                             }}
                                         >
@@ -665,13 +675,13 @@ export default function AdminHeroSlides() {
                                                 className={`${styles.heroMiniContent} ${getPreviewTextClass(draft.textHorizontal)} ${getPreviewVerticalClass(draft.textVertical)}`}
                                                 style={previewVars}
                                             >
-                                                {draft.showEyebrow !== false && <span>{previewEyebrow}</span>}
+                                                {previewShowEyebrow && <span>{previewEyebrow}</span>}
                                                 {previewTitle && <div className={styles.heroMiniTitle} dangerouslySetInnerHTML={{ __html: draft.title_tr || "" }} />}
                                                 {previewDesc && <div className={styles.heroMiniDescription} dangerouslySetInnerHTML={{ __html: draft.desc_tr || "" }} />}
-                                                {(draft.showPrimaryButton !== false || draft.showSecondaryButton !== false) && (previewTitle || previewDesc) && (
+                                                {(previewShowPrimaryButton || previewShowSecondaryButton) && (
                                                     <div className={styles.heroMiniButtons}>
-                                                        {draft.showPrimaryButton !== false && <em>{draft.buttonText_tr || "Ürünleri İncele"}</em>}
-                                                        {draft.showSecondaryButton !== false && <em>{draft.secondaryButtonText_tr || "Uzmanla Görüş"}</em>}
+                                                        {previewShowPrimaryButton && <em>{draft.buttonText_tr || "Ürünleri İncele"}</em>}
+                                                        {previewShowSecondaryButton && <em>{draft.secondaryButtonText_tr || "Uzmanla Görüş"}</em>}
                                                     </div>
                                                 )}
                                             </div>

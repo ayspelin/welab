@@ -51,6 +51,7 @@ interface Props {
 }
 
 type HeroSlideStyle = CSSProperties & {
+    "--hero-image-url"?: string;
     "--hero-image-position"?: string;
     "--hero-title-size"?: string;
     "--hero-desc-size"?: string;
@@ -81,6 +82,8 @@ const clampNumber = (value: number | null | undefined, fallback: number, min: nu
     return Math.min(max, Math.max(min, value));
 };
 
+const getCssImageUrl = (url: string) => `url("${url.replace(/\\/g, "\\\\").replace(/"/g, '\\"')}")`;
+
 const getLocaleText = (
     locale: string,
     tr?: string | null,
@@ -98,6 +101,7 @@ const getSlideStyle = (slide: HeroSlide): HeroSlideStyle => {
     const gridOpacity = clampNumber(slide.gridOpacity, 24, 0, 100) / 100;
 
     return {
+        "--hero-image-url": getCssImageUrl(slide.imageUrl),
         "--hero-image-position": `${imageX}% ${imageY}%`,
         "--hero-title-size": slide.titleSize || "clamp(2.8rem, 6.2vw, 5.7rem)",
         "--hero-desc-size": slide.descSize || "clamp(1rem, 1.9vw, 1.45rem)",
