@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "@/i18n/routing";
 import Image from "next/image";
 import styles from "./Header.module.css";
@@ -16,11 +16,6 @@ export default function Header() {
 
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    // Close mobile menu when route changes
-    useEffect(() => {
-        setIsMobileMenuOpen(false);
-    }, []);
-
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
     };
@@ -30,7 +25,7 @@ export default function Header() {
             <div className={styles.headerInner}>
                 <div className={styles.logo}>
                     <Link href="/">
-                        <Image src="/images/logo.svg" alt="WELAB Logo" width={220} height={86} style={{ objectFit: 'contain' }} priority />
+                        <Image src="/images/logo.svg" alt="WELAB Logo" width={220} height={67} style={{ objectFit: 'contain' }} priority />
                     </Link>
                 </div>
 

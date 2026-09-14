@@ -2,12 +2,25 @@
 
 import styles from "./Footer.module.css";
 import { Link } from "@/i18n/routing";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 
+type FooterSettings = {
+    footerDesc_tr?: string;
+    footerDesc_en?: string;
+    instagramUrl?: string;
+    linkedinUrl?: string;
+    twitterUrl?: string;
+    youtubeUrl?: string;
+    email?: string;
+    phone?: string;
+    address?: string;
+};
+
 export default function Footer() {
     const locale = useLocale();
-    const [settings, setSettings] = useState<any>(null);
+    const [settings, setSettings] = useState<FooterSettings | null>(null);
     const t = useTranslations("Footer");
 
     useEffect(() => {
@@ -43,7 +56,7 @@ export default function Footer() {
             <div className={`container ${styles.footerGrid}`}>
                 <div className={styles.brand}>
                     <Link href="/" style={{ display: 'inline-block', marginBottom: '1rem', marginLeft: '-0.5rem' }}>
-                        <img src="/images/logo.svg" alt="WELAB Logo" style={{ width: '200px', height: '78px', objectFit: 'contain' }} />
+                        <Image src="/images/logo.svg" alt="WELAB Logo" width={210} height={64} style={{ objectFit: 'contain' }} />
                     </Link>
                     <p className={styles.brandDesc}>
                         {locale === 'tr' ? (settings?.footerDesc_tr || t('brandDesc')) : (settings?.footerDesc_en || settings?.footerDesc_tr || t('brandDesc'))}

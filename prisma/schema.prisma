@@ -57,8 +57,8 @@ model Category {
   parent   Category?  @relation("SubCategories", fields: [parentId], references: [id])
   children Category[] @relation("SubCategories")
 
-  products Product[]
-  showOnHome Boolean @default(false)
+  products   Product[]
+  showOnHome Boolean   @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -132,12 +132,12 @@ model DocumentFolder {
 }
 
 model Setting {
-  id           String  @id @default(uuid())
-  aboutText_en String  @db.Text
-  aboutText_tr String? @db.Text
-  phone        String?
-  email        String?
-  address      String?
+  id                  String  @id @default(uuid())
+  aboutText_en        String  @db.Text
+  aboutText_tr        String? @db.Text
+  phone               String?
+  email               String?
+  address             String?
   aboutImageMain      String?
   aboutImageSecondary String?
 
@@ -168,28 +168,45 @@ model Setting {
   translations_tr Json?
   translations_en Json?
 
-  certificates    Json? // [{ title_tr: string, title_en: string, imageUrl: string, isVisible: boolean }]
+  certificates Json? // [{ title_tr: string, title_en: string, imageUrl: string, isVisible: boolean }]
 
   updatedAt DateTime @updatedAt
 }
 
 model HeroSlide {
-  id            String   @id @default(uuid())
-  title_tr      String?  @db.Text
-  title_en      String?  @db.Text
-  desc_tr       String?  @db.Text
-  desc_en       String?  @db.Text
-  buttonText_tr String?
-  buttonText_en String?
-  buttonUrl     String?
-  imageUrl      String
-  titleSize     String   @default("4rem")
-  descSize      String   @default("1.25rem")
-  order         Int      @default(0)
-  isActive      Boolean  @default(true)
-  isSpecialDay  Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id                     String   @id @default(uuid())
+  eyebrow_tr             String?
+  eyebrow_en             String?
+  title_tr               String?  @db.Text
+  title_en               String?  @db.Text
+  desc_tr                String?  @db.Text
+  desc_en                String?  @db.Text
+  buttonText_tr          String?
+  buttonText_en          String?
+  buttonUrl              String?
+  secondaryButtonText_tr String?
+  secondaryButtonText_en String?
+  secondaryButtonUrl     String?
+  imageUrl               String
+  titleSize              String   @default("4rem")
+  descSize               String   @default("1.25rem")
+  showEyebrow            Boolean  @default(true)
+  showPrimaryButton      Boolean  @default(true)
+  showSecondaryButton    Boolean  @default(true)
+  textHorizontal         String   @default("left")
+  textVertical           String   @default("center")
+  cardPosition           String   @default("right")
+  imagePositionX         Int      @default(50)
+  imagePositionY         Int      @default(50)
+  overlayOpacity         Int      @default(100)
+  gridEnabled            Boolean  @default(true)
+  gridSize               Int      @default(90)
+  gridOpacity            Int      @default(24)
+  order                  Int      @default(0)
+  isActive               Boolean  @default(true)
+  isSpecialDay           Boolean  @default(false)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
 }
 
 model Reference {
@@ -269,27 +286,27 @@ enum InquiryStatus {
 }
 
 model Blog {
-  id                String    @id @default(uuid())
-  slug              String    @unique
-  title_tr          String
-  title_en          String?
-  titleHtml_tr      String?   @db.Text
-  titleHtml_en      String?   @db.Text
-  content_tr        String    @db.Text
-  content_en        String?   @db.Text
-  excerpt_tr        String?   @db.Text
-  excerpt_en        String?   @db.Text
-  coverImage        String?
-  youtubeUrl        String?   @db.Text
-  
+  id           String  @id @default(uuid())
+  slug         String  @unique
+  title_tr     String
+  title_en     String?
+  titleHtml_tr String? @db.Text
+  titleHtml_en String? @db.Text
+  content_tr   String  @db.Text
+  content_en   String? @db.Text
+  excerpt_tr   String? @db.Text
+  excerpt_en   String? @db.Text
+  coverImage   String?
+  youtubeUrl   String? @db.Text
+
   seoTitle_tr       String?
   seoTitle_en       String?
-  seoDescription_tr String?   @db.Text
-  seoDescription_en String?   @db.Text
+  seoDescription_tr String? @db.Text
+  seoDescription_en String? @db.Text
 
-  publishedAt       DateTime?
-  isActive          Boolean   @default(true)
+  publishedAt DateTime?
+  isActive    Boolean   @default(true)
 
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

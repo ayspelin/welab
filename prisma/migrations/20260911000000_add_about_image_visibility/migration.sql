@@ -1,0 +1,2 @@
+-- No database changes are required for this migration.
+-- About image visibility is stored inside the existing Setting image fields.
